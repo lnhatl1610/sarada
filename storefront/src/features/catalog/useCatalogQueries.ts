@@ -24,6 +24,8 @@ export function useCatalogQueries(options: CatalogQueryOptions) {
   const [reviewSort, setReviewSort] = useState<CatalogReviewSort>('latest')
   const [reviewFilters, setReviewFilters] = useState<CatalogReviewFilters>({ rating: null, withImages: false, size: null })
   useEffect(() => {
+    // Reset review controls when the viewed product changes.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setReviewPage(1)
     setReviewSort('latest')
     setReviewFilters({ rating: null, withImages: false, size: null })

@@ -117,6 +117,8 @@ export function StorefrontSearchBox({ value, categories, collections, onChange, 
   const showTrending = debouncedValue.length < 2 && trendingTerms.length > 0
   const optionCount = products.length + contentSuggestions.length + matchingCategories.length + matchingCollections.length + (showHistory ? history.length : 0) + (showTrending ? trendingTerms.length : 0)
 
+  // Reset keyboard navigation when search results change.
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => setActiveIndex(-1), [debouncedValue, optionCount])
 
   const submit = (event?: FormEvent<HTMLFormElement>, term = value) => {
