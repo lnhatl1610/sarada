@@ -12,9 +12,9 @@ use App\Http\Requests\Api\V1\Storefront\StoreAddressRequest;
 use App\Http\Requests\Api\V1\Storefront\StoreWishlistListRequest;
 use App\Http\Requests\Api\V1\Storefront\UpdateAccountPreferencesRequest;
 use App\Http\Requests\Api\V1\Storefront\UpdateAddressRequest;
+use App\Http\Requests\Api\V1\Storefront\UpdateProfileRequest;
 use App\Http\Requests\Api\V1\Storefront\UpdateWishlistListRequest;
 use App\Http\Requests\Api\V1\Storefront\UpdateWishlistListShareRequest;
-use App\Http\Requests\Api\V1\Storefront\UpdateProfileRequest;
 use App\Http\Requests\Api\V1\Storefront\UploadAccountAvatarRequest;
 use App\Http\Resources\AccountResource;
 use App\Http\Resources\AddressResource;
@@ -24,6 +24,7 @@ use App\Models\Order;
 use App\Models\PendingEmailChange;
 use App\Models\Product;
 use App\Models\User;
+use App\Models\WishlistList;
 use App\Modules\Identity\Actions\ChangeAdminPasswordAction;
 use App\Modules\Identity\Actions\ManageWishlistListAction;
 use App\Modules\Identity\Actions\ReportSuspiciousAdminSessionAction;
@@ -554,7 +555,7 @@ class AccountController extends Controller
 
     public function sharedWishlist(Request $request, string $token): JsonResponse
     {
-        $list = \App\Models\WishlistList::query()->where('share_token', $token)->firstOrFail();
+        $list = WishlistList::query()->where('share_token', $token)->firstOrFail();
         $products = $list->products()->published()
             ->with(['category', 'brand', 'images', 'variants' => fn ($variants) => $variants->where('is_active', true)->with(['color', 'size', 'inventory'])])
             ->orderByPivot('created_at', 'desc')

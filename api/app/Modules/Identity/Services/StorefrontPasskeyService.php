@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
+use Symfony\Component\Serializer\SerializerInterface;
 use Webauthn\AttestationStatement\AttestationStatementSupportManager;
 use Webauthn\AttestationStatement\NoneAttestationStatementSupport;
 use Webauthn\AuthenticatorAssertionResponse;
@@ -15,9 +16,10 @@ use Webauthn\AuthenticatorAssertionResponseValidator;
 use Webauthn\AuthenticatorAttestationResponse;
 use Webauthn\AuthenticatorAttestationResponseValidator;
 use Webauthn\AuthenticatorSelectionCriteria;
-use Webauthn\CredentialRecord;
 use Webauthn\CeremonyStep\CeremonyStepManagerFactory;
+use Webauthn\CredentialRecord;
 use Webauthn\Denormalizer\WebauthnSerializerFactory;
+use Webauthn\Exception\AuthenticatorResponseVerificationException;
 use Webauthn\PublicKeyCredential;
 use Webauthn\PublicKeyCredentialCreationOptions;
 use Webauthn\PublicKeyCredentialDescriptor;
@@ -25,7 +27,6 @@ use Webauthn\PublicKeyCredentialParameters;
 use Webauthn\PublicKeyCredentialRequestOptions;
 use Webauthn\PublicKeyCredentialRpEntity;
 use Webauthn\PublicKeyCredentialUserEntity;
-use Webauthn\Exception\AuthenticatorResponseVerificationException;
 
 class StorefrontPasskeyService
 {
@@ -230,7 +231,7 @@ class StorefrontPasskeyService
         return $record;
     }
 
-    private function serializer(): \Symfony\Component\Serializer\SerializerInterface
+    private function serializer(): SerializerInterface
     {
         $support = AttestationStatementSupportManager::create([NoneAttestationStatementSupport::create()]);
 
@@ -244,7 +245,7 @@ class StorefrontPasskeyService
             throw new \RuntimeException('Storefront WebAuthn allowed origins are not configured.');
         }
 
-        $factory = new CeremonyStepManagerFactory();
+        $factory = new CeremonyStepManagerFactory;
         $factory->setAllowedOrigins($origins);
 
         return $factory;

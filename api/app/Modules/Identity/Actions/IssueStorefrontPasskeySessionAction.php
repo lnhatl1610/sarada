@@ -5,8 +5,8 @@ namespace App\Modules\Identity\Actions;
 use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Cookie;
 
 class IssueStorefrontPasskeySessionAction

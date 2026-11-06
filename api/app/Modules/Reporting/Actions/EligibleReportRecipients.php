@@ -23,8 +23,7 @@ class EligibleReportRecipients
                     ->join('permissions', 'permissions.id', '=', 'permission_role.permission_id')
                     ->whereColumn('role_user.user_id', 'users.id')->where('permissions.name', 'reports.view')->where('permissions.guard_name', 'api'))
                     ->orWhereExists(fn ($adminQuery) => $adminQuery->selectRaw('1')->from('role_user')->join('roles', 'roles.id', '=', 'role_user.role_id')
-                        ->whereColumn('role_user.user_id', 'users.id')->where('roles.name', 'super_admin')->where('roles.guard_name', 'api'))
-                    ;
+                        ->whereColumn('role_user.user_id', 'users.id')->where('roles.name', 'super_admin')->where('roles.guard_name', 'api'));
             })
             ->pluck('email')->map(fn (string $email): string => mb_strtolower($email));
 

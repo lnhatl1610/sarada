@@ -29,6 +29,26 @@ This document is the canonical source for frontend structure, state, forms, and 
 - UI permission checks control presentation; API authorization remains authoritative. Access tokens stay in memory, and frontend totals are display estimates only.
 - Keep routes, OpenAPI-generated types, documentation, and page specs aligned. Update design tokens when the shared design system changes. Run frontend checks only when requested and report visual verification only when it was actually performed.
 - Admin and Storefront use Tailwind CSS v4 with CSS-first configuration and `@import "tailwindcss"`; follow each app's existing component and CSS conventions, avoid deprecated v3 utilities, and prefer `gap` for spacing between sibling elements.
+- Storefront styling: write new UI with Tailwind utilities and semantic design tokens (CSS variables in `src/index.css`); do not add new hand-written feature `.css` files. Existing feature CSS may stay until the screen is next reworked, then migrate it.
+- Storefront components: build on shadcn/ui primitives in `src/components/ui/` (`new-york` style, `neutral` base, `lucide` icons per `components.json`). Add a primitive with the shadcn CLI only when a screen needs it, compose class names with `cn()` from `@/lib/utils` (`clsx` + `tailwind-merge`), and define variants with `class-variance-authority`. Primitives that need behavior (dialog, sheet, dropdown, tabs) require `radix-ui` in `storefront/package.json`; add it when the first such primitive is introduced.
+
+### Approved frontend libraries
+Use these before adding anything new; a new runtime dependency needs an ADR (see `docs/adr/`).
+
+| Concern | Library |
+|---|---|
+| Routing | `react-router` |
+| Server state | `@tanstack/react-query` |
+| Client-owned state | `zustand` (only when local state is not enough) |
+| Forms and validation | `react-hook-form`, `@hookform/resolvers`, `zod` |
+| HTTP | `axios` (shared client in `lib/`) |
+| Styling | `tailwindcss` v4, `@tailwindcss/vite`, `tw-animate-css` |
+| UI primitives | shadcn/ui, `radix-ui`, `class-variance-authority`, `clsx`, `tailwind-merge` |
+| Icons | `lucide-react` |
+| Motion and carousels | `motion` (respect reduced motion), `embla-carousel` |
+| Toasts | `sonner` |
+| Fonts | `@fontsource-variable/*` (self-hosted; do not import fonts from Google CDN) |
+| Admin tables | `@tanstack/react-table` (admin only) |
 
 ### Feature module template
 
@@ -71,7 +91,7 @@ Do not persist access tokens. Browser storage is optional: use the guarded helpe
 
 ## Home editorial composition
 
-The `/` route uses `features/home/BlazerHome.tsx` in development and production, replacing the previous home sections and shared header/footer for this route only. Its scoped stylesheet recreates the supplied split white/charcoal fashion reference on a sage canvas. Image crops are derived from the supplied reference; collection links lead to the live catalog/search routes without inventing product prices or ratings. The teaser can be dismissed for the current render. Other routes keep their existing shells and backend behavior.
+The `/` route uses `features/home/BlazerHome.tsx` in development and production, replacing the previous home sections and shared header/footer for this route only. Its scoped stylesheet recreates the supplied split white/charcoal fashion reference as a full-viewport frame without an outer sage canvas or page scroll. One transparent model cutout and three portrait lookbook images use high-resolution assets. Collection links lead to the live catalog/search routes without inventing product prices or ratings. The teaser can be dismissed for the current render. Other routes keep their existing shells and backend behavior.
 
 ## Storefront metadata
 

@@ -14,16 +14,13 @@ const channels = Object.keys(channelLabels) as NotificationChannel[]
 
 export function NotificationPreferencesPage({ enabled }: { enabled: boolean }) {
   const { query, save, pushSubscriptions, registerPush, removePush } = useNotificationPreferences(enabled)
-  const [draftOverride, setDraftOverride] = useState<NotificationPreferences | null>(null)
+  const [edited, setDraft] = useState<NotificationPreferences | null>(null)
+  const draft = edited ?? query.data?.preferences ?? null
   const [notice, setNotice] = useState('')
   const [error, setError] = useState('')
-  const draft = draftOverride ?? query.data?.preferences ?? null
 
   const update = (event: NotificationEvent, channel: NotificationChannel, checked: boolean) => {
-    setDraftOverride((current) => {
-      const base = current ?? query.data?.preferences
-      return base ? { ...base, [event]: { ...base[event], [channel]: checked } } : current
-    })
+    setDraft(draft ? { ...draft, [event]: { ...draft[event], [channel]: checked } } : draft)
     setNotice('')
     setError('')
   }
@@ -34,7 +31,7 @@ export function NotificationPreferencesPage({ enabled }: { enabled: boolean }) {
     setError('')
     try {
       const result = await save.mutateAsync(draft)
-      setDraftOverride(result.preferences)
+      setDraft(result.preferences)
       setNotice('Đã lưu cài đặt nhận tin.')
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : 'Chưa lưu được cài đặt nhận tin.')

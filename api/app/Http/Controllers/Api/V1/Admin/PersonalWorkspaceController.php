@@ -17,22 +17,13 @@ use App\Models\UserTask;
 use App\Modules\AdminAccess\Actions\GetPersonalPerformanceAction;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class PersonalWorkspaceController extends Controller
 {
-
     public function performance(ListPersonalPerformanceRequest $request, GetPersonalPerformanceAction $performance): JsonResponse
     {
         return PersonalPerformanceResource::make($performance->execute($request->user(), $request->validated('range', '7d')))->response();
     }
-
-
-
-
-
-
-
 
     public function taskAssignees(Request $request): JsonResponse
     {
@@ -151,14 +142,6 @@ class PersonalWorkspaceController extends Controller
 
         return response()->json(['message' => 'Đã xóa việc cần làm.']);
     }
-
-
-
-
-
-
-
-
 
     private function forgetMenuSummary(Request $request): void
     {
