@@ -69,7 +69,7 @@ const FaqPage = lazy(() => import('../features/content/FaqPage').then((module) =
 const BlogPage = lazy(() => import('../features/content/BlogPage').then((module) => ({ default: module.BlogPage })))
 const CollectionRouteState = lazy(() => import('../features/catalog/CollectionRouteState').then((module) => ({ default: module.CollectionRouteState })))
 const HomePage = lazy(() => import('../features/home/HomePage').then((module) => ({ default: module.HomePage })))
-const StorefrontHomeUiFirst = lazy(() => import('../features/home/StorefrontHomeUiFirst').then((module) => ({ default: module.StorefrontHomeUiFirst })))
+const BlazerHome = lazy(() => import('../features/home/BlazerHome').then((module) => ({ default: module.BlazerHome })))
 const CheckoutPage = lazy(() => import('../features/checkout/CheckoutPage').then((module) => ({ default: module.CheckoutPage })))
 const CheckoutSuccessPage = lazy(() => import('../features/checkout/CheckoutSuccessPage').then((module) => ({ default: module.CheckoutSuccessPage })))
 const PublicContentPage = lazy(() => import('../features/content/PublicContentPage').then((module) => ({ default: module.PublicContentPage })))
@@ -127,7 +127,7 @@ export function StorefrontRouteContent(props: Props) {
   const routerLocation = useLocation()
   const path = routerLocation.pathname
   const checkoutFocusMode = path === '/checkout'
-  const showHomeUiFirstPreview = import.meta.env.DEV && path === '/' && new URLSearchParams(routerLocation.search).get('mode') !== 'api'
+  const showHomeUiFirstPreview = path === '/'
   const showCatalogUiFirstPreview = import.meta.env.DEV && path === '/products' && new URLSearchParams(routerLocation.search).get('mode') === 'ui'
   const showProductUiFirstPreview = import.meta.env.DEV && path.startsWith('/products/') && new URLSearchParams(routerLocation.search).get('mode') === 'ui'
   const showUiFirstPreview = showHomeUiFirstPreview || showCatalogUiFirstPreview || showProductUiFirstPreview
@@ -336,7 +336,7 @@ export function StorefrontRouteContent(props: Props) {
 
     {path === '/' && !showHomeUiFirstPreview && storefrontConfiguration?.newsletter_welcome_offer_enabled && <Suspense fallback={null}><NewsletterWelcomePopup storeName={storeBrandName} welcomeOfferEnabled={storefrontConfiguration.newsletter_welcome_offer_enabled} /></Suspense>}
     <main id="primary-content" className={`storefront-main${showUiFirstPreview ? ' ui-first-main' : ''}`} aria-label="Nội dung chính" tabIndex={-1}>
-      {showHomeUiFirstPreview ? <Suspense fallback={<p className="state" role="status">Đang tải giao diện trang chủ…</p>}><StorefrontHomeUiFirst storeName={storeBrandName} /></Suspense> : showCatalogUiFirstPreview ? <Suspense fallback={<p className="state" role="status">Đang tải giao diện danh sách sản phẩm…</p>}><StorefrontCatalogUiFirst storeName={storeBrandName} /></Suspense> : showProductUiFirstPreview ? <Suspense fallback={<p className="state" role="status">Đang tải giao diện chi tiết sản phẩm…</p>}><StorefrontProductUiFirst storeName={storeBrandName} /></Suspense> : <>
+      {showHomeUiFirstPreview ? <Suspense fallback={<p className="state" role="status">Đang tải giao diện trang chủ…</p>}><BlazerHome storeName={storeBrandName} /></Suspense> : showCatalogUiFirstPreview ? <Suspense fallback={<p className="state" role="status">Đang tải giao diện danh sách sản phẩm…</p>}><StorefrontCatalogUiFirst storeName={storeBrandName} /></Suspense> : showProductUiFirstPreview ? <Suspense fallback={<p className="state" role="status">Đang tải giao diện chi tiết sản phẩm…</p>}><StorefrontProductUiFirst storeName={storeBrandName} /></Suspense> : <>
       {showRouteBreadcrumbs && <StorefrontBreadcrumbs items={breadcrumbItems} />}
       {path === '/blog' || path.startsWith('/blog/') ? <BlogPage query={props.blogPostQuery} />
       : path === '/stores' ? <StoreLocationsPage />
