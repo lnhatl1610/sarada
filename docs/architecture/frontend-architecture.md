@@ -45,7 +45,7 @@ Use these before adding anything new; a new runtime dependency needs an ADR (see
 | Styling | `tailwindcss` v4, `@tailwindcss/vite`, `tw-animate-css` |
 | UI primitives | shadcn/ui, `radix-ui`, `class-variance-authority`, `clsx`, `tailwind-merge` |
 | Icons | `lucide-react` |
-| Motion and carousels | `motion` (respect reduced motion), `embla-carousel` |
+| Motion and carousels | `motion` (respect reduced motion), `embla-carousel`, `embla-carousel-react`, `embla-carousel-autoplay` (requested Home sliders; stop on focus/interaction and disable autoplay for reduced motion) |
 | Toasts | `sonner` |
 | Fonts | `@fontsource-variable/*` (self-hosted; do not import fonts from Google CDN) |
 | Admin tables | `@tanstack/react-table` (admin only) |
@@ -91,7 +91,7 @@ Do not persist access tokens. Browser storage is optional: use the guarded helpe
 
 ## Home editorial composition
 
-The `/` route uses `features/home/BlazerHome.tsx` in development and production, replacing the previous home sections and shared header/footer for this route only. Its scoped stylesheet recreates the supplied split white/charcoal fashion reference as a full-viewport frame without an outer sage canvas or page scroll. One transparent model cutout and three portrait lookbook images use high-resolution assets. Collection links lead to the live catalog/search routes without inventing product prices or ratings. The teaser can be dismissed for the current render. Other routes keep their existing shells and backend behavior.
+The `/` route uses `features/home/BlazerHome.tsx` in development and production, replacing the previous home sections and shared header/footer for this route only. Its scoped stylesheet recreates the supplied split white/charcoal fashion reference as a full-viewport hero without an outer sage canvas. Preserve this existing Header and Hero exactly when extending Home: the owner explicitly requires the supplied NEW FASHION composition to remain unchanged. New content is composed below it by BlazerSections in separate feature components; the page scrolls normally. One transparent model cutout and three portrait lookbook images use high-resolution assets. Collection links lead to the live catalog/search routes without inventing product prices or ratings. The teaser can be dismissed for the current render. Other routes keep their existing shells and backend behavior.
 
 ## Storefront metadata
 
