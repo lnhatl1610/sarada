@@ -47,6 +47,8 @@ export function WishlistPage({ lists, listsLoading, listsError, activeListId, on
   const [listActionError, setListActionError] = useState('')
   const [shareLink, setShareLink] = useState('')
 
+  // The input is intentionally reset when the selected server-backed list changes.
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => setRenameValue(activeList?.name ?? ''), [activeList?.id, activeList?.name])
 
   const runListAction = async (action: () => Promise<unknown>) => {

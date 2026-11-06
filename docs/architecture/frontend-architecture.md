@@ -69,6 +69,10 @@ Storefront feature behavior lives beside its pages and API clients. Home banners
 
 Do not persist access tokens. Browser storage is optional: use the guarded helper in `lib/browser-storage.ts` for client preferences, guest cart identifiers, and short-lived password-recovery convenience state; keep in-memory state authoritative when storage is blocked. Do not trust client totals. Convert VND through `lib/money.ts` and dates through shared locale helpers. Every page implements loading, empty, error, and success states.
 
+## Home editorial composition
+
+The `/` route uses `features/home/BlazerHome.tsx` in development and production, replacing the previous home sections and shared header/footer for this route only. Its scoped stylesheet recreates the supplied split white/charcoal fashion reference on a sage canvas. Image crops are derived from the supplied reference; collection links lead to the live catalog/search routes without inventing product prices or ratings. The teaser can be dismissed for the current render. Other routes keep their existing shells and backend behavior.
+
 ## Storefront metadata
 
 The human-readable `/sitemap` page groups API-backed categories, published collections, brands with published products, and published CMS pages; the Laravel `/sitemap.xml` remains the machine-readable index.
