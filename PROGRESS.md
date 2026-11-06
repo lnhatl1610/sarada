@@ -1,6 +1,7 @@
 # Project progress
 
 - Replaced the active Home route in development and production with a responsive Blzr editorial composition matching the supplied fashion reference: sage canvas, split white/charcoal stage, oversized headline, extracted model imagery, collection gallery, and dismissible collection teaser. Navigation uses existing catalog/search/account/cart/content routes; no fabricated price, rating, stock, or cart state is introduced. Other pages retain their existing shell. Automated tests were not run (not requested).
+- Kept the editorial hero intact and added the requested fashion-store content below it: announcement bar, category tiles, new-arrivals cards, tailoring promo, service commitments, newsletter signup, and footer links. The new sections are responsive and verified in the storefront preview.
 
 - API cleanup requested by owner: removed PHPUnit/test caches, temporary visual QA scripts, the stray `toArray())` file, `vendor-passkey`, `.claude`, `.cursor`, `.codex`, `.mcp.json`, and `boost.json`. `api/CLAUDE.md` remains because Windows denied deletion through both filesystem and patch tools; its ACL grants ordinary users read/write but not delete. Updated the directory snapshot to remove deleted tool folders. No application code changed.
 
