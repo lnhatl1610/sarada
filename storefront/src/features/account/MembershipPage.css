@@ -1,0 +1,38 @@
+.membership-page { display: grid; gap: 18px; }
+.membership-page h1, .membership-page h2, .membership-page h3, .membership-page p { margin-top: 0; }
+.membership-page h1 { margin-bottom: 0; }
+.membership-page__intro { color: var(--muted, #666); }
+.membership-summary { display: grid; gap: 10px; padding: 22px; border: 1px solid var(--border, #ddd); background: var(--surface, #fff); }
+.membership-summary__heading { display: flex; justify-content: space-between; gap: 16px; align-items: center; }
+.membership-summary__heading span { font-size: 12px; letter-spacing: .1em; color: var(--muted, #666); }
+.membership-summary__heading strong { font-size: 24px; }
+.membership-summary__progress { height: 8px; overflow: hidden; border-radius: 999px; background: var(--muted-surface, #eee); }
+.membership-summary__progress span { display: block; height: 100%; background: var(--foreground, #161616); transition: width .25s ease; }
+.membership-summary p { margin: 0; color: var(--muted, #666); }
+.membership-summary a { width: fit-content; color: inherit; text-underline-offset: 3px; }
+.membership-summary--compact { min-width: 240px; padding: 16px; }
+.membership-summary--compact .membership-summary__heading strong { font-size: 20px; }
+.membership-page__expiry { padding: 12px 14px; border-left: 3px solid #9a6500; background: var(--muted-surface, #f7f4ea); }
+.membership-page__tier-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.membership-page__tier-grid article { padding: 18px; border: 1px solid var(--border, #ddd); }
+.membership-page__tier-grid article[aria-current="true"] { border-color: var(--foreground, #222); box-shadow: inset 0 0 0 1px var(--foreground, #222); }
+.membership-page__tier-grid h3 { margin-bottom: 10px; }
+.membership-page__tier-grid p, .membership-page__tier-grid li { color: var(--muted, #666); font-size: 14px; line-height: 1.5; }
+.membership-page__tier-grid ul { padding-left: 18px; margin-bottom: 0; }
+.membership-page__history ul { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--border, #ddd); }
+.membership-page__history li { display: flex; justify-content: space-between; gap: 16px; padding: 16px 0; border-bottom: 1px solid var(--border, #ddd); }
+.membership-page__history li > div { display: grid; gap: 5px; }
+.membership-page__history li > div:last-child { justify-items: end; white-space: nowrap; }
+.membership-page__history small { color: var(--muted, #666); }
+.membership-points-positive { color: #176b3a; }
+.membership-points-negative { color: #a23030; }
+.membership-page__history-heading { display: flex; justify-content: space-between; gap: 16px; align-items: baseline; }
+.membership-page__history-heading p { color: var(--muted, #666); font-size: 14px; }
+.membership-page__state { padding: 24px; text-align: center; border: 1px solid var(--border, #ddd); }
+.membership-page__state button, .membership-page__pagination button { min-height: 42px; padding: 8px 14px; border: 1px solid var(--border, #ddd); background: var(--surface, #fff); color: inherit; font: inherit; cursor: pointer; }
+.membership-page__pagination { display: flex; justify-content: center; align-items: center; gap: 16px; margin-top: 18px; }
+.membership-page__pagination button:disabled { opacity: .5; cursor: not-allowed; }
+.membership-page :focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+@media (max-width: 900px) { .membership-page__tier-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 540px) { .membership-page__tier-grid { grid-template-columns: 1fr; } .membership-page__history-heading { align-items: flex-start; flex-direction: column; gap: 0; } .membership-page__history li { align-items: flex-start; flex-direction: column; } .membership-page__history li > div:last-child { justify-items: start; } }
+@media (prefers-reduced-motion: reduce) { .membership-summary__progress span { transition: none; } }

@@ -1,0 +1,22 @@
+# Security Architecture
+
+Threats to address: credential stuffing, token theft/replay, XSS, CSRF through refresh cookies, cross-audience token use, IDOR on orders, coupon/stock races, unsafe image uploads, and sensitive information in logs.
+
+- Access: short-lived signed JWT with `aud` set to `admin` or `storefront`; middleware verifies signature, expiry, issuer/audience, active account, and the revocable session row identified by `sid`.
+- Guest-capable cart, checkout-preview, and order-placement routes resolve an optional storefront Bearer JWT. A supplied token must have a current storefront audience/session; missing credentials keep the request in guest-cart scope, while invalid or admin credentials fail closed.
+- Refresh: random opaque token; persist SHA-256 hash only; httpOnly, Secure in production, SameSite=Lax cookie scoped to auth paths; rotate atomically. Storefront `remember_me=false` uses a browser-session cookie, while `true` persists for the configured session lifetime; the choice is retained in the refresh-token row across rotations. The token family is the forward `replaced_by_id` chain from one login, and reuse revokes only that chain and its linked access sessions.
+- Trusted admin devices: persist only SHA-256 hashes of 64-byte random tokens, use a 30-day httpOnly Secure-in-production SameSite=Lax cookie scoped to admin auth routes, rotate it after each trusted login, and revoke all remembered devices on password or 2FA credential changes. A password change keeps the current session, revokes other sessions by default with an explicit opt-out, and queues an email notice after commit.
+- Authorization: backend policies and named permissions; default deny. Do not rely on hiding UI controls.
+- Abuse controls: rate-limit login by IP and normalized email or phone identifier, checkout by IP/session, public Storefront APIs by IP, and authenticated media uploads. Public read/cart/location/checkout-preview endpoints use configurable `API_PUBLIC_REQUESTS_PER_MINUTE` (default 60, clamped to 1–600). Upload writes use `API_UPLOADS_PER_MINUTE` (default 20, clamped to 1–120) enforced independently per IP and account, in addition to each endpoint's other throttles.
+- `TRUSTED_PROXIES` is optional and must contain only the exact proxy IPs/CIDRs that connect to Laravel. Leave it empty for direct connections; do not trust arbitrary `X-Forwarded-*` headers or use `*` on a public host.
+- Input: Form Requests, strict allowlists, mass-assignment protection, output encoding, MIME/content/size validation for uploads, generated storage filenames.
+- Data minimization: guest order lookup requires code and matching contact; do not expose sequential IDs or raw payment payloads.
+- Audit: record administrative mutations with actor, action, entity, time, and safe metadata. Also record successful admin login (after two-factor completion), logout, and data exports with their active filters. Account security/profile changes use field-level snapshots with credentials, 2FA secrets/codes, and session tokens redacted; never log passwords, tokens, or secret values.
+- Login history stores only the outcome, account reference/email, IP address, user-agent, and timestamp; it never stores a password, 2FA code, challenge token, or access/refresh token. Admins can read only their own rows. The scheduler prunes entries older than 180 days.
+- Storefront phone-change verification stores only an HMAC of the short-lived SMS code, expires it after ten minutes, limits attempts and resend frequency, and never includes the code in account audit logs. Phone login requires a confirmed current number.
+- Browser: keep access tokens in memory, refresh token only in httpOnly cookie; validate CORS origins and refresh-cookie CSRF protections. The JWT library blacklist is disabled because every protected route checks the session row, which supports immediate single-session and account-wide revocation without a separate blacklist store.
+- Local API origin defaults follow the app's hostname so `localhost` and `127.0.0.1` are not mixed across refresh-cookie requests. A separately configured API origin must remain same-site with the app because refresh cookies use `SameSite=Lax`.
+- Operations: secrets through environment/secret manager, TLS, patch dependencies, backups encrypted and restore-tested.
+- Admin system health exposes only service states and operational counts to users with `system.health`; it omits connection strings, credentials, exception traces, and filesystem paths.
+
+See `docs/architecture/auth-rbac.md` and ADR 0001.

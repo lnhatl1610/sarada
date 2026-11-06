@@ -1,0 +1,76 @@
+.admin-idle-warning-backdrop {
+  position: fixed;
+  z-index: 10000;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  background: rgb(15 23 42 / 55%);
+}
+
+.admin-idle-warning {
+  width: min(100%, 28rem);
+  padding: 1.5rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg, 0.75rem);
+  background: var(--background);
+  color: var(--foreground);
+  box-shadow: 0 24px 64px rgb(0 0 0 / 22%);
+}
+
+.admin-idle-warning h2 {
+  margin: 0 0 0.5rem;
+  font-size: 1.125rem;
+}
+
+.admin-idle-warning p {
+  margin: 0 0 1.25rem;
+  color: var(--muted-foreground);
+}
+
+.idle-session-settings > label {
+  display: block;
+  margin-bottom: 0.375rem;
+  font-weight: 600;
+}
+
+.idle-session-settings > select {
+  width: min(100%, 20rem);
+  margin-bottom: 1rem;
+}
+
+.admin-lock-backdrop {
+  position: fixed;
+  z-index: 10001;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  overflow-y: auto;
+  padding: 1.25rem;
+  background: var(--background);
+  color: var(--foreground);
+}
+
+.admin-lock-card {
+  width: min(100%, 25rem);
+  text-align: center;
+}
+
+.admin-lock-icon {
+  display: grid;
+  width: 3.5rem;
+  height: 3.5rem;
+  margin: 0 auto 1.25rem;
+  place-items: center;
+  border-radius: 1rem;
+  background: var(--muted);
+  color: var(--primary);
+}
+
+.admin-lock-icon svg { width: 1.5rem; height: 1.5rem; }
+.admin-lock-card .eyebrow { margin: 0 0 0.5rem; color: var(--muted-foreground); }
+.admin-lock-card h1 { margin: 0; font-size: 1.75rem; }
+.admin-lock-user { margin: 0.5rem 0; font-weight: 600; }
+.admin-lock-description { margin: 0 0 1.25rem; color: var(--muted-foreground); }
+.admin-lock-card form { text-align: left; }
+.admin-lock-logout { margin-top: 1rem; }

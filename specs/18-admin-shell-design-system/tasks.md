@@ -1,0 +1,27 @@
+# Tasks: Admin shell and design system
+
+- [x] Record selected admin theme and shell decisions in ADR-0006.
+- [x] Add scoped light/dark admin design tokens and theme preference.
+- [x] Add collapsible desktop navigation and tablet/mobile drawer.
+- [x] Keep desktop and mobile sidebar navigation scrollable while hiding native scrollbars across browsers.
+- [x] Filter navigation and screen access by current API permissions.
+- [x] Add skip link, breadcrumb, 403/404 states, and remove placeholder links.
+- [x] Keep a single authenticated account menu in the topbar for profile details, preferences, password change, help, version, and logout; leave the sidebar footer without an account control.
+- [x] Add navbar `Ctrl+K`/`Cmd+K` quick links to existing product/order filters.
+- [x] Add a reusable status badge with Vietnamese labels for product, order, and payment states.
+- [x] Add shared DataTable, FilterBar, ConfirmDialog, FormField/FormSection, Empty/Error/Skeleton, Money, and PermissionGate primitives.
+- [x] Add a reusable `StatCard` for dashboard summary metrics with loading state.
+- [x] Add a shared `PageHeader` for page title, description, eyebrow, and route actions.
+- [x] Extract the responsive breadcrumb, search, quick-create, alert, theme, and account controls into a shared `AppHeader`.
+- [x] Extract the permission-filtered, polling operational alert popover into a shared `NotificationBell`; keep local read markers scoped by admin account.
+- [x] Show polled pending-order, pending-review, and low-stock counts on their permission-filtered sidebar links.
+- [x] Extract the debounced, permission-aware topbar search and keyboard shortcut into a shared `GlobalSearch` feature.
+- [x] Add a shared date range picker with today, 7-day, 30-day, this-month, and custom presets for date-based reports.
+- [x] Adopt the shared DataTable and FilterBar across product, order, inventory, and review lists; use server pagination and persist each list's page and supported filters in the URL.
+- [x] Add keyboard-accessible row selection and bulk actions for products, orders, and reviews, backed by their authorized bulk endpoints.
+- [x] Add allowlisted server-side sorting for products, orders, inventory, and operational lists; core list filters and sort state are represented in the URL.
+- [x] Add a route-level React error boundary and session-expiry handling; a failed refresh clears the in-memory token and displays a login message.
+- [x] Add persisted notification center with read/unread state after notification APIs are available.
+- [x] Add an authenticated password-change flow that verifies the current password and revokes all admin/storefront sessions.
+- [x] Implement editable profile and TOTP 2FA using the existing account API; keep English localization, PIN, and account/workspace switching outside the current Vietnamese-only, single-store product scope.
+- [ ] Record visual acceptance evidence when verification is requested.

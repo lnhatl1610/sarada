@@ -1,0 +1,2 @@
+.admin-shell > .sidebar { position: sticky; top: 0; box-sizing: border-box; height: 100vh; height: 100dvh; min-height: 100vh; align-self: flex-start; display: flex; flex-direction: column; }
+.admin-shell > .sidebar .sidebar-navigation { position: relative; display: flex; flex-direction: column; flex: 1 1 auto; min-height: 0; }

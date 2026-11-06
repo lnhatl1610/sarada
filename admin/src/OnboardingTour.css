@@ -1,0 +1,11 @@
+.onboarding-dialog { max-width: 34rem; }
+.onboarding-link { display: inline-flex; width: fit-content; align-items: center; gap: .35rem; color: var(--primary); font-weight: 600; text-decoration: underline; text-underline-offset: .2rem; }
+.onboarding-progress { display: flex; gap: .35rem; margin: .5rem 0; }
+.onboarding-progress span { height: .3rem; flex: 1; border-radius: 999px; background: var(--muted); }
+.onboarding-progress span.active { background: var(--primary); }
+.onboarding-dialog [data-slot="dialog-footer"] { justify-content: space-between; }
+.onboarding-snooze { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: .4rem; color: var(--muted-foreground); font-size: .75rem; }
+.onboarding-snooze > span { margin-right: auto; }
+.onboarding-launcher { max-width: 48rem; padding: 1.5rem; margin: 2rem auto; border: 1px solid var(--border); border-radius: var(--radius); background: var(--card); }
+.onboarding-launcher h1 { margin: .3rem 0; font-size: 1.5rem; }
+.onboarding-launcher p:not(.eyebrow) { color: var(--muted-foreground); }

@@ -1,0 +1,38 @@
+.personal-performance-page { display: grid; gap: 1rem; }
+.personal-performance-page > .page-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem; }
+.personal-performance-range { display: grid; gap: 0.375rem; min-width: 10rem; font-size: 0.8125rem; font-weight: 600; }
+.personal-performance-range select { min-height: 2.5rem; }
+.personal-performance-period { margin: 0; color: var(--muted-foreground); font-size: 0.8125rem; }
+.personal-performance-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr)); gap: 0.875rem; }
+.personal-performance-card { display: grid; gap: 0.45rem; min-height: 7.5rem; }
+.personal-performance-card p, .personal-performance-card small { margin: 0; color: var(--muted-foreground); }
+.personal-performance-card strong { font-size: clamp(1.35rem, 2.5vw, 1.9rem); line-height: 1.1; }
+.personal-performance-chart { display: grid; gap: 0.75rem; min-width: 0; }
+.personal-performance-chart .panel-heading { margin-bottom: 0; }
+.personal-performance-chart .panel-heading h2 { margin: 0 0 0.25rem; font-size: 1.125rem; }
+.personal-performance-chart .panel-heading p { margin: 0; color: var(--muted-foreground); }
+.personal-performance-svg { display: block; width: 100%; min-height: 12rem; overflow: visible; }
+.personal-performance-gridline { stroke: var(--border); stroke-dasharray: 3 5; stroke-width: 1; }
+.personal-performance-line { fill: none; stroke-width: 3; stroke-linejoin: round; stroke-linecap: round; }
+.personal-performance-line.current { stroke: var(--primary); }
+.personal-performance-line.previous { stroke: var(--muted-foreground); stroke-dasharray: 6 5; stroke-width: 2; }
+.personal-performance-dot.current { fill: var(--primary); }
+.personal-performance-dot.previous { fill: var(--muted-foreground); }
+.personal-performance-axis-label { fill: var(--muted-foreground); font-size: 11px; }
+.personal-performance-legend { display: flex; flex-wrap: wrap; gap: 1rem; color: var(--muted-foreground); font-size: 0.8125rem; }
+.personal-performance-legend span { display: inline-flex; align-items: center; gap: 0.4rem; }
+.personal-performance-legend i { width: 0.7rem; height: 0.7rem; border-radius: 999px; background: var(--muted-foreground); }
+.personal-performance-legend i.current { background: var(--primary); }
+.personal-performance-data summary { width: fit-content; cursor: pointer; color: var(--primary); font-size: 0.875rem; }
+.personal-performance-data > div { display: grid; grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); gap: 0.5rem; margin-top: 0.75rem; }
+.personal-performance-data p { display: flex; justify-content: space-between; gap: 0.5rem; margin: 0; padding: 0.5rem; border-radius: 0.375rem; background: var(--muted); font-size: 0.8125rem; }
+.personal-performance-data span { text-align: right; }
+.personal-performance-empty { padding: 2rem 1rem; text-align: center; }
+.personal-performance-empty p { max-width: 38rem; margin: 0.5rem auto 0; color: var(--muted-foreground); }
+.personal-performance-error { display: grid; justify-items: start; gap: 0.75rem; }
+.personal-performance-error p { margin: 0; }
+@media (max-width: 640px) {
+  .personal-performance-page > .page-heading { align-items: stretch; flex-direction: column; }
+  .personal-performance-range { width: 100%; }
+  .personal-performance-svg { min-height: 9rem; }
+}

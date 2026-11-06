@@ -1,0 +1,8 @@
+# ADR 0001: Audience-scoped JWT access with rotating refresh cookies
+
+- Status: Accepted and implemented
+- Context: Storefront and admin are separate SPAs and need API bearer access; long-lived bearer credentials in browser storage increase replay/XSS impact.
+- Target decision: Use short-lived JWT access tokens scoped to `admin` or `storefront`, held in memory, and opaque random refresh tokens in Secure/httpOnly/SameSite cookies. Persist only refresh-token hashes and rotate on use; detect reuse and revoke the token family. The planned JWT implementation uses the maintained `php-open-source-saver/jwt-auth` fork for Laravel 13 compatibility.
+- Current implementation: `php-open-source-saver/jwt-auth` issues signed 15-minute `admin` and `storefront` access JWTs. Each token includes a `sid` that maps to an existing Sanctum personal-access-token row used only as a revocation/session record; the opaque Sanctum secret is never returned or accepted as bearer authentication. Audience middleware validates the JWT claim, row ownership, expiry, ability, and account status on every protected route. Refresh credentials remain random, hashed, rotated httpOnly cookies with a 14-day lifetime.
+- Consequences: Deployments must set `JWT_SECRET` (run `php artisan jwt:secret` locally or supply a secret through the deployment secret manager). Deleting the session row immediately invalidates its JWT on every route protected by the audience middleware. This keeps session listing, single-session logout, password changes, account blocking, and refresh-token reuse revocation on the existing schema without a JWT blacklist store.
+- Rejected: Long-lived bearer credentials in browser localStorage (larger theft window).

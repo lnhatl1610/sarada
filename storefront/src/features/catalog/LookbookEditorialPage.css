@@ -1,0 +1,35 @@
+.store .lookbook-editorial { width: min(1380px, calc(100% - 48px)); padding-top: 30px; padding-bottom: 96px; }
+.store .lookbook-editorial__heading { max-width: 760px; margin: clamp(34px, 5vw, 70px) auto clamp(38px, 6vw, 78px); text-align: center; }
+.store .lookbook-editorial__heading h1 { margin: 10px 0 16px; font-family: var(--font-display); font-size: clamp(42px, 7vw, 86px); font-weight: 400; letter-spacing: -.035em; line-height: .98; }
+.store .lookbook-editorial__heading > p:last-child { max-width: 580px; margin: 0 auto; color: var(--muted); font-size: 15px; line-height: 1.8; }
+.store .lookbook-editorial__outfit { display: grid; grid-template-columns: minmax(0, 1.08fr) minmax(370px, .92fr); align-items: start; gap: clamp(28px, 5vw, 78px); }
+.store .lookbook-editorial__visual { position: sticky; top: 100px; min-height: min(78vh, 760px); overflow: hidden; border: 1px solid var(--glass-line); border-radius: var(--r-lg); background: var(--bg-subtle); box-shadow: var(--sh-2); isolation: isolate; }
+.store .lookbook-editorial__visual > img { width: 100%; height: min(78vh, 760px); object-fit: cover; }
+.store .lookbook-editorial__visual::after { position: absolute; inset: 52% 0 0; z-index: 0; background: linear-gradient(transparent, rgb(22 21 19 / 48%)); content: ''; pointer-events: none; }
+.store .lookbook-editorial__visual-caption { position: absolute; z-index: 1; bottom: 24px; left: 26px; max-width: calc(100% - 52px); color: #fff; font-family: var(--font-display); font-size: clamp(22px, 2.4vw, 34px); }
+.store .lookbook-editorial__pin { position: absolute; z-index: 2; display: grid; width: 38px; height: 38px; place-items: center; transform: translate(-50%, -50%); border: 1px solid rgb(255 255 255 / 82%); border-radius: 50%; background: var(--glass); color: var(--fg); text-decoration: none; box-shadow: var(--sh-2); backdrop-filter: var(--blur); transition: transform var(--t-fast) var(--ease-out); }
+.store .lookbook-editorial__pin:hover { transform: translate(-50%, -50%) scale(1.08); }
+.store .lookbook-editorial__pin span { font-size: 12px; font-weight: 700; }
+.store .lookbook-editorial__items { padding: 14px 0; }
+.store .lookbook-editorial__items-heading { display: flex; align-items: end; justify-content: space-between; gap: 12px; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--line); }
+.store .lookbook-editorial__items-heading h2,.store .lookbook-editorial__more h2 { margin: 6px 0 0; font-family: var(--font-display); font-size: clamp(30px, 3vw, 42px); font-weight: 400; letter-spacing: -.02em; }
+.store .lookbook-editorial__items-heading > span { color: var(--muted); font-size: 13px; }
+.store .lookbook-editorial__items ul { display: grid; gap: 12px; margin: 0; padding: 0; list-style: none; }
+.store .lookbook-editorial__items li { position: relative; display: grid; grid-template-columns: 22px 76px minmax(0, 1fr); align-items: start; gap: 12px; padding: 12px; border: 1px solid var(--glass-line); border-radius: var(--r-md); background: var(--glass); box-shadow: var(--sh-1); backdrop-filter: var(--blur); scroll-margin-top: 110px; }
+.store .lookbook-editorial__choice { display: grid; min-height: 44px; place-items: center; }
+.store .lookbook-editorial__choice input { width: 18px; height: 18px; accent-color: var(--accent); }
+.store .lookbook-editorial__product-image { display: block; width: 76px; aspect-ratio: 3 / 4; overflow: hidden; border-radius: var(--r-sm); background: var(--bg-subtle); }
+.store .lookbook-editorial__product-image img { width: 100%; height: 100%; object-fit: cover; }
+.store .lookbook-editorial__product-copy { display: grid; justify-items: start; gap: 8px; min-width: 0; }
+.store .lookbook-editorial__product-copy > a { color: inherit; font-size: 14px; font-weight: 600; line-height: 1.45; text-decoration: none; }
+.store .lookbook-editorial__product-copy > strong { font-size: 14px; font-weight: 600; }
+.store .lookbook-editorial__variant { display: grid; grid-template-columns: auto minmax(145px, 1fr); align-items: center; gap: 8px; width: 100%; color: var(--muted); font-size: 11px; }
+.store .lookbook-editorial__variant select { min-height: 36px; min-width: 0; padding: 6px 8px; border: 1px solid var(--line); border-radius: var(--r-sm); background: var(--bg); color: var(--fg); font: inherit; font-size: 12px; }
+.store .lookbook-editorial__stock { grid-column: 3; color: var(--muted); font-size: 11px; }
+.store .lookbook-editorial__items li.is-unavailable { opacity: .65; }
+.store .lookbook-editorial__add-all { width: 100%; margin-top: 18px; }
+.store .lookbook-editorial__empty,.store .lookbook-editorial__feedback { color: var(--muted); font-size: 13px; line-height: 1.6; }
+.store .lookbook-editorial__more { margin-top: clamp(70px, 10vw, 130px); padding: clamp(30px, 6vw, 70px); border: 1px solid var(--glass-line); border-radius: var(--r-lg); background: var(--glass); text-align: center; box-shadow: var(--sh-1); backdrop-filter: var(--blur); }
+.store .lookbook-editorial__more h2 { margin: 8px 0 20px; }
+@media (max-width: 900px) { .store .lookbook-editorial__outfit { grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 24px; } .store .lookbook-editorial__visual,.store .lookbook-editorial__visual > img { min-height: min(70vh, 680px); height: min(70vh, 680px); } }
+@media (max-width: 680px) { .store .lookbook-editorial { width: min(100% - 32px, 560px); padding-top: 18px; } .store .lookbook-editorial__heading { margin: 34px auto; } .store .lookbook-editorial__outfit { grid-template-columns: 1fr; gap: 22px; } .store .lookbook-editorial__visual { position: relative; top: auto; min-height: 0; aspect-ratio: 4 / 5; } .store .lookbook-editorial__visual > img { height: 100%; min-height: 0; position: absolute; inset: 0; } .store .lookbook-editorial__items { padding: 0; } .store .lookbook-editorial__items li { grid-template-columns: 22px 68px minmax(0, 1fr); gap: 9px; padding: 10px; } .store .lookbook-editorial__product-image { width: 68px; } .store .lookbook-editorial__variant { grid-template-columns: 1fr; gap: 4px; } .store .lookbook-editorial__more { margin-top: 64px; } }

@@ -1,0 +1,13 @@
+flowchart LR
+  Shopper[Shopper] --> Storefront[Storefront checkout]
+  Storefront -->|order + payment_method| API[Laravel API]
+  API -->|lock cart, variants, inventory| OrderFlow[Order transaction]
+  OrderFlow -->|reserve stock, save payment instructions| Database[(MySQL)]
+  Storefront -->|scoped payment token| PaymentPage[Bank transfer page]
+  PaymentPage -->|read instructions| API
+  PaymentPage -->|amount + transfer reference| VietQR[VietQR image service]
+  Shopper -->|bank transfer| Bank[Store bank account]
+  Staff[Authorized staff] -->|reconcile and mark paid| Admin[Admin]
+  Admin -->|payment status update| API
+  API -->|record payment + audit history| Database
+  Scheduler[Scheduler] -->|expire unpaid non-COD order| OrderFlow

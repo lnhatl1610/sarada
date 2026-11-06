@@ -1,0 +1,846 @@
+{
+  "generatedAt": "2026-10-28T03:34:21.824Z",
+  "baseUrl": "http://127.0.0.1:5174",
+  "engine": "Chromium 156.0.8078.4",
+  "routes": [
+    "/",
+    "/login",
+    "/register",
+    "/pending-approval",
+    "/verify-email",
+    "/forgot-password",
+    "/forgot-password/sent",
+    "/reset-password/demo-token",
+    "/reset-password/done",
+    "/products",
+    "/products/ao-so-mi-linen",
+    "/categories/ao",
+    "/collections/hang-moi",
+    "/cart",
+    "/checkout",
+    "/checkout/success/FS-UAT-NOT-REAL",
+    "/order-success/FS-UAT-NOT-REAL",
+    "/track-order",
+    "/account",
+    "/account/settings",
+    "/account/addresses",
+    "/account/wishlist",
+    "/account/orders",
+    "/account/orders/FS-UAT-NOT-REAL",
+    "/pages/about",
+    "/pages/contact",
+    "/pages/privacy",
+    "/pages/shipping",
+    "/pages/size-guide",
+    "/pages/terms",
+    "/__not_found__"
+  ],
+  "viewports": [
+    390,
+    1440
+  ],
+  "summary": {
+    "observations": 62,
+    "routesReviewed": 31,
+    "failedCycles": 0,
+    "runtimeErrors": 0,
+    "serverErrors": 0
+  },
+  "runtimeErrors": [],
+  "serverErrors": [],
+  "interactions": [
+    {
+      "control": "mobile navigation",
+      "focusReturned": true
+    },
+    {
+      "control": "cart drawer",
+      "focusReturned": true
+    },
+    {
+      "control": "mobile catalog filters",
+      "focusReturned": true
+    },
+    {
+      "control": "size guide",
+      "focusReturned": true
+    }
+  ],
+  "observations": [
+    {
+      "path": "/",
+      "viewports": [
+        {
+          "width": 390,
+          "finalPath": "/",
+          "focus": {
+            "first": "Bỏ qua điều hướng",
+            "uniqueFocusTargets": 17,
+            "cycleFound": true,
+            "visibleFocusCount": 51
+          }
+        },
+        {
+          "width": 1440,
+          "finalPath": "/",
+          "focus": {
+            "first": "Bỏ qua điều hướng",
+            "uniqueFocusTargets": 16,
+            "cycleFound": true,
+            "visibleFocusCount": 57
+          }
+        }
+      ]
+    },
+    {
+      "path": "/login",
+      "viewports": [
+        {
+          "width": 390,
+          "finalPath": "/login",
+          "focus": {
+            "first": "INPUT",
+            "uniqueFocusTargets": 6,
+            "cycleFound": true,
+            "visibleFocusCount": 8
+          }
+        },
+        {
+          "width": 1440,
+          "finalPath": "/login",
+          "focus": {
+            "first": "INPUT",
+            "uniqueFocusTargets": 6,
+            "cycleFound": true,
+            "visibleFocusCount": 8
+          }
+        }
+      ]
+    },
+    {
+      "path": "/register",
+      "viewports": [
+        {
+          "width": 390,
+          "finalPath": "/register",
+          "focus": {
+            "first": "INPUT",
+            "uniqueFocusTargets": 9,
+            "cycleFound": true,
+            "visibleFocusCount": 11
+          }
+        },
+        {
+          "width": 1440,
+          "finalPath": "/register",
+          "focus": {
+            "first": "INPUT",
+            "uniqueFocusTargets": 9,
+            "cycleFound": true,
+            "visibleFocusCount": 11
+          }
+        }
+      ]
+    },
+    {
+      "path": "/pending-approval",
+      "viewports": [
+        {
+          "width": 390,
+          "finalPath": "/pending-approval",
+          "focus": {
+            "first": "Đổi email",
+            "uniqueFocusTargets": 1,
+            "cycleFound": true,
+            "visibleFocusCount": 1
+          }
+        },
+        {
+          "width": 1440,
+          "finalPath": "/pending-approval",
+          "focus": {
+            "first": "Đổi email",
+            "uniqueFocusTargets": 1,
+            "cycleFound": true,
+            "visibleFocusCount": 1
+          }
+        }
+      ]
+    },
+    {
+      "path": "/verify-email",
+      "viewports": [
+        {
+          "width": 390,
+          "finalPath": "/verify-email",
+          "focus": {
+            "first": "Quay về đăng nhập",
+            "uniqueFocusTargets": 3,
+            "cycleFound": true,
+            "visibleFocusCount": 3
+          }
+        },
+        {
+          "width": 1440,
+          "finalPath": "/verify-email",
+          "focus": {
+            "first": "Quay về đăng nhập",
+            "uniqueFocusTargets": 3,
+            "cycleFound": true,
+            "visibleFocusCount": 3
+          }
+        }
+      ]
+    },
+    {
+      "path": "/forgot-password",
+      "viewports": [
+        {
+          "width": 390,
+          "finalPath": "/forgot-password",
+          "focus": {
+            "first": "INPUT",
+            "uniqueFocusTargets": 4,
+            "cycleFound": true,
+            "visibleFocusCount": 5
+          }
+        },
+        {
+          "width": 1440,
+          "finalPath": "/forgot-password",
+          "focus": {
+            "first": "INPUT",
+            "uniqueFocusTargets": 4,
+            "cycleFound": true,
+            "visibleFocusCount": 5
+          }
+        }
+      ]
+    },
+    {
+      "path": "/forgot-password/sent",
+      "viewports": [
+        {
+          "width": 390,
+          "finalPath": "/forgot-password/sent",
+          "focus": {
+            "first": "Gửi lại hướng dẫn",
+            "uniqueFocusTargets": 3,
+            "cycleFound": true,
+            "visibleFocusCount": 4
+          }
+        },
+        {
+          "width": 1440,
+          "finalPath": "/forgot-password/sent",
+          "focus": {
+            "first": "Gửi lại hướng dẫn",
+            "uniqueFocusTargets": 3,
+            "cycleFound": true,
+            "visibleFocusCount": 4
+          }
+        }
+      ]
+    },
+    {
+      "path": "/reset-password/demo-token",
+      "viewports": [
+        {
+          "width": 390,
+          "finalPath": "/reset-password/demo-token",
+          "focus": {
+            "first": "INPUT",
+            "uniqueFocusTargets": 6,
+            "cycleFound": true,
+            "visibleFocusCount": 8
+          }
+        },
+        {
+          "width": 1440,
+          "finalPath": "/reset-password/demo-token",
+          "focus": {
+            "first": "INPUT",
+            "uniqueFocusTargets": 6,
+            "cycleFound": true,
+            "visibleFocusCount": 8
+          }
+        }
+      ]
+    },
+    {
+      "path": "/reset-password/done",
+      "viewports": [
+        {
+          "width": 390,
+          "finalPath": "/reset-password/done",
+          "focus": {
+            "first": "Đăng nhập ngay",
+            "uniqueFocusTargets": 3,
+            "cycleFound": true,
+            "visibleFocusCount": 3
+          }
+        },
+        {
+          "width": 1440,
+          "finalPath": "/reset-password/done",
+          "focus": {
+            "first": "Đăng nhập ngay",
+            "uniqueFocusTargets": 3,
+            "cycleFound": true,
+            "visibleFocusCount": 3
+          }
+        }
+      ]
+    },
+    {
+      "path": "/products",
+      "viewports": [
+        {
+          "width": 390,
+          "finalPath": "/products",
+          "focus": {
+            "first": "Bỏ qua điều hướng",
+            "uniqueFocusTargets": 13,
+            "cycleFound": true,
+            "visibleFocusCount": 68
+          }
+        },
+        {
+          "width": 1440,
+          "finalPath": "/products",
+          "focus": {
+            "first": "Bỏ qua điều hướng",
+            "uniqueFocusTargets": 15,
+            "cycleFound": true,
+            "visibleFocusCount": 82
+          }
+        }
+      ]
+    },
+    {
+      "path": "/products/ao-so-mi-linen",
+      "viewports": [
+        {
+          "width": 390,
+          "finalPath": "/products/ao-so-mi-linen",
+          "focus": {
+            "first": "Bỏ qua điều hướng",
+            "uniqueFocusTargets": 16,
+            "cycleFound": true,
+            "visibleFocusCount": 32
+          }
+        },
+        {
+          "width": 1440,
+          "finalPath": "/products/ao-so-mi-linen",
+          "focus": {
+            "first": "Bỏ qua điều hướng",
+            "uniqueFocusTargets": 15,
+            "cycleFound": true,
+            "visibleFocusCount": 38
+          }
+        }
+      ]
+    },
+    {
+      "path": "/categories/ao",
+      "viewports": [
+        {
+          "width": 390,
+          "finalPath": "/categories/ao",
+          "focus": {
+            "first": "Bỏ qua điều hướng",
+            "uniqueFocusTargets": 13,
+            "cycleFound": true,
+            "visibleFocusCount": 35
+          }
+        },
+        {
+          "width": 1440,
+          "finalPath": "/categories/ao",
+          "focus": {
+            "first": "Bỏ qua điều hướng",
+            "uniqueFocusTargets": 15,
+            "cycleFound": true,
+            "visibleFocusCount": 49
+          }
+        }
+      ]
+    },
+    {
+      "path": "/collections/hang-moi",
+      "viewports": [
+        {
+          "width": 390,
+          "finalPath": "/collections/hang-moi",
+          "focus": {
+            "first": "Bỏ qua điều hướng",
+            "uniqueFocusTargets": 13,
+            "cycleFound": true,
+            "visibleFocusCount": 69
+          }
+        },
+        {
+          "width": 1440,
+          "finalPath": "/collections/hang-moi",
+          "focus": {
+            "first": "Bỏ qua điều hướng",
+            "uniqueFocusTargets": 15,
+            "cycleFound": true,
+            "visibleFocusCount": 83
+          }
+        }
+      ]
+    },
+    {
+      "path": "/cart",
+      "viewports": [
+        {
+          "width": 390,
+          "finalPath": "/cart",
+          "focus": {
+            "first": "Bỏ qua điều hướng",
+            "uniqueFocusTargets": 9,
+            "cycleFound": true,
+            "visibleFocusCount": 16
+          }
+        },
+        {
+          "width": 1440,
+          "finalPath": "/cart",
+          "focus": {
+            "first": "Bỏ qua điều hướng",
+            "uniqueFocusTargets": 8,
+            "cycleFound": true,
+            "visibleFocusCount": 22
+          }
+        }
+      ]
+    },
+    {
+      "path": "/checkout",
+      "viewports": [
+        {
+          "width": 390,
+          "finalPath": "/checkout",
+          "focus": {
+            "first": "Bỏ qua điều hướng",
+            "uniqueFocusTargets": 11,
+            "cycleFound": true,
+            "visibleFocusCount": 23
+          }
+        },
+        {
+          "width": 1440,
+          "finalPath": "/checkout",
+          "focus": {
+            "first": "Bỏ qua điều hướng",
+            "uniqueFocusTargets": 10,
+            "cycleFound": true,
+            "visibleFocusCount": 29
+          }
+        }
+      ]
+    },
+    {
+      "path": "/checkout/success/FS-UAT-NOT-REAL",
+      "viewports": [
+        {
+          "width": 390,
+          "finalPath": "/checkout/success/FS-UAT-NOT-REAL",
+          "focus": {
+            "first": "Bỏ qua điều hướng",
+            "uniqueFocusTargets": 11,
+            "cycleFound": true,
+            "visibleFocusCount": 17
+          }
+        },
+        {
+          "width": 1440,
+          "finalPath": "/checkout/success/FS-UAT-NOT-REAL",
+          "focus": {
+            "first": "Bỏ qua điều hướng",
+            "uniqueFocusTargets": 10,
+            "cycleFound": true,
+            "visibleFocusCount": 23
+          }
+        }
+      ]
+    },
+    {
+      "path": "/order-success/FS-UAT-NOT-REAL",
+      "viewports": [
+        {
+          "width": 390,
+          "finalPath": "/order-success/FS-UAT-NOT-REAL",
+          "focus": {
+            "first": "Bỏ qua điều hướng",
+            "uniqueFocusTargets": 11,
+            "cycleFound": true,
+            "visibleFocusCount": 17
+          }
+        },
+        {
+          "width": 1440,
+          "finalPath": "/order-success/FS-UAT-NOT-REAL",
+          "focus": {
+            "first": "Bỏ qua điều hướng",
+            "uniqueFocusTargets": 10,
+            "cycleFound": true,
+            "visibleFocusCount": 23
+          }
+        }
+      ]
+    },
+    {
+      "path": "/track-order",
+      "viewports": [
+        {
+          "width": 390,
+          "finalPath": "/track-order",
+          "focus": {
+            "first": "Bỏ qua điều hướng",
+            "uniqueFocusTargets": 12,
+            "cycleFound": true,
+            "visibleFocusCount": 18
+          }
+        },
+        {
+          "width": 1440,
+          "finalPath": "/track-order",
+          "focus": {
+            "first": "Bỏ qua điều hướng",
+            "uniqueFocusTargets": 11,
+            "cycleFound": true,
+            "visibleFocusCount": 24
+          }
+        }
+      ]
+    },
+    {
+      "path": "/account",
+      "viewports": [
+        {
+          "width": 390,
+          "finalPath": "/login",
+          "focus": {
+            "first": "INPUT",
+            "uniqueFocusTargets": 6,
+            "cycleFound": true,
+            "visibleFocusCount": 8
+          }
+        },
+        {
+          "width": 1440,
+          "finalPath": "/login",
+          "focus": {
+            "first": "INPUT",
+            "uniqueFocusTargets": 6,
+            "cycleFound": true,
+            "visibleFocusCount": 8
+          }
+        }
+      ]
+    },
+    {
+      "path": "/account/settings",
+      "viewports": [
+        {
+          "width": 390,
+          "finalPath": "/login",
+          "focus": {
+            "first": "INPUT",
+            "uniqueFocusTargets": 6,
+            "cycleFound": true,
+            "visibleFocusCount": 8
+          }
+        },
+        {
+          "width": 1440,
+          "finalPath": "/login",
+          "focus": {
+            "first": "INPUT",
+            "uniqueFocusTargets": 6,
+            "cycleFound": true,
+            "visibleFocusCount": 8
+          }
+        }
+      ]
+    },
+    {
+      "path": "/account/addresses",
+      "viewports": [
+        {
+          "width": 390,
+          "finalPath": "/login",
+          "focus": {
+            "first": "INPUT",
+            "uniqueFocusTargets": 6,
+            "cycleFound": true,
+            "visibleFocusCount": 8
+          }
+        },
+        {
+          "width": 1440,
+          "finalPath": "/login",
+          "focus": {
+            "first": "INPUT",
+            "uniqueFocusTargets": 6,
+            "cycleFound": true,
+            "visibleFocusCount": 8
+          }
+        }
+      ]
+    },
+    {
+      "path": "/account/wishlist",
+      "viewports": [
+        {
+          "width": 390,
+          "finalPath": "/login",
+          "focus": {
+            "first": "INPUT",
+            "uniqueFocusTargets": 6,
+            "cycleFound": true,
+            "visibleFocusCount": 8
+          }
+        },
+        {
+          "width": 1440,
+          "finalPath": "/login",
+          "focus": {
+            "first": "INPUT",
+            "uniqueFocusTargets": 6,
+            "cycleFound": true,
+            "visibleFocusCount": 8
+          }
+        }
+      ]
+    },
+    {
+      "path": "/account/orders",
+      "viewports": [
+        {
+          "width": 390,
+          "finalPath": "/login",
+          "focus": {
+            "first": "INPUT",
+            "uniqueFocusTargets": 6,
+            "cycleFound": true,
+            "visibleFocusCount": 8
+          }
+        },
+        {
+          "width": 1440,
+          "finalPath": "/login",
+          "focus": {
+            "first": "INPUT",
+            "uniqueFocusTargets": 6,
+            "cycleFound": true,
+            "visibleFocusCount": 8
+          }
+        }
+      ]
+    },
+    {
+      "path": "/account/orders/FS-UAT-NOT-REAL",
+      "viewports": [
+        {
+          "width": 390,
+          "finalPath": "/login",
+          "focus": {
+            "first": "INPUT",
+            "uniqueFocusTargets": 6,
+            "cycleFound": true,
+            "visibleFocusCount": 8
+          }
+        },
+        {
+          "width": 1440,
+          "finalPath": "/login",
+          "focus": {
+            "first": "INPUT",
+            "uniqueFocusTargets": 6,
+            "cycleFound": true,
+            "visibleFocusCount": 8
+          }
+        }
+      ]
+    },
+    {
+      "path": "/pages/about",
+      "viewports": [
+        {
+          "width": 390,
+          "finalPath": "/pages/about",
+          "focus": {
+            "first": "Bỏ qua điều hướng",
+            "uniqueFocusTargets": 9,
+            "cycleFound": true,
+            "visibleFocusCount": 15
+          }
+        },
+        {
+          "width": 1440,
+          "finalPath": "/pages/about",
+          "focus": {
+            "first": "Bỏ qua điều hướng",
+            "uniqueFocusTargets": 8,
+            "cycleFound": true,
+            "visibleFocusCount": 21
+          }
+        }
+      ]
+    },
+    {
+      "path": "/pages/contact",
+      "viewports": [
+        {
+          "width": 390,
+          "finalPath": "/pages/contact",
+          "focus": {
+            "first": "Bỏ qua điều hướng",
+            "uniqueFocusTargets": 9,
+            "cycleFound": true,
+            "visibleFocusCount": 15
+          }
+        },
+        {
+          "width": 1440,
+          "finalPath": "/pages/contact",
+          "focus": {
+            "first": "Bỏ qua điều hướng",
+            "uniqueFocusTargets": 8,
+            "cycleFound": true,
+            "visibleFocusCount": 21
+          }
+        }
+      ]
+    },
+    {
+      "path": "/pages/privacy",
+      "viewports": [
+        {
+          "width": 390,
+          "finalPath": "/pages/privacy",
+          "focus": {
+            "first": "Bỏ qua điều hướng",
+            "uniqueFocusTargets": 9,
+            "cycleFound": true,
+            "visibleFocusCount": 15
+          }
+        },
+        {
+          "width": 1440,
+          "finalPath": "/pages/privacy",
+          "focus": {
+            "first": "Bỏ qua điều hướng",
+            "uniqueFocusTargets": 8,
+            "cycleFound": true,
+            "visibleFocusCount": 21
+          }
+        }
+      ]
+    },
+    {
+      "path": "/pages/shipping",
+      "viewports": [
+        {
+          "width": 390,
+          "finalPath": "/pages/shipping",
+          "focus": {
+            "first": "Bỏ qua điều hướng",
+            "uniqueFocusTargets": 9,
+            "cycleFound": true,
+            "visibleFocusCount": 15
+          }
+        },
+        {
+          "width": 1440,
+          "finalPath": "/pages/shipping",
+          "focus": {
+            "first": "Bỏ qua điều hướng",
+            "uniqueFocusTargets": 8,
+            "cycleFound": true,
+            "visibleFocusCount": 21
+          }
+        }
+      ]
+    },
+    {
+      "path": "/pages/size-guide",
+      "viewports": [
+        {
+          "width": 390,
+          "finalPath": "/pages/size-guide",
+          "focus": {
+            "first": "Bỏ qua điều hướng",
+            "uniqueFocusTargets": 9,
+            "cycleFound": true,
+            "visibleFocusCount": 15
+          }
+        },
+        {
+          "width": 1440,
+          "finalPath": "/pages/size-guide",
+          "focus": {
+            "first": "Bỏ qua điều hướng",
+            "uniqueFocusTargets": 8,
+            "cycleFound": true,
+            "visibleFocusCount": 21
+          }
+        }
+      ]
+    },
+    {
+      "path": "/pages/terms",
+      "viewports": [
+        {
+          "width": 390,
+          "finalPath": "/pages/terms",
+          "focus": {
+            "first": "Bỏ qua điều hướng",
+            "uniqueFocusTargets": 9,
+            "cycleFound": true,
+            "visibleFocusCount": 15
+          }
+        },
+        {
+          "width": 1440,
+          "finalPath": "/pages/terms",
+          "focus": {
+            "first": "Bỏ qua điều hướng",
+            "uniqueFocusTargets": 8,
+            "cycleFound": true,
+            "visibleFocusCount": 21
+          }
+        }
+      ]
+    },
+    {
+      "path": "/__not_found__",
+      "viewports": [
+        {
+          "width": 390,
+          "finalPath": "/__not_found__",
+          "focus": {
+            "first": "Bỏ qua điều hướng",
+            "uniqueFocusTargets": 10,
+            "cycleFound": true,
+            "visibleFocusCount": 16
+          }
+        },
+        {
+          "width": 1440,
+          "finalPath": "/__not_found__",
+          "focus": {
+            "first": "Bỏ qua điều hướng",
+            "uniqueFocusTargets": 9,
+            "cycleFound": true,
+            "visibleFocusCount": 22
+          }
+        }
+      ]
+    }
+  ]
+}

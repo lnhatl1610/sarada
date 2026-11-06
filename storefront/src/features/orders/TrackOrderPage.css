@@ -1,0 +1,24 @@
+.store .track-timeline{margin-top:24px;border-top:1px solid var(--line);padding-top:18px}
+.store .track-timeline h3{font-size:14px;margin:0 0 12px}
+.store .track-timeline ol{list-style:none;padding:0;margin:0}
+.store .track-timeline li{position:relative;display:grid;grid-template-columns:12px 1fr;gap:12px;padding:0 0 18px}
+.store .track-timeline li:not(:last-child)::before{content:"";position:absolute;left:5px;top:10px;bottom:0;width:1px;background:var(--line)}
+.store .track-timeline-dot{position:relative;z-index:1;width:11px;height:11px;margin-top:3px;border:1px solid var(--ink);border-radius:50%;background:var(--surface,#fff)}
+.store .track-timeline li:last-child .track-timeline-dot{background:var(--ink)}
+.store .track-timeline li b{font-size:12px;font-weight:600}
+.store .track-timeline li p{margin:4px 0;color:var(--muted);font-size:11px}
+.store .track-timeline li time{display:block;margin-top:4px;color:var(--muted);font-size:10px}
+.store .track-timeline-empty{margin:18px 0 0;padding-top:14px;border-top:1px solid var(--line);color:var(--muted);font-size:11px}
+.store .track-refunds{margin-top:18px;padding-top:14px;border-top:1px solid var(--line)}
+.store .track-refunds h3{font-size:14px;margin:0 0 8px}
+.store .track-refunds p{margin:0 0 8px}
+.store .track-refunds ul{display:grid;gap:6px;list-style:none;padding:0;margin:0}
+.store .track-refunds li{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 12px;padding:8px 0;border-bottom:1px solid var(--line)}
+.store .track-refunds time{color:var(--muted);font-size:11px}
+.store .track-shipments{margin:20px 0;border-top:1px solid var(--line);padding-top:16px}
+.store .track-shipments h3{font-size:14px;margin:0 0 10px}
+.store .track-shipment{display:grid;gap:5px;padding:10px 0;border-bottom:1px solid var(--line);font-size:11px}
+.store .track-shipment span,.store .track-shipment time{color:var(--muted)}
+.store .track-shipment b{font-weight:600;overflow-wrap:anywhere}
+.store .track-shipment time{font-size:10px}
+@media(max-width:380px){.store .track-result{padding:16px}}

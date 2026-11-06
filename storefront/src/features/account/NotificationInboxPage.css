@@ -1,0 +1,22 @@
+.customer-notifications { display: grid; gap: 20px; }
+.customer-notifications h2, .customer-notifications h3, .customer-notifications p { margin: 0; }
+.customer-notifications__heading { display: flex; align-items: end; justify-content: space-between; gap: 16px; }
+.customer-notifications__heading > div { display: grid; gap: 8px; }
+.customer-notifications__heading > div > p:last-child, .customer-notifications__content > p, .customer-notifications__content time { color: var(--muted, #666); }
+.customer-notifications button { min-height: 40px; padding: 8px 12px; border: 1px solid var(--border, #ddd); background: transparent; color: inherit; cursor: pointer; }
+.customer-notifications button:disabled { opacity: .5; cursor: not-allowed; }
+.customer-notifications__list { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
+.customer-notifications__list > li { display: grid; grid-template-columns: 10px minmax(0, 1fr) auto; align-items: start; gap: 14px; padding: 18px; border: 1px solid var(--border, #e5e5e5); background: var(--surface, #fff); }
+.customer-notifications__list > li.is-unread { border-inline-start: 3px solid var(--foreground, #171717); }
+.customer-notifications__indicator { width: 8px; height: 8px; margin-top: 6px; border-radius: 50%; background: transparent; }
+.is-unread .customer-notifications__indicator { background: var(--foreground, #171717); }
+.customer-notifications__content { display: grid; gap: 6px; }
+.customer-notifications__content h3 { font-size: 15px; font-weight: 600; }
+.customer-notifications__content time { font-size: 12px; }
+.customer-notifications__actions { display: grid; justify-items: end; gap: 8px; }
+.customer-notifications__actions a { color: inherit; text-underline-offset: 3px; }
+.customer-notifications__state { padding: 24px; border: 1px solid var(--border, #ddd); }
+.customer-notifications__state h3 { margin-bottom: 8px; }
+.customer-notifications__pagination { display: flex; justify-content: center; align-items: center; gap: 12px; }
+.customer-notifications :focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+@media (max-width: 680px) { .customer-notifications__heading { align-items: start; flex-direction: column; } .customer-notifications__list > li { grid-template-columns: 10px minmax(0, 1fr); } .customer-notifications__actions { grid-column: 2; justify-items: start; } }

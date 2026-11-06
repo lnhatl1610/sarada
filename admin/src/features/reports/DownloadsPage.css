@@ -1,0 +1,12 @@
+.downloads-page { display: grid; gap: 14px; }
+.downloads-list { display: grid; gap: 10px; }
+.download-card { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+.download-card-title, .download-card-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.download-card-title h2 { margin: 0; font-size: 16px; }
+.download-card-info p { margin: 6px 0 0; color: var(--shell-muted); font-size: 13px; }
+.download-status { border-radius: 999px; padding: 3px 9px; font-size: 12px; background: var(--shell-subtle); }
+.download-status--ready { color: var(--shell-success); }
+.download-status--failed { color: var(--shell-danger); }
+.download-progress { height: 7px; max-width: 400px; margin-top: 10px; border-radius: 999px; overflow: hidden; background: var(--shell-subtle); }
+.download-progress span { display: block; height: 100%; background: var(--shell-accent); transition: width 180ms ease; }
+@media (max-width: 700px) { .download-card { align-items: flex-start; flex-direction: column; } }

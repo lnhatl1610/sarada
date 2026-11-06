@@ -1,0 +1,51 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+:root {
+  --radius: .65rem;
+  --background: #f9f8f5;
+  --foreground: #252522;
+  --card: #ffffff;
+  --card-foreground: #252522;
+  --popover: #ffffff;
+  --popover-foreground: #252522;
+  --primary: #7f2638;
+  --primary-foreground: #ffffff;
+  --secondary: #eeeae5;
+  --secondary-foreground: #252522;
+  --muted: #efede8;
+  --muted-foreground: #716e68;
+  --accent: #f1e8e9;
+  --accent-foreground: #682031;
+  --destructive: #b42318;
+  --border: #e5e0da;
+  --input: #e5e0da;
+  --ring: #7f2638;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+:root{font-family:var(--font-body,Inter),system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:16px;color:#252522;background:#fbfaf8;font-synthesis:none;text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;font-weight:400}*{box-sizing:border-box}body{margin:0;min-width:0}button,input,select,textarea{font:inherit}a{color:inherit;text-decoration:none}

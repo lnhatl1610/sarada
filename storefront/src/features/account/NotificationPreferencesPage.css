@@ -1,0 +1,21 @@
+.notification-preferences { display: grid; gap: 18px; }
+.notification-preferences h2, .notification-preferences h3, .notification-preferences p { margin: 0; }
+.notification-preferences__heading { display: flex; justify-content: space-between; align-items: end; gap: 16px; }
+.notification-preferences__heading > div { display: grid; gap: 8px; }
+.notification-preferences__heading > div > p:last-child, .notification-preferences__channel-note { color: var(--muted, #666); }
+.notification-preferences__table { overflow-x: auto; border: 1px solid var(--border, #ddd); }
+.notification-preferences__row { display: grid; grid-template-columns: minmax(220px, 2fr) repeat(5, minmax(90px, 1fr)); align-items: center; gap: 12px; min-width: 760px; padding: 14px; border-bottom: 1px solid var(--border, #eee); }
+.notification-preferences__row:last-child { border-bottom: 0; }
+.notification-preferences__row--header { background: var(--surface-muted, #f6f6f4); font-size: 12px; font-weight: 600; }
+.notification-preferences__row > div { display: grid; gap: 5px; }
+.notification-preferences__row small { color: var(--muted, #666); }
+.notification-preferences__toggle { display: grid; place-items: center; }
+.notification-preferences__toggle input { width: 18px; height: 18px; accent-color: var(--foreground, #171717); }
+.notification-preferences__channel-note, .notification-preferences__error, .notification-preferences__notice { font-size: 13px; }
+.notification-preferences__error { color: var(--danger, #b42318); }
+.notification-preferences__push { display: grid; justify-items: start; gap: 12px; padding-top: 16px; border-top: 1px solid var(--border, #ddd); }
+.notification-preferences__device { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; max-width: 700px; padding: 10px 0; border-bottom: 1px solid var(--border, #eee); }
+.notification-preferences button { min-height: 40px; padding: 8px 12px; border: 1px solid var(--border, #ddd); background: transparent; color: inherit; cursor: pointer; }
+.notification-preferences button:disabled { opacity: .5; cursor: not-allowed; }
+.notification-preferences :focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+@media (max-width: 680px) { .notification-preferences__heading { align-items: start; flex-direction: column; } }

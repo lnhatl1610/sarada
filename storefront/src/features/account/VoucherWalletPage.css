@@ -1,0 +1,27 @@
+.voucher-wallet { display: grid; gap: 14px; }
+.voucher-wallet__add { display: grid; gap: 8px; max-width: 620px; padding: 16px; border: 1px solid var(--border, #ddd); }
+.voucher-wallet__add > div { display: flex; gap: 8px; }
+.voucher-wallet__add input { flex: 1; min-width: 0; min-height: 42px; padding: 8px 11px; border: 1px solid var(--border, #bbb); background: var(--surface, #fff); color: inherit; }
+.voucher-wallet__add small { color: var(--muted, #666); }
+.voucher-wallet h1, .voucher-wallet p { margin: 0; }
+.voucher-wallet__intro { color: var(--muted, #666); }
+.voucher-wallet__filters { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0; }
+.voucher-wallet__filters button, .voucher-wallet__pagination button { min-height: 40px; padding: 8px 13px; border: 1px solid var(--border, #ddd); color: inherit; background: transparent; cursor: pointer; }
+.voucher-wallet__filters button.is-active { color: var(--background, #fff); border-color: var(--foreground, #171717); background: var(--foreground, #171717); }
+.voucher-wallet__list { display: grid; gap: 12px; }
+.voucher-card { display: grid; grid-template-columns: minmax(0, 1fr) minmax(180px, .8fr) auto; align-items: center; gap: 16px; padding: 18px; border: 1px solid var(--border, #e5e5e5); background: var(--surface, #fff); }
+.voucher-card__offer { display: grid; gap: 8px; }
+.voucher-card__offer b { font-size: 18px; font-weight: 500; }
+.voucher-card__offer span { width: fit-content; padding: 5px 9px; border: 1px dashed var(--border, #bbb); font-family: ui-monospace, monospace; letter-spacing: .04em; }
+.voucher-card__details { display: grid; gap: 5px; color: var(--muted, #666); font-size: 13px; }
+.voucher-card__status { width: fit-content; padding: 3px 7px; color: var(--foreground, #171717); background: #f1f1ee; font-size: 12px; }
+.voucher-card__status.is-available { color: #22613d; background: #edf6ef; }
+.voucher-card__status.is-expired, .voucher-card__status.is-used, .voucher-card__status.is-unavailable { color: #6b6b6b; }
+.voucher-card.is-expired, .voucher-card.is-used, .voucher-card.is-unavailable { opacity: .78; }
+.voucher-card__details small { color: var(--danger, #b42318); }
+.voucher-wallet__state { padding: 24px; border: 1px solid var(--border, #e5e5e5); }
+.voucher-wallet__state h2 { margin: 0 0 8px; font-size: 18px; }
+.voucher-wallet__pagination { display: flex; align-items: center; justify-content: center; gap: 12px; margin-top: 8px; }
+.voucher-wallet__pagination button:disabled { opacity: .5; cursor: not-allowed; }
+.voucher-wallet :focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+@media (max-width: 680px) { .voucher-card { grid-template-columns: 1fr auto; gap: 12px; } .voucher-card__details { grid-column: 1 / -1; grid-row: 2; } .voucher-wallet__add > div { flex-direction: column; } }

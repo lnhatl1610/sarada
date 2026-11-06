@@ -1,0 +1,6 @@
+# Inventory
+
+`inventories.quantity` is physical stock; `reserved` holds placed orders. Available = quantity − reserved. Checkout and manual order creation lock all requested active variants in ascending ID order, then lock matching inventory rows by `variant_id` in ascending order before checking/adjusting. Admin batch adjustments sort variant IDs before locking inventory rows. Order status transitions process items by `variant_id`, then item ID, before each inventory operation. Every receive/sale/reserve/release/adjust operation adds an `inventory_movements` row with reference and actor. Staff adjustments require a reason. Low stock when available quantity ≤ configured threshold; expose it to admin dashboard and optionally notify by email.
+# Low-stock email alerts
+
+When an adjustment or new order reservation moves available quantity from above a variant's configured threshold to at or below it, the API queues one alert to the configured recipient list after commit. It sends another alert only after stock has recovered above the threshold and crosses downward again. Orders and inventory updates remain committed if email delivery later fails; the database queue retries the notification.

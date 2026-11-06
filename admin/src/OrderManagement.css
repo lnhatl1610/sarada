@@ -1,0 +1,129 @@
+.order-filters {
+  display: grid;
+  grid-template-columns: minmax(180px, 1.5fr) minmax(150px, 1fr) repeat(2, minmax(140px, .8fr));
+  gap: 10px;
+  padding: 12px 16px;
+}
+
+.order-filters label {
+  display: grid;
+  gap: 4px;
+  color: #716e68;
+  font-size: 9px;
+}
+
+.order-filters label input {
+  min-height: 36px;
+  border: 1px solid #e4e1dc;
+  padding: 0 8px;
+}
+
+.order-detail-trigger {
+  border: 0;
+  padding: 0;
+  color: #7f2638;
+  background: transparent;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+@media print {
+  .sidebar, .admin-top, .admin-footer, .page-title, .listing, .admin-toast,
+  .order-detail-panel .panel-heading button { display: none !important; }
+  .admin-main { margin: 0 !important; width: 100% !important; }
+  .order-detail-panel { border: 0; box-shadow: none; display: block !important; }
+}
+
+.order-detail-panel {
+  margin-top: 18px;
+  padding: 18px;
+}
+
+.order-detail-heading { align-items: flex-start; gap: 16px; flex-wrap: wrap; }
+.order-detail-heading > div:first-child { min-width: 220px; }
+.order-detail-badges, .order-detail-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.order-detail-actions select { min-height: 38px; max-width: 220px; }
+.order-detail-items { width: 100%; border-collapse: collapse; }
+.order-detail-items th, .order-detail-items td { padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--shell-border, #e5e7eb); vertical-align: middle; }
+.order-detail-items th { color: var(--shell-muted, #6b7280); font-size: 11px; }
+.order-snapshot-product { display: flex; align-items: center; gap: 10px; min-width: 220px; }
+.order-snapshot-product img, .order-snapshot-placeholder { width: 54px; height: 64px; flex: 0 0 54px; border-radius: 7px; object-fit: cover; background: var(--shell-surface-muted, #f3f4f6); }
+.order-snapshot-placeholder { display: grid; place-items: center; color: var(--shell-muted, #6b7280); font-size: 11px; }
+.order-snapshot-product small, .order-payment-card > small { display: block; color: var(--shell-muted, #6b7280); margin-top: 4px; }
+.order-payment-list, .order-shipment-list { display: grid; gap: 10px; margin-top: 12px; }
+.order-payment-card, .order-shipment-list article { padding: 12px; border: 1px solid var(--shell-border, #e5e7eb); border-radius: 9px; }
+.order-payment-card > div { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.order-payment-card p { margin: 8px 0 0; }
+.order-payment-card details { margin-top: 10px; }
+.order-payment-card summary { cursor: pointer; color: var(--shell-primary, #7b4b3a); }
+.order-payment-card pre { max-height: 240px; overflow: auto; padding: 10px; border-radius: 6px; white-space: pre-wrap; overflow-wrap: anywhere; background: var(--shell-surface-muted, #f3f4f6); font-size: 12px; }
+.order-shipment-list article { display: grid; gap: 5px; }
+.order-shipment-list small { color: var(--shell-muted, #6b7280); }
+@media (max-width: 640px) {
+  .order-detail-items th:nth-child(2), .order-detail-items td:nth-child(2) { display: none; }
+  .order-detail-items th, .order-detail-items td { padding: 8px 6px; }
+  .order-snapshot-product { min-width: 0; }
+  .order-snapshot-product img, .order-snapshot-placeholder { width: 42px; height: 52px; flex-basis: 42px; }
+  .order-detail-actions > * { flex: 1 1 auto; }
+}
+
+.order-detail-panel h2,
+.order-detail-panel h3 {
+  margin: 0 0 10px;
+}
+
+.order-detail-grid {
+  display: grid;
+  grid-template-columns: 1.2fr .8fr;
+  gap: 28px;
+  padding-top: 14px;
+}
+
+.order-detail-grid > section > p {
+  margin: 0 0 24px;
+  font-size: 11px;
+  line-height: 1.7;
+}
+
+.order-detail-line,
+.order-totals p {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid #eeeae5;
+  font-size: 11px;
+}
+
+.order-detail-line small,
+.order-history-timeline small {
+  display: block;
+  margin-top: 4px;
+  color: #716e68;
+  font-size: 9px;
+}
+
+.order-totals p {
+  margin: 0;
+}
+
+.order-history-timeline {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.order-history-timeline li {
+  padding: 0 0 14px 4px;
+  font-size: 10px;
+}
+
+@media (max-width: 760px) {
+  .order-filters {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .order-detail-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,1998 @@
+{
+  "generatedAt": "2026-10-28T03:28:33.221Z",
+  "baseUrl": "http://127.0.0.1:5174",
+  "engine": "Chromium 156.0.8078.4",
+  "axeCore": "4.14.0",
+  "standard": "WCAG 2.1 A/AA + axe best-practice tags",
+  "widths": [
+    320,
+    390,
+    768,
+    1440
+  ],
+  "routes": [
+    "/",
+    "/login",
+    "/register",
+    "/pending-approval",
+    "/verify-email",
+    "/forgot-password",
+    "/forgot-password/sent",
+    "/reset-password/demo-token",
+    "/reset-password/done",
+    "/products",
+    "/products/ao-so-mi-linen",
+    "/categories/ao",
+    "/collections/hang-moi",
+    "/cart",
+    "/checkout",
+    "/checkout/success/FS-UAT-NOT-REAL",
+    "/order-success/FS-UAT-NOT-REAL",
+    "/track-order",
+    "/account",
+    "/account/settings",
+    "/account/addresses",
+    "/account/wishlist",
+    "/account/orders",
+    "/account/orders/FS-UAT-NOT-REAL",
+    "/pages/about",
+    "/pages/contact",
+    "/pages/privacy",
+    "/pages/shipping",
+    "/pages/size-guide",
+    "/pages/terms",
+    "/__not_found__"
+  ],
+  "summary": {
+    "observations": 124,
+    "violations": 0,
+    "incomplete": 21,
+    "runtimeErrors": 0,
+    "serverErrors": 0
+  },
+  "runtimeErrors": [],
+  "serverErrors": [],
+  "cases": [
+    {
+      "requestedPath": "/",
+      "width": 320,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "video-caption",
+          "help": "<video> elements must have captions",
+          "nodes": [
+            {
+              "target": [
+                "video"
+              ],
+              "summary": "Fix all of the following:\n  Check that captions are available for the element"
+            }
+          ]
+        }
+      ],
+      "passes": 41
+    },
+    {
+      "requestedPath": "/",
+      "width": 390,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "video-caption",
+          "help": "<video> elements must have captions",
+          "nodes": [
+            {
+              "target": [
+                "video"
+              ],
+              "summary": "Fix all of the following:\n  Check that captions are available for the element"
+            }
+          ]
+        }
+      ],
+      "passes": 41
+    },
+    {
+      "requestedPath": "/",
+      "width": 768,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "video-caption",
+          "help": "<video> elements must have captions",
+          "nodes": [
+            {
+              "target": [
+                "video"
+              ],
+              "summary": "Fix all of the following:\n  Check that captions are available for the element"
+            }
+          ]
+        }
+      ],
+      "passes": 41
+    },
+    {
+      "requestedPath": "/",
+      "width": 1440,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "video-caption",
+          "help": "<video> elements must have captions",
+          "nodes": [
+            {
+              "target": [
+                "video"
+              ],
+              "summary": "Fix all of the following:\n  Check that captions are available for the element"
+            }
+          ]
+        }
+      ],
+      "passes": 41
+    },
+    {
+      "requestedPath": "/login",
+      "width": 320,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/login",
+      "violations": [],
+      "incomplete": [],
+      "passes": 38
+    },
+    {
+      "requestedPath": "/login",
+      "width": 390,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/login",
+      "violations": [],
+      "incomplete": [],
+      "passes": 38
+    },
+    {
+      "requestedPath": "/login",
+      "width": 768,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/login",
+      "violations": [],
+      "incomplete": [],
+      "passes": 38
+    },
+    {
+      "requestedPath": "/login",
+      "width": 1440,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/login",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "nodes": [
+            {
+              "target": [
+                ".storefront-auth-panel-topline > span:nth-child(1)"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                ".storefront-auth-panel-topline > span:nth-child(2)"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                ".storefront-auth-panel-copy > p"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                "h2"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                ".storefront-auth-panel-copy > span"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                ".storefront-auth-panel-bottom > span:nth-child(1)"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                ".storefront-auth-panel-bottom > span:nth-child(2)"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            }
+          ]
+        }
+      ],
+      "passes": 39
+    },
+    {
+      "requestedPath": "/register",
+      "width": 320,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/register",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "nodes": [
+            {
+              "target": [
+                "button"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined because it is overlapped by another element"
+            },
+            {
+              "target": [
+                "form > p"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined because it is overlapped by another element"
+            },
+            {
+              "target": [
+                "a[href$=\"login\"]"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined because it is overlapped by another element"
+            }
+          ]
+        }
+      ],
+      "passes": 40
+    },
+    {
+      "requestedPath": "/register",
+      "width": 390,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/register",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "nodes": [
+            {
+              "target": [
+                "button"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined because it is overlapped by another element"
+            },
+            {
+              "target": [
+                "form > p"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined because it is overlapped by another element"
+            },
+            {
+              "target": [
+                "a[href$=\"login\"]"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined because it is overlapped by another element"
+            }
+          ]
+        }
+      ],
+      "passes": 40
+    },
+    {
+      "requestedPath": "/register",
+      "width": 768,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/register",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "nodes": [
+            {
+              "target": [
+                "button"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined because it is overlapped by another element"
+            },
+            {
+              "target": [
+                "form > p"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined because it is overlapped by another element"
+            },
+            {
+              "target": [
+                "a[href$=\"login\"]"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined because it is overlapped by another element"
+            }
+          ]
+        }
+      ],
+      "passes": 40
+    },
+    {
+      "requestedPath": "/register",
+      "width": 1440,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/register",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "nodes": [
+            {
+              "target": [
+                "form > p"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined because it is overlapped by another element"
+            },
+            {
+              "target": [
+                "a[href$=\"login\"]"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined because it is overlapped by another element"
+            },
+            {
+              "target": [
+                ".storefront-auth-panel-topline > span:nth-child(1)"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                ".storefront-auth-panel-topline > span:nth-child(2)"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                ".storefront-auth-panel-copy > p"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                "h2"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                ".storefront-auth-panel-copy > span"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                ".storefront-auth-panel-bottom > span:nth-child(1)"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                ".storefront-auth-panel-bottom > span:nth-child(2)"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            }
+          ]
+        }
+      ],
+      "passes": 41
+    },
+    {
+      "requestedPath": "/pending-approval",
+      "width": 320,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/pending-approval",
+      "violations": [],
+      "incomplete": [],
+      "passes": 31
+    },
+    {
+      "requestedPath": "/pending-approval",
+      "width": 390,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/pending-approval",
+      "violations": [],
+      "incomplete": [],
+      "passes": 31
+    },
+    {
+      "requestedPath": "/pending-approval",
+      "width": 768,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/pending-approval",
+      "violations": [],
+      "incomplete": [],
+      "passes": 31
+    },
+    {
+      "requestedPath": "/pending-approval",
+      "width": 1440,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/pending-approval",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "nodes": [
+            {
+              "target": [
+                ".storefront-auth-panel-topline > span:nth-child(1)"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                ".storefront-auth-panel-topline > span:nth-child(2)"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                ".storefront-auth-panel-copy > p"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                "h2"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                ".storefront-auth-panel-copy > span"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                ".storefront-auth-panel-bottom > span:nth-child(1)"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                ".storefront-auth-panel-bottom > span:nth-child(2)"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            }
+          ]
+        }
+      ],
+      "passes": 32
+    },
+    {
+      "requestedPath": "/verify-email",
+      "width": 320,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/verify-email",
+      "violations": [],
+      "incomplete": [],
+      "passes": 29
+    },
+    {
+      "requestedPath": "/verify-email",
+      "width": 390,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/verify-email",
+      "violations": [],
+      "incomplete": [],
+      "passes": 29
+    },
+    {
+      "requestedPath": "/verify-email",
+      "width": 768,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/verify-email",
+      "violations": [],
+      "incomplete": [],
+      "passes": 29
+    },
+    {
+      "requestedPath": "/verify-email",
+      "width": 1440,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/verify-email",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "nodes": [
+            {
+              "target": [
+                ".storefront-auth-panel-topline > span:nth-child(1)"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                ".storefront-auth-panel-topline > span:nth-child(2)"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                ".storefront-auth-panel-copy > p"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                "h2"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                ".storefront-auth-panel-copy > span"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                ".storefront-auth-panel-bottom > span:nth-child(1)"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                ".storefront-auth-panel-bottom > span:nth-child(2)"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            }
+          ]
+        }
+      ],
+      "passes": 31
+    },
+    {
+      "requestedPath": "/forgot-password",
+      "width": 320,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/forgot-password",
+      "violations": [],
+      "incomplete": [],
+      "passes": 36
+    },
+    {
+      "requestedPath": "/forgot-password",
+      "width": 390,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/forgot-password",
+      "violations": [],
+      "incomplete": [],
+      "passes": 36
+    },
+    {
+      "requestedPath": "/forgot-password",
+      "width": 768,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/forgot-password",
+      "violations": [],
+      "incomplete": [],
+      "passes": 36
+    },
+    {
+      "requestedPath": "/forgot-password",
+      "width": 1440,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/forgot-password",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "nodes": [
+            {
+              "target": [
+                ".storefront-auth-panel-topline > span:nth-child(1)"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                ".storefront-auth-panel-topline > span:nth-child(2)"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                ".storefront-auth-panel-copy > p"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                "h2"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                ".storefront-auth-panel-copy > span"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                ".storefront-auth-panel-bottom > span:nth-child(1)"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                ".storefront-auth-panel-bottom > span:nth-child(2)"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            }
+          ]
+        }
+      ],
+      "passes": 37
+    },
+    {
+      "requestedPath": "/forgot-password/sent",
+      "width": 320,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/forgot-password/sent",
+      "violations": [],
+      "incomplete": [],
+      "passes": 31
+    },
+    {
+      "requestedPath": "/forgot-password/sent",
+      "width": 390,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/forgot-password/sent",
+      "violations": [],
+      "incomplete": [],
+      "passes": 31
+    },
+    {
+      "requestedPath": "/forgot-password/sent",
+      "width": 768,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/forgot-password/sent",
+      "violations": [],
+      "incomplete": [],
+      "passes": 31
+    },
+    {
+      "requestedPath": "/forgot-password/sent",
+      "width": 1440,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/forgot-password/sent",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "nodes": [
+            {
+              "target": [
+                ".storefront-auth-panel-topline > span:nth-child(1)"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                ".storefront-auth-panel-topline > span:nth-child(2)"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                ".storefront-auth-panel-copy > p"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                "h2"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                ".storefront-auth-panel-copy > span"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                ".storefront-auth-panel-bottom > span:nth-child(1)"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                ".storefront-auth-panel-bottom > span:nth-child(2)"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            }
+          ]
+        }
+      ],
+      "passes": 32
+    },
+    {
+      "requestedPath": "/reset-password/demo-token",
+      "width": 320,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/reset-password/demo-token",
+      "violations": [],
+      "incomplete": [],
+      "passes": 39
+    },
+    {
+      "requestedPath": "/reset-password/demo-token",
+      "width": 390,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/reset-password/demo-token",
+      "violations": [],
+      "incomplete": [],
+      "passes": 39
+    },
+    {
+      "requestedPath": "/reset-password/demo-token",
+      "width": 768,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/reset-password/demo-token",
+      "violations": [],
+      "incomplete": [],
+      "passes": 39
+    },
+    {
+      "requestedPath": "/reset-password/demo-token",
+      "width": 1440,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/reset-password/demo-token",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "nodes": [
+            {
+              "target": [
+                ".storefront-auth-panel-topline > span:nth-child(1)"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                ".storefront-auth-panel-topline > span:nth-child(2)"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                ".storefront-auth-panel-copy > p"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                "h2"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                ".storefront-auth-panel-copy > span"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                ".storefront-auth-panel-bottom > span:nth-child(1)"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                ".storefront-auth-panel-bottom > span:nth-child(2)"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            }
+          ]
+        }
+      ],
+      "passes": 40
+    },
+    {
+      "requestedPath": "/reset-password/done",
+      "width": 320,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/reset-password/done",
+      "violations": [],
+      "incomplete": [],
+      "passes": 29
+    },
+    {
+      "requestedPath": "/reset-password/done",
+      "width": 390,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/reset-password/done",
+      "violations": [],
+      "incomplete": [],
+      "passes": 29
+    },
+    {
+      "requestedPath": "/reset-password/done",
+      "width": 768,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/reset-password/done",
+      "violations": [],
+      "incomplete": [],
+      "passes": 29
+    },
+    {
+      "requestedPath": "/reset-password/done",
+      "width": 1440,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/reset-password/done",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "nodes": [
+            {
+              "target": [
+                ".storefront-auth-panel-topline > span:nth-child(1)"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                ".storefront-auth-panel-topline > span:nth-child(2)"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                ".storefront-auth-panel-copy > p"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                "h2"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                ".storefront-auth-panel-copy > span"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                ".storefront-auth-panel-bottom > span:nth-child(1)"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                ".storefront-auth-panel-bottom > span:nth-child(2)"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            }
+          ]
+        }
+      ],
+      "passes": 31
+    },
+    {
+      "requestedPath": "/products",
+      "width": 320,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/products",
+      "violations": [],
+      "incomplete": [],
+      "passes": 43
+    },
+    {
+      "requestedPath": "/products",
+      "width": 390,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/products",
+      "violations": [],
+      "incomplete": [],
+      "passes": 43
+    },
+    {
+      "requestedPath": "/products",
+      "width": 768,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/products",
+      "violations": [],
+      "incomplete": [],
+      "passes": 44
+    },
+    {
+      "requestedPath": "/products",
+      "width": 1440,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/products",
+      "violations": [],
+      "incomplete": [],
+      "passes": 44
+    },
+    {
+      "requestedPath": "/products/ao-so-mi-linen",
+      "width": 320,
+      "title": "Áo sơ mi linen dáng rộng | NÉT Studio",
+      "finalPath": "/products/ao-so-mi-linen",
+      "violations": [],
+      "incomplete": [],
+      "passes": 48
+    },
+    {
+      "requestedPath": "/products/ao-so-mi-linen",
+      "width": 390,
+      "title": "Áo sơ mi linen dáng rộng | NÉT Studio",
+      "finalPath": "/products/ao-so-mi-linen",
+      "violations": [],
+      "incomplete": [],
+      "passes": 48
+    },
+    {
+      "requestedPath": "/products/ao-so-mi-linen",
+      "width": 768,
+      "title": "Áo sơ mi linen dáng rộng | NÉT Studio",
+      "finalPath": "/products/ao-so-mi-linen",
+      "violations": [],
+      "incomplete": [],
+      "passes": 48
+    },
+    {
+      "requestedPath": "/products/ao-so-mi-linen",
+      "width": 1440,
+      "title": "Áo sơ mi linen dáng rộng | NÉT Studio",
+      "finalPath": "/products/ao-so-mi-linen",
+      "violations": [],
+      "incomplete": [],
+      "passes": 49
+    },
+    {
+      "requestedPath": "/categories/ao",
+      "width": 320,
+      "title": "Áo | NÉT Studio",
+      "finalPath": "/categories/ao",
+      "violations": [],
+      "incomplete": [],
+      "passes": 43
+    },
+    {
+      "requestedPath": "/categories/ao",
+      "width": 390,
+      "title": "Áo | NÉT Studio",
+      "finalPath": "/categories/ao",
+      "violations": [],
+      "incomplete": [],
+      "passes": 43
+    },
+    {
+      "requestedPath": "/categories/ao",
+      "width": 768,
+      "title": "Áo | NÉT Studio",
+      "finalPath": "/categories/ao",
+      "violations": [],
+      "incomplete": [],
+      "passes": 44
+    },
+    {
+      "requestedPath": "/categories/ao",
+      "width": 1440,
+      "title": "Áo | NÉT Studio",
+      "finalPath": "/categories/ao",
+      "violations": [],
+      "incomplete": [],
+      "passes": 44
+    },
+    {
+      "requestedPath": "/collections/hang-moi",
+      "width": 320,
+      "title": "Hàng mới | NÉT Studio",
+      "finalPath": "/collections/hang-moi",
+      "violations": [],
+      "incomplete": [],
+      "passes": 43
+    },
+    {
+      "requestedPath": "/collections/hang-moi",
+      "width": 390,
+      "title": "Hàng mới | NÉT Studio",
+      "finalPath": "/collections/hang-moi",
+      "violations": [],
+      "incomplete": [],
+      "passes": 43
+    },
+    {
+      "requestedPath": "/collections/hang-moi",
+      "width": 768,
+      "title": "Hàng mới | NÉT Studio",
+      "finalPath": "/collections/hang-moi",
+      "violations": [],
+      "incomplete": [],
+      "passes": 44
+    },
+    {
+      "requestedPath": "/collections/hang-moi",
+      "width": 1440,
+      "title": "Hàng mới | NÉT Studio",
+      "finalPath": "/collections/hang-moi",
+      "violations": [],
+      "incomplete": [],
+      "passes": 44
+    },
+    {
+      "requestedPath": "/cart",
+      "width": 320,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/cart",
+      "violations": [],
+      "incomplete": [],
+      "passes": 41
+    },
+    {
+      "requestedPath": "/cart",
+      "width": 390,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/cart",
+      "violations": [],
+      "incomplete": [],
+      "passes": 41
+    },
+    {
+      "requestedPath": "/cart",
+      "width": 768,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/cart",
+      "violations": [],
+      "incomplete": [],
+      "passes": 41
+    },
+    {
+      "requestedPath": "/cart",
+      "width": 1440,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/cart",
+      "violations": [],
+      "incomplete": [],
+      "passes": 41
+    },
+    {
+      "requestedPath": "/checkout",
+      "width": 320,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/checkout",
+      "violations": [],
+      "incomplete": [],
+      "passes": 43
+    },
+    {
+      "requestedPath": "/checkout",
+      "width": 390,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/checkout",
+      "violations": [],
+      "incomplete": [],
+      "passes": 43
+    },
+    {
+      "requestedPath": "/checkout",
+      "width": 768,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/checkout",
+      "violations": [],
+      "incomplete": [],
+      "passes": 43
+    },
+    {
+      "requestedPath": "/checkout",
+      "width": 1440,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/checkout",
+      "violations": [],
+      "incomplete": [],
+      "passes": 43
+    },
+    {
+      "requestedPath": "/checkout/success/FS-UAT-NOT-REAL",
+      "width": 320,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/checkout/success/FS-UAT-NOT-REAL",
+      "violations": [],
+      "incomplete": [],
+      "passes": 41
+    },
+    {
+      "requestedPath": "/checkout/success/FS-UAT-NOT-REAL",
+      "width": 390,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/checkout/success/FS-UAT-NOT-REAL",
+      "violations": [],
+      "incomplete": [],
+      "passes": 41
+    },
+    {
+      "requestedPath": "/checkout/success/FS-UAT-NOT-REAL",
+      "width": 768,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/checkout/success/FS-UAT-NOT-REAL",
+      "violations": [],
+      "incomplete": [],
+      "passes": 41
+    },
+    {
+      "requestedPath": "/checkout/success/FS-UAT-NOT-REAL",
+      "width": 1440,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/checkout/success/FS-UAT-NOT-REAL",
+      "violations": [],
+      "incomplete": [],
+      "passes": 41
+    },
+    {
+      "requestedPath": "/order-success/FS-UAT-NOT-REAL",
+      "width": 320,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/order-success/FS-UAT-NOT-REAL",
+      "violations": [],
+      "incomplete": [],
+      "passes": 41
+    },
+    {
+      "requestedPath": "/order-success/FS-UAT-NOT-REAL",
+      "width": 390,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/order-success/FS-UAT-NOT-REAL",
+      "violations": [],
+      "incomplete": [],
+      "passes": 41
+    },
+    {
+      "requestedPath": "/order-success/FS-UAT-NOT-REAL",
+      "width": 768,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/order-success/FS-UAT-NOT-REAL",
+      "violations": [],
+      "incomplete": [],
+      "passes": 41
+    },
+    {
+      "requestedPath": "/order-success/FS-UAT-NOT-REAL",
+      "width": 1440,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/order-success/FS-UAT-NOT-REAL",
+      "violations": [],
+      "incomplete": [],
+      "passes": 41
+    },
+    {
+      "requestedPath": "/track-order",
+      "width": 320,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/track-order",
+      "violations": [],
+      "incomplete": [],
+      "passes": 42
+    },
+    {
+      "requestedPath": "/track-order",
+      "width": 390,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/track-order",
+      "violations": [],
+      "incomplete": [],
+      "passes": 42
+    },
+    {
+      "requestedPath": "/track-order",
+      "width": 768,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/track-order",
+      "violations": [],
+      "incomplete": [],
+      "passes": 42
+    },
+    {
+      "requestedPath": "/track-order",
+      "width": 1440,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/track-order",
+      "violations": [],
+      "incomplete": [],
+      "passes": 42
+    },
+    {
+      "requestedPath": "/account",
+      "width": 320,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/login?returnTo=%2Faccount",
+      "violations": [],
+      "incomplete": [],
+      "passes": 38
+    },
+    {
+      "requestedPath": "/account",
+      "width": 390,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/login?returnTo=%2Faccount",
+      "violations": [],
+      "incomplete": [],
+      "passes": 38
+    },
+    {
+      "requestedPath": "/account",
+      "width": 768,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/login?returnTo=%2Faccount",
+      "violations": [],
+      "incomplete": [],
+      "passes": 38
+    },
+    {
+      "requestedPath": "/account",
+      "width": 1440,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/login?returnTo=%2Faccount",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "nodes": [
+            {
+              "target": [
+                ".storefront-auth-panel-topline > span:nth-child(1)"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                ".storefront-auth-panel-topline > span:nth-child(2)"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                ".storefront-auth-panel-copy > p"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                "h2"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                ".storefront-auth-panel-copy > span"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                ".storefront-auth-panel-bottom > span:nth-child(1)"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                ".storefront-auth-panel-bottom > span:nth-child(2)"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            }
+          ]
+        }
+      ],
+      "passes": 39
+    },
+    {
+      "requestedPath": "/account/settings",
+      "width": 320,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/login?returnTo=%2Faccount%2Fsettings",
+      "violations": [],
+      "incomplete": [],
+      "passes": 38
+    },
+    {
+      "requestedPath": "/account/settings",
+      "width": 390,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/login?returnTo=%2Faccount%2Fsettings",
+      "violations": [],
+      "incomplete": [],
+      "passes": 38
+    },
+    {
+      "requestedPath": "/account/settings",
+      "width": 768,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/login?returnTo=%2Faccount%2Fsettings",
+      "violations": [],
+      "incomplete": [],
+      "passes": 38
+    },
+    {
+      "requestedPath": "/account/settings",
+      "width": 1440,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/login?returnTo=%2Faccount%2Fsettings",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "nodes": [
+            {
+              "target": [
+                ".storefront-auth-panel-topline > span:nth-child(1)"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                ".storefront-auth-panel-topline > span:nth-child(2)"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                ".storefront-auth-panel-copy > p"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                "h2"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                ".storefront-auth-panel-copy > span"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                ".storefront-auth-panel-bottom > span:nth-child(1)"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                ".storefront-auth-panel-bottom > span:nth-child(2)"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            }
+          ]
+        }
+      ],
+      "passes": 39
+    },
+    {
+      "requestedPath": "/account/addresses",
+      "width": 320,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/login?returnTo=%2Faccount%2Faddresses",
+      "violations": [],
+      "incomplete": [],
+      "passes": 38
+    },
+    {
+      "requestedPath": "/account/addresses",
+      "width": 390,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/login?returnTo=%2Faccount%2Faddresses",
+      "violations": [],
+      "incomplete": [],
+      "passes": 38
+    },
+    {
+      "requestedPath": "/account/addresses",
+      "width": 768,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/login?returnTo=%2Faccount%2Faddresses",
+      "violations": [],
+      "incomplete": [],
+      "passes": 38
+    },
+    {
+      "requestedPath": "/account/addresses",
+      "width": 1440,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/login?returnTo=%2Faccount%2Faddresses",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "nodes": [
+            {
+              "target": [
+                ".storefront-auth-panel-topline > span:nth-child(1)"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                ".storefront-auth-panel-topline > span:nth-child(2)"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                ".storefront-auth-panel-copy > p"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                "h2"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                ".storefront-auth-panel-copy > span"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                ".storefront-auth-panel-bottom > span:nth-child(1)"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                ".storefront-auth-panel-bottom > span:nth-child(2)"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            }
+          ]
+        }
+      ],
+      "passes": 39
+    },
+    {
+      "requestedPath": "/account/wishlist",
+      "width": 320,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/login?returnTo=%2Faccount%2Fwishlist",
+      "violations": [],
+      "incomplete": [],
+      "passes": 38
+    },
+    {
+      "requestedPath": "/account/wishlist",
+      "width": 390,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/login?returnTo=%2Faccount%2Fwishlist",
+      "violations": [],
+      "incomplete": [],
+      "passes": 38
+    },
+    {
+      "requestedPath": "/account/wishlist",
+      "width": 768,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/login?returnTo=%2Faccount%2Fwishlist",
+      "violations": [],
+      "incomplete": [],
+      "passes": 38
+    },
+    {
+      "requestedPath": "/account/wishlist",
+      "width": 1440,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/login?returnTo=%2Faccount%2Fwishlist",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "nodes": [
+            {
+              "target": [
+                ".storefront-auth-panel-topline > span:nth-child(1)"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                ".storefront-auth-panel-topline > span:nth-child(2)"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                ".storefront-auth-panel-copy > p"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                "h2"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                ".storefront-auth-panel-copy > span"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                ".storefront-auth-panel-bottom > span:nth-child(1)"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                ".storefront-auth-panel-bottom > span:nth-child(2)"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            }
+          ]
+        }
+      ],
+      "passes": 39
+    },
+    {
+      "requestedPath": "/account/orders",
+      "width": 320,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/login?returnTo=%2Faccount%2Forders",
+      "violations": [],
+      "incomplete": [],
+      "passes": 38
+    },
+    {
+      "requestedPath": "/account/orders",
+      "width": 390,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/login?returnTo=%2Faccount%2Forders",
+      "violations": [],
+      "incomplete": [],
+      "passes": 38
+    },
+    {
+      "requestedPath": "/account/orders",
+      "width": 768,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/login?returnTo=%2Faccount%2Forders",
+      "violations": [],
+      "incomplete": [],
+      "passes": 38
+    },
+    {
+      "requestedPath": "/account/orders",
+      "width": 1440,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/login?returnTo=%2Faccount%2Forders",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "nodes": [
+            {
+              "target": [
+                ".storefront-auth-panel-topline > span:nth-child(1)"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                ".storefront-auth-panel-topline > span:nth-child(2)"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                ".storefront-auth-panel-copy > p"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                "h2"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                ".storefront-auth-panel-copy > span"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                ".storefront-auth-panel-bottom > span:nth-child(1)"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                ".storefront-auth-panel-bottom > span:nth-child(2)"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            }
+          ]
+        }
+      ],
+      "passes": 39
+    },
+    {
+      "requestedPath": "/account/orders/FS-UAT-NOT-REAL",
+      "width": 320,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/login?returnTo=%2Faccount%2Forders%2FFS-UAT-NOT-REAL",
+      "violations": [],
+      "incomplete": [],
+      "passes": 38
+    },
+    {
+      "requestedPath": "/account/orders/FS-UAT-NOT-REAL",
+      "width": 390,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/login?returnTo=%2Faccount%2Forders%2FFS-UAT-NOT-REAL",
+      "violations": [],
+      "incomplete": [],
+      "passes": 38
+    },
+    {
+      "requestedPath": "/account/orders/FS-UAT-NOT-REAL",
+      "width": 768,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/login?returnTo=%2Faccount%2Forders%2FFS-UAT-NOT-REAL",
+      "violations": [],
+      "incomplete": [],
+      "passes": 38
+    },
+    {
+      "requestedPath": "/account/orders/FS-UAT-NOT-REAL",
+      "width": 1440,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/login?returnTo=%2Faccount%2Forders%2FFS-UAT-NOT-REAL",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "nodes": [
+            {
+              "target": [
+                ".storefront-auth-panel-topline > span:nth-child(1)"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                ".storefront-auth-panel-topline > span:nth-child(2)"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                ".storefront-auth-panel-copy > p"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                "h2"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                ".storefront-auth-panel-copy > span"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                ".storefront-auth-panel-bottom > span:nth-child(1)"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            },
+            {
+              "target": [
+                ".storefront-auth-panel-bottom > span:nth-child(2)"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined due to a pseudo element"
+            }
+          ]
+        }
+      ],
+      "passes": 39
+    },
+    {
+      "requestedPath": "/pages/about",
+      "width": 320,
+      "title": "Câu chuyện NÉT Studio | NÉT Studio",
+      "finalPath": "/pages/about",
+      "violations": [],
+      "incomplete": [],
+      "passes": 41
+    },
+    {
+      "requestedPath": "/pages/about",
+      "width": 390,
+      "title": "Câu chuyện NÉT Studio | NÉT Studio",
+      "finalPath": "/pages/about",
+      "violations": [],
+      "incomplete": [],
+      "passes": 41
+    },
+    {
+      "requestedPath": "/pages/about",
+      "width": 768,
+      "title": "Câu chuyện NÉT Studio | NÉT Studio",
+      "finalPath": "/pages/about",
+      "violations": [],
+      "incomplete": [],
+      "passes": 41
+    },
+    {
+      "requestedPath": "/pages/about",
+      "width": 1440,
+      "title": "Câu chuyện NÉT Studio | NÉT Studio",
+      "finalPath": "/pages/about",
+      "violations": [],
+      "incomplete": [],
+      "passes": 41
+    },
+    {
+      "requestedPath": "/pages/contact",
+      "width": 320,
+      "title": "Liên hệ | NÉT Studio",
+      "finalPath": "/pages/contact",
+      "violations": [],
+      "incomplete": [],
+      "passes": 41
+    },
+    {
+      "requestedPath": "/pages/contact",
+      "width": 390,
+      "title": "Liên hệ | NÉT Studio",
+      "finalPath": "/pages/contact",
+      "violations": [],
+      "incomplete": [],
+      "passes": 41
+    },
+    {
+      "requestedPath": "/pages/contact",
+      "width": 768,
+      "title": "Liên hệ | NÉT Studio",
+      "finalPath": "/pages/contact",
+      "violations": [],
+      "incomplete": [],
+      "passes": 41
+    },
+    {
+      "requestedPath": "/pages/contact",
+      "width": 1440,
+      "title": "Liên hệ | NÉT Studio",
+      "finalPath": "/pages/contact",
+      "violations": [],
+      "incomplete": [],
+      "passes": 41
+    },
+    {
+      "requestedPath": "/pages/privacy",
+      "width": 320,
+      "title": "Quyền riêng tư | NÉT Studio",
+      "finalPath": "/pages/privacy",
+      "violations": [],
+      "incomplete": [],
+      "passes": 41
+    },
+    {
+      "requestedPath": "/pages/privacy",
+      "width": 390,
+      "title": "Quyền riêng tư | NÉT Studio",
+      "finalPath": "/pages/privacy",
+      "violations": [],
+      "incomplete": [],
+      "passes": 41
+    },
+    {
+      "requestedPath": "/pages/privacy",
+      "width": 768,
+      "title": "Quyền riêng tư | NÉT Studio",
+      "finalPath": "/pages/privacy",
+      "violations": [],
+      "incomplete": [],
+      "passes": 41
+    },
+    {
+      "requestedPath": "/pages/privacy",
+      "width": 1440,
+      "title": "Quyền riêng tư | NÉT Studio",
+      "finalPath": "/pages/privacy",
+      "violations": [],
+      "incomplete": [],
+      "passes": 41
+    },
+    {
+      "requestedPath": "/pages/shipping",
+      "width": 320,
+      "title": "Giao hàng và đổi trả | NÉT Studio",
+      "finalPath": "/pages/shipping",
+      "violations": [],
+      "incomplete": [],
+      "passes": 41
+    },
+    {
+      "requestedPath": "/pages/shipping",
+      "width": 390,
+      "title": "Giao hàng và đổi trả | NÉT Studio",
+      "finalPath": "/pages/shipping",
+      "violations": [],
+      "incomplete": [],
+      "passes": 41
+    },
+    {
+      "requestedPath": "/pages/shipping",
+      "width": 768,
+      "title": "Giao hàng và đổi trả | NÉT Studio",
+      "finalPath": "/pages/shipping",
+      "violations": [],
+      "incomplete": [],
+      "passes": 41
+    },
+    {
+      "requestedPath": "/pages/shipping",
+      "width": 1440,
+      "title": "Giao hàng và đổi trả | NÉT Studio",
+      "finalPath": "/pages/shipping",
+      "violations": [],
+      "incomplete": [],
+      "passes": 41
+    },
+    {
+      "requestedPath": "/pages/size-guide",
+      "width": 320,
+      "title": "Hướng dẫn chọn kích cỡ | NÉT Studio",
+      "finalPath": "/pages/size-guide",
+      "violations": [],
+      "incomplete": [],
+      "passes": 43
+    },
+    {
+      "requestedPath": "/pages/size-guide",
+      "width": 390,
+      "title": "Hướng dẫn chọn kích cỡ | NÉT Studio",
+      "finalPath": "/pages/size-guide",
+      "violations": [],
+      "incomplete": [],
+      "passes": 43
+    },
+    {
+      "requestedPath": "/pages/size-guide",
+      "width": 768,
+      "title": "Hướng dẫn chọn kích cỡ | NÉT Studio",
+      "finalPath": "/pages/size-guide",
+      "violations": [],
+      "incomplete": [],
+      "passes": 43
+    },
+    {
+      "requestedPath": "/pages/size-guide",
+      "width": 1440,
+      "title": "Hướng dẫn chọn kích cỡ | NÉT Studio",
+      "finalPath": "/pages/size-guide",
+      "violations": [],
+      "incomplete": [],
+      "passes": 43
+    },
+    {
+      "requestedPath": "/pages/terms",
+      "width": 320,
+      "title": "Điều khoản sử dụng | NÉT Studio",
+      "finalPath": "/pages/terms",
+      "violations": [],
+      "incomplete": [],
+      "passes": 41
+    },
+    {
+      "requestedPath": "/pages/terms",
+      "width": 390,
+      "title": "Điều khoản sử dụng | NÉT Studio",
+      "finalPath": "/pages/terms",
+      "violations": [],
+      "incomplete": [],
+      "passes": 41
+    },
+    {
+      "requestedPath": "/pages/terms",
+      "width": 768,
+      "title": "Điều khoản sử dụng | NÉT Studio",
+      "finalPath": "/pages/terms",
+      "violations": [],
+      "incomplete": [],
+      "passes": 41
+    },
+    {
+      "requestedPath": "/pages/terms",
+      "width": 1440,
+      "title": "Điều khoản sử dụng | NÉT Studio",
+      "finalPath": "/pages/terms",
+      "violations": [],
+      "incomplete": [],
+      "passes": 41
+    },
+    {
+      "requestedPath": "/__not_found__",
+      "width": 320,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/__not_found__",
+      "violations": [],
+      "incomplete": [],
+      "passes": 41
+    },
+    {
+      "requestedPath": "/__not_found__",
+      "width": 390,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/__not_found__",
+      "violations": [],
+      "incomplete": [],
+      "passes": 41
+    },
+    {
+      "requestedPath": "/__not_found__",
+      "width": 768,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/__not_found__",
+      "violations": [],
+      "incomplete": [],
+      "passes": 41
+    },
+    {
+      "requestedPath": "/__not_found__",
+      "width": 1440,
+      "title": "NÉT Studio — Mặc chậm. Ở lại lâu.",
+      "finalPath": "/__not_found__",
+      "violations": [],
+      "incomplete": [],
+      "passes": 41
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+.cart-sync-state{margin:12px 0;color:var(--muted);font-size:11px}
+.cart-sync-error{display:flex;justify-content:space-between;align-items:center;gap:16px;margin:12px 0;padding:12px 14px;border:1px solid var(--line);color:var(--color-error,#a33f37);font-size:11px}
+.cart-sync-error button{border:0;background:transparent;color:inherit;text-decoration:underline;cursor:pointer}
+.cart-stock-error{max-width:290px;color:var(--color-error,#a33f37);font-size:10px;line-height:1.5}
+.cart-checkout-disabled{opacity:.55;cursor:not-allowed}

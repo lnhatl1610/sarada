@@ -1,0 +1,11 @@
+{
+  "name": "Sarada — Thời trang tinh giản",
+  "short_name": "Sarada",
+  "description": "Thời trang tinh giản, chất liệu tự nhiên, dành cho phong cách mỗi ngày.",
+  "lang": "vi-VN",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#FBF7F0",
+  "theme_color": "#FBF7F0"
+}

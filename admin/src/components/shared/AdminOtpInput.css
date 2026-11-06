@@ -1,0 +1,5 @@
+.admin-otp-input { display: flex; gap: 8px; }
+.admin-otp-input input, .admin-shell .admin-otp-input input, .login-card .admin-otp-input input { box-sizing: border-box; width: 44px; min-width: 0; height: 48px; min-height: 48px; padding: 0; border: 1px solid var(--line, #d9d9d2); border-radius: 8px; background: var(--surface, #fff); color: var(--ink, #292a27); text-align: center; font: 600 19px/1 ui-monospace, SFMono-Regular, Consolas, monospace; }
+.admin-otp-input input:focus-visible { border-color: var(--accent, #80645b); outline: 2px solid color-mix(in srgb, var(--accent, #80645b) 28%, transparent); outline-offset: 2px; }
+.admin-otp-input input:disabled { cursor: not-allowed; opacity: .6; }
+@media (max-width: 380px) { .admin-otp-input { gap: 5px; } .admin-otp-input input, .admin-shell .admin-otp-input input, .login-card .admin-otp-input input { width: 40px; height: 44px; min-height: 44px; } }

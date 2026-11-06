@@ -1,0 +1,10 @@
+.order-change-request-dialog{width:min(100% - 32px,500px);max-width:500px;border:1px solid var(--line);padding:28px;background:var(--paper);color:var(--ink)}
+.order-change-request-dialog::backdrop{background:rgba(24,24,22,.52)}
+.order-change-request-dialog .eyebrow{margin:0 0 8px}
+.order-change-request-dialog h2{margin:0 0 10px;font:500 25px/1.15 system-ui,sans-serif;letter-spacing:-.04em}
+.order-change-request-copy{margin:0 0 20px;color:var(--muted);font-size:11px;line-height:1.7}
+.order-change-request-dialog label{display:block;margin-bottom:7px;font-size:11px}
+.order-change-request-dialog textarea{display:block;width:100%;resize:vertical;border:1px solid var(--line);padding:11px;background:transparent;color:inherit;font:inherit;font-size:12px}
+.order-change-request-actions{display:flex;justify-content:flex-end;gap:9px;margin-top:22px}
+.order-change-request-actions button{min-height:42px}
+@media(max-width:480px){.order-change-request-dialog{padding:21px}.order-change-request-actions{flex-direction:column-reverse}.order-change-request-actions button{width:100%}}

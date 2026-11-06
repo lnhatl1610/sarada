@@ -1,0 +1,121 @@
+/* Keep sidebar navigation scrollable while hiding native scrollbars in Chromium,
+   Firefox, and legacy Edge. Desktop uses a sidebar wrapper with a separate
+   sidebar-container child; mobile renders the sidebar through a portal. */
+[data-slot="sidebar"],
+[data-slot="sidebar"] *,
+[data-sidebar="sidebar"],
+[data-sidebar="sidebar"] *,
+[data-slot="sidebar-container"],
+[data-slot="sidebar-container"] *,
+[data-slot="sidebar-content"],
+[data-sidebar="content"] {
+  scrollbar-width: none !important;
+  scrollbar-color: transparent transparent !important;
+  -ms-overflow-style: none !important;
+}
+
+[data-slot="sidebar-container"],
+[data-slot="sidebar"][data-mobile="true"] {
+  overflow: hidden !important;
+}
+
+[data-slot="sidebar-container"] [data-slot="sidebar-inner"],
+[data-slot="sidebar"][data-mobile="true"] [data-slot="sidebar-inner"] {
+  min-height: 0;
+  overflow: hidden !important;
+}
+
+[data-slot="sidebar-content"] {
+  min-height: 0;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain;
+}
+
+/* SidebarContent is the only navigation scroll area on desktop and mobile. */
+.admin-sidebar-scroll {
+  scrollbar-width: none !important;
+  scrollbar-color: transparent transparent !important;
+  -ms-overflow-style: none !important;
+}
+
+[data-slot="sidebar"]::-webkit-scrollbar,
+[data-slot="sidebar"] *::-webkit-scrollbar,
+[data-sidebar="sidebar"]::-webkit-scrollbar,
+[data-sidebar="sidebar"] *::-webkit-scrollbar,
+[data-slot="sidebar-container"]::-webkit-scrollbar,
+[data-slot="sidebar-container"] *::-webkit-scrollbar,
+[data-slot="sidebar"][data-mobile="true"]::-webkit-scrollbar,
+[data-slot="sidebar"][data-mobile="true"] *::-webkit-scrollbar,
+[data-slot="sidebar-content"]::-webkit-scrollbar,
+[data-sidebar="content"]::-webkit-scrollbar,
+[data-slot="sidebar-content"]::-webkit-scrollbar-track,
+[data-sidebar="content"]::-webkit-scrollbar-track,
+[data-slot="sidebar-content"]::-webkit-scrollbar-thumb,
+[data-sidebar="content"]::-webkit-scrollbar-thumb,
+[data-slot="sidebar-content"]::-webkit-scrollbar-corner,
+[data-sidebar="content"]::-webkit-scrollbar-corner,
+[data-slot="sidebar-content"]::-webkit-scrollbar-button,
+[data-sidebar="content"]::-webkit-scrollbar-button,
+[data-slot="sidebar-content"]::-webkit-resizer {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  opacity: 0 !important;
+  background: transparent !important;
+}
+
+.admin-sidebar-scroll::-webkit-scrollbar,
+.admin-sidebar-scroll::-webkit-scrollbar:vertical,
+.admin-sidebar-scroll::-webkit-scrollbar:horizontal,
+.admin-sidebar-scroll::-webkit-scrollbar-track,
+.admin-sidebar-scroll::-webkit-scrollbar-thumb,
+.admin-sidebar-scroll::-webkit-scrollbar-corner,
+.admin-sidebar-scroll::-webkit-scrollbar-button,
+.admin-sidebar-scroll::-webkit-resizer {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  background: transparent !important;
+}
+
+/* Keep scrolling on the navigation list itself. This avoids a second native
+   scrollbar being painted by SidebarContent in Chromium on Windows. */
+.admin-app-sidebar [data-slot="sidebar-content"],
+[data-slot="sidebar"][data-mobile="true"] [data-slot="sidebar-content"] {
+  overflow: hidden !important;
+}
+
+.admin-sidebar-navigation {
+  box-sizing: border-box;
+  /* Extend the scrollport past the clipped SidebarContent edge so Windows
+     cannot paint its classic scrollbar inside the visible sidebar. */
+  width: calc(100% + 32px);
+  min-height: 0;
+  flex: 1 1 auto;
+  padding-right: 16px;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain;
+  scrollbar-width: none !important;
+  scrollbar-color: transparent transparent !important;
+  -ms-overflow-style: none !important;
+}
+
+.admin-sidebar-navigation::-webkit-scrollbar,
+.admin-sidebar-navigation::-webkit-scrollbar-track,
+.admin-sidebar-navigation::-webkit-scrollbar-thumb,
+.admin-sidebar-navigation::-webkit-scrollbar-corner,
+.admin-sidebar-navigation::-webkit-scrollbar-button,
+.admin-sidebar-navigation::-webkit-resizer {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  background: transparent !important;
+}

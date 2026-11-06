@@ -1,0 +1,11 @@
+.report-schedules-page .report-schedule-recipients { grid-column: 1 / -1; }
+.report-schedules-page .report-schedule-recipients small { color: var(--shell-muted); }
+.report-schedule-active { display: flex; align-items: center; gap: 8px; }
+.report-schedule-active input { width: auto; }
+.report-schedule-form-actions, .report-schedule-card-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.report-schedule-card-actions { justify-content: flex-end; }
+.report-schedules-list { display: grid; gap: 10px; }
+.report-schedule-card { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 14px; border: 1px solid var(--shell-border); border-radius: 12px; }
+.report-schedule-card h3, .report-schedule-card p { margin: 0 0 5px; }
+.report-schedule-card p { color: var(--shell-muted); font-size: 13px; }
+@media (max-width: 700px) { .report-schedule-card { align-items: flex-start; flex-direction: column; } .report-schedule-card-actions { justify-content: flex-start; } }

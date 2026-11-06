@@ -1,0 +1,147 @@
+.store-locations-page h1 {
+  margin-bottom: 0.35rem;
+}
+
+.store-locations-intro {
+  max-width: 44rem;
+  color: var(--muted-foreground, #737373);
+}
+
+.store-locations-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.65rem;
+  margin: 1.5rem 0;
+}
+
+.store-locations-controls label {
+  font-weight: 600;
+}
+
+.store-locations-controls select {
+  min-height: 2.75rem;
+  min-width: min(100%, 16rem);
+  padding: 0.55rem 0.7rem;
+  border: 1px solid var(--border, #e5e5e5);
+  border-radius: 0.25rem;
+  background: var(--background, #fff);
+  color: inherit;
+}
+
+.store-locations-clear-nearby,
+.store-locations-error button {
+  min-height: 2.75rem;
+  padding: 0.45rem 0.6rem;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.store-locations-message,
+.store-locations-error {
+  margin: 1rem 0;
+}
+
+.store-locations-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: clamp(1rem, 3vw, 2.5rem);
+  align-items: start;
+}
+
+.store-locations-list {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.store-location-card {
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--border, #e5e5e5);
+}
+
+.store-location-card.is-selected {
+  border-bottom-color: var(--foreground, #171717);
+}
+
+.store-location-card-select {
+  display: grid;
+  justify-items: start;
+  gap: 0.3rem;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.store-location-card-select .eyebrow {
+  margin: 0;
+}
+
+.store-location-card-select strong {
+  font-size: 1.2rem;
+}
+
+.store-location-card address,
+.store-location-card p {
+  margin: 0.65rem 0;
+  font-style: normal;
+}
+
+.store-location-card p span {
+  color: var(--muted-foreground, #737373);
+}
+
+.store-location-distance {
+  color: var(--muted-foreground, #737373);
+  font-size: 0.9rem;
+}
+
+.store-location-card-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.store-locations-map {
+  position: sticky;
+  top: 6rem;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.store-locations-map h2 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.store-locations-map iframe {
+  display: block;
+  width: 100%;
+  min-height: 26rem;
+  border: 1px solid var(--border, #e5e5e5);
+}
+
+.store-locations-empty {
+  padding: 2rem 0;
+}
+
+@media (max-width: 760px) {
+  .store-locations-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .store-locations-map {
+    position: static;
+    grid-row: 1;
+  }
+
+  .store-locations-map iframe {
+    min-height: 18rem;
+  }
+}

@@ -1,0 +1,25 @@
+.product-compare-page { padding-block: 2.5rem 5rem; }
+.product-compare-heading { display: flex; align-items: end; justify-content: space-between; gap: 1.5rem; margin-bottom: 2rem; }
+.product-compare-heading h1 { margin: 0; font-size: clamp(2rem, 5vw, 3.4rem); letter-spacing: -.045em; }
+.product-compare-heading p:not(.eyebrow) { max-width: 40rem; color: var(--muted-foreground, #626262); }
+.product-compare-table-wrap { max-width: 100%; overflow: auto; border: 1px solid var(--border, #dedede); border-radius: .75rem; }
+.product-compare-table { width: 100%; min-width: 720px; border-collapse: collapse; table-layout: fixed; }
+.product-compare-table th, .product-compare-table td { width: 24%; padding: 1rem; border-right: 1px solid var(--border, #dedede); border-bottom: 1px solid var(--border, #dedede); text-align: left; vertical-align: top; }
+.product-compare-table tr:last-child th, .product-compare-table tr:last-child td { border-bottom: 0; }
+.product-compare-table tr > :last-child { border-right: 0; }
+.product-compare-table thead th:first-child, .product-compare-table tbody th { width: 160px; background: var(--muted, #f5f5f5); font-weight: 600; }
+.product-compare-table thead th { vertical-align: top; }
+.product-compare-product { position: relative; padding-top: .5rem; }
+.product-compare-product a { display: grid; gap: .75rem; color: inherit; text-decoration: none; }
+.product-compare-product img { width: 100%; max-height: 280px; aspect-ratio: 3 / 4; object-fit: cover; border-radius: .35rem; background: var(--muted, #f5f5f5); }
+.product-compare-product strong { line-height: 1.4; }
+.product-compare-remove { position: absolute; z-index: 1; top: 0; right: 0; width: 2rem; height: 2rem; border: 1px solid var(--border, #dedede); border-radius: 50%; background: var(--background, white); cursor: pointer; font-size: 1.25rem; }
+.product-compare-state { padding: .85rem 1rem; border-radius: .5rem; background: var(--muted, #f5f5f5); }
+.product-compare-add-more { margin-top: 1.25rem; }
+.product-compare-add-more a { color: inherit; }
+@media (max-width: 640px) {
+  .product-compare-page { padding-block: 1.5rem 3rem; }
+  .product-compare-heading { align-items: start; flex-direction: column; gap: .5rem; }
+  .product-compare-table th, .product-compare-table td { padding: .75rem; }
+  .product-compare-table thead th:first-child, .product-compare-table tbody th { position: sticky; left: 0; z-index: 2; width: 110px; }
+}

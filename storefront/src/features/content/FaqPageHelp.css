@@ -1,0 +1,11 @@
+.faq-help-request{margin-top:3rem;padding-top:1.5rem;border-top:1px solid var(--border)}
+.faq-help-request h2{margin:0 0 .5rem;font-size:1.25rem}
+.faq-help-request>p{max-width:56ch;color:var(--muted-foreground);line-height:1.65}
+.faq-help-request__details{margin-top:1rem;border:1px solid var(--border);border-radius:var(--radius)}
+.faq-help-request__details>summary{min-height:48px;display:flex;align-items:center;padding:0 1rem;cursor:pointer;font-weight:600;list-style:none}
+.faq-help-request__details>summary::-webkit-details-marker{display:none}
+.faq-help-request__details>summary::after{content:'+';margin-left:auto;font-size:1.25rem}
+.faq-help-request__details[open]>summary{border-bottom:1px solid var(--border)}
+.faq-help-request__details[open]>summary::after{content:'−'}
+.faq-help-request__details>summary:focus-visible{outline:2px solid var(--primary);outline-offset:3px}
+.faq-help-request__details .store-contact-form{margin:0;padding:1.25rem;border:0}

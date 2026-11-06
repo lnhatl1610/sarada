@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="420" height="260" viewBox="0 0 420 260" fill="none">
+  <rect width="420" height="260" rx="18" fill="#F5F1E9"/>
+  <circle cx="211" cy="126" r="82" fill="#E7DFD2"/>
+  <path d="M151 96h120l-10 104h-100L151 96Z" fill="#FFFDFA" stroke="#6C5B48" stroke-width="3"/>
+  <path d="m181 99 3-18c2-13 12-21 27-21s25 8 27 21l3 18" stroke="#6C5B48" stroke-width="4" stroke-linecap="round"/>
+  <path d="M190 136h42" stroke="#B68A60" stroke-width="4" stroke-linecap="round"/>
+  <text x="211" y="158" text-anchor="middle" fill="#28251F" font-family="Georgia,serif" font-size="20" letter-spacing="3">SARADA</text>
+  <path d="m107 79 8 8m0-8-8 8M294 72l7 7m0-7-7 7" stroke="#B68A60" stroke-width="2" stroke-linecap="round"/>
+  <path d="M75 222h270" stroke="#D8D1C6" stroke-width="2"/>
+</svg>

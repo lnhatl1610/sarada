@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="420" height="260" viewBox="0 0 420 260" fill="none">
+  <style>
+    .float { animation: drift 3.2s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+    @keyframes drift { 0%,100% { transform: translateY(0) rotate(-2deg); } 50% { transform: translateY(8px) rotate(2deg); } }
+    @media (prefers-reduced-motion: reduce) { .float { animation: none; } }
+  </style>
+  <rect width="420" height="260" rx="18" fill="#F5F1E9"/>
+  <circle cx="336" cy="57" r="24" fill="#E8DFD2"/>
+  <circle cx="73" cy="75" r="4" fill="#B68A60"/>
+  <circle cx="351" cy="167" r="4" fill="#B68A60"/>
+  <path d="M62 218h296" stroke="#D8D1C6" stroke-width="2" stroke-linecap="round"/>
+  <rect x="73" y="62" width="192" height="139" rx="8" fill="#E7DFD2"/>
+  <rect x="87" y="76" width="164" height="111" rx="4" fill="#FFFDFA" stroke="#6C5B48" stroke-width="2"/>
+  <text x="169" y="137" text-anchor="middle" fill="#28251F" font-family="Georgia,serif" font-size="42" letter-spacing="4">404</text>
+  <path d="M137 151h64" stroke="#B68A60" stroke-width="3" stroke-linecap="round"/>
+  <g class="float">
+    <path d="M302 72c0-6 8-6 8-12 0-4-3-6-7-5" stroke="#6C5B48" stroke-width="2" stroke-linecap="round"/>
+    <path d="M282 69h49l19 18-7 9-14-9-8 17h-30l-8-17-14 9-7-9 20-18Z" fill="#C9B59B" stroke="#6C5B48" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M292 101h29l8 18 27 63h-99l27-63 8-18Z" fill="#8A5A49" stroke="#6C5B48" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M292 103c5 6 13 6 19 0M307 119v38" stroke="#E9D7C5" stroke-width="2" stroke-linecap="round"/>
+    <path d="m279 112-11 12m57-12 11 12" stroke="#6C5B48" stroke-width="2" stroke-linecap="round"/>
+  </g>
+  <path d="m359 80 3 7 7 3-7 3-3 7-3-7-7-3 7-3 3-7Z" fill="#B68A60"/>
+</svg>

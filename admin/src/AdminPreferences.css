@@ -1,0 +1,80 @@
+.admin-preferences-page { display: grid; gap: 16px; max-width: 980px; }
+.preferences-sidebar-pins { display: grid; gap: 8px; max-width: 560px; margin-top: 18px; }
+.preferences-sidebar-pins h3 { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px; margin: 0; font-size: 14px; }
+.preferences-sidebar-pins h3 small { color: var(--shell-muted); font-size: 12px; font-weight: 400; }
+.preferences-sidebar-pin { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 38px; border-bottom: 1px solid var(--shell-border-subtle); }
+.preferences-sidebar-pin[draggable="true"] { cursor: grab; }
+.preferences-sidebar-pin label { display: flex; align-items: center; gap: 9px; }
+.preferences-sidebar-pin > span { display: flex; gap: 4px; }
+.preferences-sidebar-pin button { min-width: 32px; min-height: 32px; }
+.preferences-backup-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.admin-shell .preferences-page-size { display: grid; max-width: 420px; gap: 7px; margin: 14px 0 0; color: var(--shell-foreground); font-size: 12px; font-weight: 600; }
+.admin-shell .preferences-page-size select { min-height: 38px; border: 1px solid var(--shell-border-subtle); border-radius: 8px; background: var(--shell-surface); color: var(--shell-foreground); padding: 0 10px; font: inherit; }
+.admin-shell .preferences-section { padding: 22px; }
+.preferences-section-heading { margin-bottom: 20px; }
+.preferences-section-heading h2 { margin: 0; font-size: 16px; }
+.preferences-section-heading p { margin: 5px 0 0; color: var(--shell-muted); font-size: 13px; }
+.preferences-theme-options,
+.preferences-accent-options,
+.preferences-density-options { display: grid; gap: 10px; margin: 0; padding: 0; border: 0; }
+.preferences-theme-options legend,
+.preferences-accent-options legend,
+.preferences-density-options legend { margin-bottom: 10px; color: var(--shell-foreground); font-size: 13px; font-weight: 650; }
+.preference-choice { display: flex; align-items: flex-start; gap: 12px; padding: 14px; border: 1px solid var(--shell-border-subtle); border-radius: 9px; cursor: pointer; }
+.preference-choice.selected { border-color: var(--shell-primary); background: color-mix(in srgb, var(--shell-primary) 5%, var(--shell-surface)); }
+.admin-shell .preference-choice input[type='radio'],
+.admin-shell .preference-accent input[type='radio'] { width: 16px; height: 16px; flex: none; margin: 2px 0 0; accent-color: var(--shell-primary); }
+.preference-choice > span { display: grid; gap: 4px; }
+.preference-choice strong { color: var(--shell-foreground); font-size: 13px; }
+.preference-choice small,
+.preference-toggle small { color: var(--shell-muted); font-size: 12px; line-height: 1.45; }
+.preferences-accent-options { margin-top: 22px; }
+.preferences-accent-options > div { display: flex; flex-wrap: wrap; gap: 10px; }
+.preference-accent { display: inline-flex; align-items: center; gap: 8px; padding: 9px 12px; border: 1px solid var(--shell-border-subtle); border-radius: 999px; color: var(--shell-foreground); cursor: pointer; }
+.preference-accent.selected { border-color: var(--shell-primary); }
+.preference-accent-swatch { width: 16px; height: 16px; border-radius: 50%; background: var(--preference-accent-color); }
+.preference-toggle { display: flex; align-items: flex-start; gap: 12px; cursor: pointer; }
+.admin-shell .preference-toggle input[type='checkbox'] { width: 17px; height: 17px; flex: none; margin: 2px 0 0; accent-color: var(--shell-primary); }
+.preference-toggle > span { display: grid; gap: 4px; }
+.preference-toggle strong { color: var(--shell-foreground); font-size: 13px; }
+.preferences-reset-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.preferences-reset-row p { margin: 0; color: var(--shell-muted); font-size: 12px; }
+.preferences-reset-row button { display: inline-flex; align-items: center; gap: 8px; }
+.preferences-preview { overflow: hidden; border: 1px solid var(--shell-border-subtle); border-radius: 10px; background: var(--shell-background); }
+.preferences-preview-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 16px; border-bottom: 1px solid var(--shell-border-subtle); background: var(--shell-surface); }
+.preferences-preview-toolbar > div { display: flex; min-width: 0; align-items: center; gap: 10px; }
+.preferences-preview-toolbar > div > span:last-child { display: grid; gap: 3px; }
+.preferences-preview-toolbar strong { color: var(--shell-foreground); font-size: 12px; }
+.preferences-preview-toolbar small { color: var(--shell-muted); font-size: 10px; }
+.preferences-preview-indicator { width: 10px; height: 10px; flex: none; border-radius: 50%; background: var(--shell-success); box-shadow: 0 0 0 4px color-mix(in srgb, var(--shell-success) 14%, transparent); }
+.preferences-preview-primary { display: inline-flex; min-height: 32px; flex: none; align-items: center; justify-content: center; padding: 0 11px; border-radius: 7px; background: var(--shell-primary); color: var(--shell-primary-foreground); font-size: 11px; font-weight: 650; }
+.preferences-preview-metrics { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; padding: 14px; }
+.preferences-preview-metrics article { display: grid; gap: 5px; padding: 12px; border: 1px solid var(--shell-border-subtle); border-radius: 8px; background: var(--shell-surface); }
+.preferences-preview-metrics small { color: var(--shell-muted); font-size: 9px; font-weight: 700; letter-spacing: .05em; }
+.preferences-preview-metrics strong { color: var(--shell-foreground); font-size: 16px; }
+.preferences-preview-metrics span { color: var(--shell-success); font-size: 10px; }
+.preferences-preview-table-wrap { overflow-x: auto; padding: 0 14px 14px; }
+.preferences-preview table { width: 100%; min-width: 430px; border-collapse: collapse; background: var(--shell-surface); color: var(--shell-foreground); font-size: 11px; text-align: left; }
+.preferences-preview th,
+.preferences-preview td { padding: 10px 11px; border-bottom: 1px solid var(--shell-border-subtle); white-space: nowrap; }
+.preferences-preview th { color: var(--shell-muted); font-size: 9px; letter-spacing: .04em; }
+.preferences-preview tr:last-child td { border-bottom: 0; }
+.preferences-preview-status { display: inline-flex; padding: 3px 7px; border-radius: 999px; background: color-mix(in srgb, var(--shell-warning) 15%, var(--shell-surface)); color: var(--shell-warning); font-size: 10px; font-weight: 650; }
+.preferences-preview-status.is-complete { background: color-mix(in srgb, var(--shell-success) 13%, var(--shell-surface)); color: var(--shell-success); }
+.preferences-preview[data-density='compact'] th,
+.preferences-preview[data-density='compact'] td { padding-block: 6px; }
+@media (min-width: 760px) { .preferences-theme-options { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 600px) { .preferences-reset-row { align-items: flex-start; flex-direction: column; } }
+.preferences-menu-groups { display: grid; gap: 8px; margin-bottom: 14px; }
+.preferences-menu-group { display: grid; grid-template-columns: auto minmax(120px, 1fr) auto auto auto; align-items: center; gap: 10px; padding: 10px 12px; border: 1px solid var(--shell-border-subtle); border-radius: 8px; background: var(--shell-surface); }
+.preferences-menu-group[draggable='true'] { cursor: grab; }
+.preferences-menu-group:active { cursor: grabbing; }
+.preferences-menu-drag { color: var(--shell-muted); font-size: 18px; line-height: 1; }
+.preferences-menu-group strong { color: var(--shell-foreground); font-size: 13px; }
+.preferences-menu-group label { display: inline-flex; align-items: center; gap: 6px; color: var(--shell-foreground); font-size: 12px; }
+.admin-shell .preferences-menu-group input[type='checkbox'] { width: 16px; height: 16px; accent-color: var(--shell-primary); }
+.preferences-menu-group button { min-height: 32px; padding: 0 10px; }
+.preferences-menu-group button:focus-visible,
+.preferences-menu-group input:focus-visible,
+.preferences-section > button:focus-visible { outline: 2px solid var(--shell-primary); outline-offset: 2px; }
+@media (max-width: 600px) { .preferences-menu-group { grid-template-columns: auto 1fr auto auto; } .preferences-menu-group label { grid-column: 2; } .preferences-menu-group button { grid-row: 2; } }

@@ -1,0 +1,129 @@
+.customer-account {
+  width: min(1240px, calc(100% - 64px));
+  margin: 0 auto;
+  padding: 38px 0 80px;
+  color: var(--ink, #171717);
+}
+
+.customer-account-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 32px;
+  padding-bottom: 25px;
+  border-bottom: 1px solid var(--line, #e5e5e5);
+}
+
+.customer-account-heading .eyebrow { margin: 0 0 9px; }
+.customer-account-heading h1 { margin: 0; font-size: clamp(26px, 3vw, 34px); font-weight: 500; letter-spacing: -.04em; }
+.customer-account-heading > p:last-child { margin: 8px 0 0; color: var(--muted, #737373); font-size: 14px; line-height: 1.5; }
+
+.customer-account-identity {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex: 0 0 auto;
+}
+
+.customer-account-identity-copy { display: grid; gap: 4px; min-width: 0; }
+.customer-account-identity-copy strong { font-size: 13px; font-weight: 600; }
+.customer-account-identity-copy span { color: var(--muted, #737373); font-size: 12px; }
+
+.customer-account-logout {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 38px;
+  padding: 0 12px;
+  border: 1px solid var(--line, #e5e5e5);
+  border-radius: 2px;
+  background: #fff;
+  color: var(--ink, #171717);
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.customer-account-logout:hover { background: #f5f5f4; }
+.customer-account-logout:focus-visible, .customer-account-nav-link:focus-visible { outline: 2px solid #525252; outline-offset: 2px; }
+
+.customer-account-layout {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  align-items: start;
+  gap: clamp(28px, 5vw, 64px);
+  padding-top: 30px;
+}
+
+.customer-account-sidebar { position: sticky; top: 24px; }
+.customer-account-nav-label { margin: 0 0 12px; color: var(--muted, #737373); font-size: 10px; font-weight: 600; letter-spacing: .08em; }
+.customer-account-sidebar nav { display: grid; gap: 2px; margin: 0; }
+
+.customer-account-nav-link {
+  display: flex;
+  min-height: 44px;
+  align-items: center;
+  gap: 11px;
+  padding: 0 11px;
+  border-left: 2px solid transparent;
+  color: #525252;
+  font-size: 13px;
+  text-decoration: none;
+  transition: background-color 120ms ease, color 120ms ease;
+}
+
+.customer-account-nav-link:hover { background: #f5f5f4; color: #171717; }
+.customer-account-nav-link[aria-current='page'] { border-left-color: #262626; background: #f5f5f4; color: #171717; font-weight: 600; }
+.customer-account-nav-link svg { flex: 0 0 auto; }
+.customer-account-content { min-width: 0; }
+.customer-account-content .account-page { max-width: none; margin: 0; padding: 0 !important; }
+.customer-account-content .account-page > .back-link { display: none; }
+.customer-account-content .account-page > h1 { margin-top: 0; }
+.customer-account-content .account-page > .eyebrow { margin-top: 0; }
+.customer-account-content .account-settings-shortcuts { display: none; }
+.customer-account-content .address-list, .customer-account-content .address-form, .customer-account-content .address-empty { max-width: none; }
+.customer-account-content .order-history { max-width: none; margin-top: 20px; }
+.customer-account-content .account-order-detail { max-width: none; margin: 0; padding: 24px; }
+.customer-account-content .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.customer-account-content .wishlist-variant-picker { font-size: 12px; }
+.customer-account-content .wishlist-variant-picker select { min-height: 42px; }
+.customer-account-content .wishlist-unavailable, .customer-account-content .wishlist-cart-error { font-size: 12px; }
+.customer-account-content .account-settings-card { border-radius: 2px; padding: 24px; }
+.customer-account-content .account-settings-nav { margin: 20px 0; }
+.customer-account-content .account-settings-nav button { padding-inline: 12px; font-size: 13px; }
+.customer-account-content .account-settings-form { max-width: 680px; }
+.customer-account-content .account-settings-card h2 { margin-top: 0; font-size: 20px; font-weight: 500; letter-spacing: -.02em; }
+.customer-account-content :is(.saved-address, .address-form, .address-empty, .account-order-detail, .account-order-grid > section, .review-form, .account-order-detail .summary, .order-history > a, .account-order-change-request, .session-revocation-dialog, .address-delete-dialog) {
+  border-radius: 2px;
+  box-shadow: none;
+}
+.customer-account-content :is(.session-revocation-dialog, .address-delete-dialog)::backdrop { backdrop-filter: none; }
+.customer-account-content .account-empty-illustration { width: 84px; max-height: 84px; object-fit: contain; }
+
+@media (max-width: 900px) {
+  .customer-account { width: min(100% - 40px, 760px); }
+  .customer-account-header { align-items: flex-start; flex-direction: column; gap: 18px; }
+  .customer-account-identity { width: 100%; justify-content: space-between; }
+  .customer-account-layout { grid-template-columns: minmax(0, 1fr); gap: 22px; padding-top: 22px; }
+  .customer-account-sidebar { position: static; }
+  .customer-account-nav-label { display: none; }
+  .customer-account-sidebar nav { display: flex; overflow-x: auto; gap: 5px; padding-bottom: 4px; scrollbar-width: thin; }
+  .customer-account-nav-link { min-height: 40px; flex: 0 0 auto; border-left: 0; border-bottom: 2px solid transparent; padding: 0 11px; white-space: nowrap; }
+  .customer-account-nav-link[aria-current='page'] { border-bottom-color: #262626; }
+  .customer-account-content .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 600px) {
+  .customer-account { width: calc(100% - 32px); padding: 26px 0 56px; }
+  .customer-account-heading h1 { font-size: 26px; }
+  .customer-account-heading > p:last-child { max-width: 38ch; font-size: 13px; }
+  .customer-account-identity-copy { display: none; }
+  .customer-account-content .account-order-detail { padding: 16px; }
+  .customer-account-content .account-settings-card { padding: 18px; }
+  .customer-account-content .grid { gap: 20px 12px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .customer-account-nav-link { transition: none; }
+}

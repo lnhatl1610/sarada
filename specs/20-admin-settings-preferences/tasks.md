@@ -1,0 +1,22 @@
+# Tasks: Admin settings and preferences
+
+- [x] Add a permission-neutral personal preferences page to the admin shell.
+- [x] Persist theme, accent, table density, and reduced-motion preference locally.
+- [x] Apply preference changes immediately and provide reset-to-default behavior.
+- [x] Add server-stored account notification preferences and account display preferences.
+- [x] Add account-synced date/time, number, and currency formatting preferences with shared admin formatters.
+- [x] Persist and apply the account's default dashboard period and previous-period comparison setting.
+- [x] Add an account-synced option to remember collapsed sidebar groups in the current browser.
+- [x] Pin up to eight permission-filtered admin destinations at the top of the sidebar and save their order per account.
+- [x] Save dashboard widget visibility and order per account and filter inaccessible widgets by permission.
+- [x] Save a permission-filtered default landing page and apply it after login when there is no requested return URL.
+- [x] Export and import versioned appearance-preference JSON with server-side schema validation.
+- [x] Register admin tables and sync their default visible columns through account appearance preferences.
+- [x] Implement store-wide settings API, authorization, audit, and settings pages.
+- [x] Add email templates, sender settings, test-email endpoint, order/shipment mail, and operational recipient alerts.
+- [x] Schedule weekly report summaries using per-account in-app/email notification preferences.
+- [x] Schedule cancellation of expired non-COD unpaid orders through the order state machine.
+- [x] Apply maintenance and SEO defaults in the storefront.
+- [x] No separate public-store-settings cache currently exists: `/auth/registration-status` reads current settings, and the cached sitemap only covers public routes/content. Revisit invalidation if public settings gain independent caching.
+- [x] Add real operational health and data export/import APIs before exposing those controls. Health, failed-job, backup, and export-job APIs are implemented with permission checks and OpenAPI operations; Admin health/backup/download screens call those APIs.
+- [ ] Record visual acceptance evidence when verification is requested.

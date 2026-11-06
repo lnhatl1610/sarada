@@ -1,0 +1,78 @@
+sequenceDiagram
+  participant Browser
+  participant API
+  participant DB
+  Browser->>API: POST registration (terms accepted, optional marketing consent)
+  API->>DB: create pending_approval user and customer role
+  opt Marketing consent selected
+    API->>DB: create newsletter subscription
+  end
+  API-->>Browser: 202 email verification required (no session)
+  API->>Browser: signed email verification link
+  Browser->>API: GET signed verification link
+  API->>DB: mark email verified
+  API-->>Browser: redirect to pending approval page
+  Browser->>API: POST staff invitation token and password
+  API->>DB: lock one-time invite, create active verified user and role
+  API-->>Browser: invitation accepted
+Browser->>API: POST login (email or phone for Storefront; optional remember_me; email for Admin)
+  API->>DB: verify user and roles
+  alt Admin has 2FA enabled
+    API->>DB: look up hashed trusted-device cookie
+    alt Trusted device valid
+      API->>DB: rotate trusted-device hash and extend expiry
+      API->>DB: create revocable session row
+      API-->>Browser: signed JWT + refresh cookie + rotated trusted-device cookie
+    else Device needs verification
+      API->>DB: store short-lived hashed challenge
+      API-->>Browser: 202 challenge token (memory only)
+      Browser->>API: POST TOTP or recovery code (optional trust for 30 days)
+      API->>DB: lock challenge, verify code, consume challenge and recovery code
+      opt Trust this device
+        API->>DB: store trusted-device token hash
+      end
+      API->>DB: create revocable session row
+      API-->>Browser: signed JWT + httpOnly refresh cookie (and optional trusted-device cookie)
+    end
+  else 2FA not enabled
+  API->>DB: create revocable session row
+  API-->>Browser: signed 15-minute JWT (aud, sid) + httpOnly refresh cookie (session-only unless remembered)
+  end
+  Browser->>API: Bearer access token
+  API-->>Browser: protected response
+  API-->>Browser: 401 when access token expires
+  Browser->>API: one shared POST refresh for concurrent requests (cookie)
+  API->>DB: lock refresh row and validate hash/audience
+  alt Token was already revoked
+    API->>DB: follow replaced_by_id chain; revoke family refresh and access sessions
+    API-->>Browser: 401 + clear audience cookie
+  else Token is current and valid
+    API->>DB: rotate refresh cookie and issue new JWT in one transaction
+    API-->>Browser: signed JWT + rotated httpOnly cookie preserving the original session/persistent choice
+  end
+  Browser->>API: retry each failed request once with new token
+  alt Refresh fails or retried request is unauthorized
+    API-->>Browser: keep route mounted and require password
+    Browser->>API: POST admin login credentials
+    alt Admin has 2FA enabled
+      API-->>Browser: 202 short-lived challenge
+      Browser->>API: POST TOTP or recovery code
+    end
+    API->>DB: create a new revocable session and rotate refresh cookie
+    API-->>Browser: restore access token and resume current route
+  end
+  Browser->>API: PUT account email with current password
+  API->>DB: store pending address and token hash with expiry
+  API->>Browser: queue confirmation link to new address
+  Browser->>API: GET one-time email change token
+  API->>DB: verify hash and expiry; replace account email atomically
+  API->>DB: delete consumed pending request
+  API->>Browser: notify previous address and redirect to account security
+  API->>Browser: redirect to account security
+  Browser->>API: POST account phone change (recent auth + current password)
+  API->>DB: store one pending phone and HMAC of six-digit code
+  API->>Browser: send SMS code; return masked phone and expiry
+  Browser->>API: POST phone change confirmation
+  API->>DB: lock challenge; check expiry/attempts/code; replace phone and set verified timestamp
+  Browser->>API: POST login by phone
+  API->>DB: reject phone login unless phone_verified_at is set

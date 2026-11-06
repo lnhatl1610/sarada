@@ -1,0 +1,14 @@
+.changelog-entries { display: grid; gap: 1rem; max-width: 58rem; }
+.changelog-entry > header { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; }
+.changelog-entry ul { display: grid; gap: .65rem; padding-left: 1.2rem; line-height: 1.6; }
+.changelog-new { padding: .2rem .55rem; border-radius: 999px; background: var(--destructive); color: var(--destructive-foreground); font-size: .75rem; font-weight: 700; }
+.license-summary { color: var(--muted-foreground); }
+.license-filters { display: flex; flex-wrap: wrap; gap: .75rem; margin: 1rem 0; }
+.license-filters label { display: grid; gap: .35rem; font-size: .875rem; }
+.license-filters input, .license-filters select { min-width: 14rem; padding: .55rem .7rem; border: 1px solid var(--input); border-radius: calc(var(--radius) - 2px); background: var(--background); color: var(--foreground); }
+.license-table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: var(--radius); }
+.license-table { width: 100%; border-collapse: collapse; background: var(--card); text-align: left; }
+.license-table th, .license-table td { padding: .7rem .85rem; border-bottom: 1px solid var(--border); }
+.license-table th { background: var(--muted); font-weight: 600; }
+.license-table td { overflow-wrap: anywhere; }
+@media (max-width: 640px) { .license-table { min-width: 40rem; } .license-filters { display: grid; } }

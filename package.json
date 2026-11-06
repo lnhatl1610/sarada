@@ -1,0 +1,24 @@
+{
+  "name": "fashion-store-workspace",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently --kill-others --names API,Admin,Storefront,Queue,Schedule --prefix-colors blue,magenta,green,cyan,yellow \"npm:dev:api\" \"npm:dev:admin\" \"npm:dev:storefront\" \"npm:dev:queue\" \"npm:dev:scheduler\"",
+    "api:types": "openapi-typescript api/openapi.yaml -o admin/src/types/api.d.ts && openapi-typescript api/openapi.yaml -o storefront/src/types/api.d.ts",
+    "dev:api": "cd api && php -d upload_max_filesize=6M -d post_max_size=18M artisan serve",
+    "dev:admin": "npm --prefix admin run dev -- --host 0.0.0.0",
+    "dev:storefront": "npm --prefix storefront run dev -- --host 0.0.0.0",
+    "dev:queue": "cd api && php artisan queue:work --tries=3 --timeout=60",
+    "dev:scheduler": "cd api && php artisan schedule:work",
+    "export:schema-snapshot": "php tools/assets/export-schema-snapshot.php",
+    "audit:schema-snapshot": "php tools/assets/audit-schema-snapshot.php",
+    "audit:demo-data": "php tools/assets/audit-schema-snapshot.php && php tools/assets/audit-storefront-api-demo-data.php && php tools/assets/audit-admin-api-demo-data.php && php tools/assets/audit-storefront-media.php",
+    "audit:storefront-api-media": "node tools/quality/audit-storefront-api-media.mjs",
+    "assets:storefront": "node tools/assets/render-storefront-assets.mjs",
+    "assets:storefront:verify": "node tools/assets/verify-storefront-assets.mjs",
+    "assets:storefront-og": "node tools/assets/render-storefront-og.mjs"
+  },
+  "devDependencies": {
+    "concurrently": "^10.0.6",
+    "openapi-typescript": "^7.13.0"
+  }
+}

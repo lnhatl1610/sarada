@@ -1,0 +1,11 @@
+# ADR 0014: Use Spatie Laravel Backup for system backups
+
+- Status: Accepted
+- Context: The admin plan needs private database and uploaded-media snapshots, retention cleanup, backup health monitoring, and an authenticated download surface. The API runs Laravel 13 on PHP 8.5; local development is often Windows, while the deployment target is Linux.
+- Options considered:
+  - Spatie Laravel Backup: provides database dumps, file archives, cleanup, monitoring, and Flysystem destinations. It requires the ZIP extension and a database dump binary for MySQL; upstream currently documents Linux support, so Windows local backup execution is not guaranteed.
+  - An application-owned dump/archive implementation: can avoid an external dump binary, but would make the project responsible for consistent database snapshots, serialization, restore compatibility, cleanup, and archive safety.
+- Decision: Use the package named by `ACCOUNT_MENU_PLAN_FULL.md`, with a private local backup disk, database plus uploaded media, archive verification, and scheduled cleanup/monitoring. Keep the manual operation permission-gated and queued. A production deployment must run on a supported Linux environment with `mysqldump`, PHP ZIP, and enough temporary/free disk space. Local Windows backup execution is a known limitation until validated against the installed MySQL client.
+- Consequences: Backups are encrypted ZIPs of the configured database and uploaded media, stored on a private local disk, and downloaded only through an API requiring `system.backup`. The manual run is queued; daily package cleanup retains seven days, and system health warns after 48 hours without a successful run. No restore endpoint is exposed. Operators must copy backups off-host for disaster recovery and configure database dump credentials with least privilege. `BACKUP_ARCHIVE_PASSWORD` must be set before manual runs are accepted.
+- Rollback: Remove the package, backup config/disk, scheduled commands, backup API/UI, and the additive run-history migration only after preserving any backup files that must be retained.
+- References: [Spatie installation and setup](https://spatie.be/docs/laravel-backup/v10/installation-and-setup), [requirements](https://spatie.be/docs/laravel-backup/v10/requirements).

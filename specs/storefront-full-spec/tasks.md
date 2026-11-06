@@ -1,0 +1,182 @@
+# Storefront Full Spec Implementation Tracker
+
+Source: [`/storefront-full-spec.md`](../../storefront-full-spec.md). This is a broad product roadmap; a checked item means implementation exists in the working tree, while runtime/release validation is tracked separately. Do not represent demo data or unconfigured third-party integrations as production-ready.
+
+## P0 — launch scope
+
+- [x] PDP size guide includes an accessible height/weight calculator backed by store-maintained per-product ranges; Admin can edit ranges for sizes sold, and missing data never fabricates a recommendation.
+
+- [x] Complete route coverage for published catalog, search, product, cart/checkout, customer account, tracking, content, and error/maintenance views. `route-paths.ts` enumerates the public route set and `StorefrontRouteContent.tsx` renders the corresponding auth, catalog, account, checkout, content, and recovery states; unknown paths use the 404 recovery panel.
+- [x] `/sitemap` is a human-readable grouped directory of storefront, category, collection, brand, and published CMS routes with per-group loading/error/empty states; the XML sitemap and SEO snapshot include the route.
+- [x] Unknown routes, 404/500 boundaries, and maintenance screens offer an accessible product-search form, suggested search terms, and a route back home.
+- [x] `/search?q=` and a full-screen, focus-managed header search dialog with debounced product suggestions (up to four 64px thumbnails), category/collection matches, local recent history, keyboard selection, and API search across name/description/SKU/brand/category/color.
+- [x] Header search also suggests matching published CMS pages through a public API, returning only a safe title and text description.
+- [x] `/search?q=` separates product results from paginated matching published CMS pages; drafts and page HTML are excluded from the response.
+- [x] Product search returns bounded typo-tolerant near matches when no exact published product match exists.
+- [x] Search no-result pages suggest anonymous trending terms and API-backed best sellers, with independent retry for failed best-seller recommendations.
+- [x] Search supports an explicit Vietnamese voice-search action using browser speech recognition, with permission/error feedback and typed-search fallback.
+- [x] Published collection index at `/collections` with loading/error/empty/success states, image disclosures, and direct links to each collection.
+- [x] `/brands` directory and `/brands/:slug` pages sourced from published-product filter options; detail pages show the Admin-maintained logo, short story, banner, SEO metadata, and filtered product grid, with loading/error/empty and unavailable-brand states.
+- [x] `/contact` resolves the published CMS contact page when available and retains a dedicated contact fallback with canonical metadata when the CMS page is missing; discoverable from desktop/mobile navigation and the footer.
+- [x] Contact page works without a published CMS record, shows configured phone/email/hours/address, and provides a rate-limited support email form with optional order code and validated image attachment; submitted content is not persisted.
+- [x] `/new-arrivals`, `/best-sellers`, and `/sale` catalog routes with API-backed merchandising filters and route-specific metadata.
+- [x] Sale page shows a live countdown only when the active campaign banner has Admin-configured countdown visibility and a real end time; it omits fabricated timers when no campaign window is configured.
+- [x] API-backed suggestions for published editorial content and anonymous real trending product queries, plus typo-tolerant product search.
+- [x] Complete shared shell: announcements, responsive navigation, mini-cart recommendations and free-shipping details, four-column footer with consented newsletter signup, configured payment/shipping/contact information, social and published-page links, and language/currency strip.
+- [x] Desktop category menu exposes the full published category tree and collection list, links to the brand directory, supports keyboard/Escape navigation, and includes up to two API-backed category image shortcuts.
+- [x] Brand directory groups available brands by Vietnamese initial and provides keyboard-accessible letter jumps; diacritics and non-Latin initials are handled.
+- [x] Shared header exposes a wishlist shortcut with its current saved-item count; the mobile label collapses to the icon while the five-item bottom navigation retains its text label.
+- [x] Checkout uses a focused shell with the original store mark and secure-payment lock label; the full header, footer, and back-to-top control are hidden, including for an empty cart.
+- [x] Account popover shows login/registration links to guests and order, wishlist, profile, and logout actions to signed-in customers; Escape returns focus to the trigger.
+- [x] The collection index is linked from desktop and mobile navigation and the shared footer, including when its catalog is empty.
+- [x] Footer renders configured store contacts and social URLs; it states nationwide delivery, address-based shipping calculation, and only configured COD/bank-transfer methods, without inventing missing contact details.
+- [x] Footer discovers all published CMS pages through one bounded public metadata endpoint, without fetching page content or exposing drafts.
+- [x] Cookie consent choices for necessary, analytics, and marketing groups; browser-local persistence; reopenable settings from the footer. GA4 loads only after analytics consent and records page views plus view_item, add_to_cart, begin_checkout, and purchase events. No marketing pixel is configured.
+- [x] Newsletter signup records explicit consent and sends a queued welcome coupon email to new subscribers when an active coupon is configured; repeated submissions do not resend it.
+- [x] An accessible once-per-session welcome newsletter dialog uses a 15-second or desktop exit-intent trigger only when an active Admin-configured welcome coupon exists; closing or subscribing suppresses further displays for that session.
+- [x] Dismissible delivery/COD announcement, sticky direction-aware shared header, and fixed five-item mobile navigation; mobile product purchase bar clears the bottom navigation and safe area.
+- [x] Announcement rotates between two or three verified delivery, address-based fee, and enabled COD messages, with manual controls, pause/resume, and persistent dismissal.
+- [x] Home service strip and footer expose COD and bank transfer only when configured; header announcements and SEO snapshots reflect configured payment availability.
+- [x] PDP and checkout present only configured payment methods; checkout can retry failed payment configuration, the API rejects unavailable methods, and idempotent replays remain available.
+- [x] Opening the mini-cart automatically after a successful add-to-cart from product detail or the wishlist; “Buy now” continues directly to checkout.
+- [x] Mini-cart free-shipping progress uses the configured store threshold or the selected province's shipping API threshold and waits for authoritative cart line prices.
+- [x] Mini-cart shows up to two API-related products, excludes items already in the cart, requires an in-stock color/size choice, and lets shoppers add through the cart API.
+- [x] Catalog product grid can switch between 2, 3, and 4 columns with labeled, keyboard-operable controls; narrow screens retain a readable two-column layout.
+- [x] Catalog has URL-backed in-stock and out-of-stock filters based on active variants' server available quantity after reservations.
+- [x] Catalog has an API-backed minimum-rating filter using approved-review averages and excluding unrated products.
+- [x] Catalog has selectable minimum discount thresholds; the API ignores discounts outside their active sale windows.
+- [x] Catalog material filter options come from published-product data and filter exact normalized material values through the API.
+- [x] Catalog price slider bounds use active-variant effective prices and remain synchronized with integer-VND fields and URL filters.
+- [x] Catalog supports API-backed highest-rating and largest-active-discount sorts, in addition to relevance, newest, price, and best-selling.
+- [x] Product cards provide quick add with an explicit color/size variant, disable unavailable variants, retain selection on request failure, and open the mini-cart only after API success.
+- [x] Product cards reveal an optional second catalog image only on hover-capable fine pointers; touch and keyboard users keep the primary image, and demo disclosures follow the visible image.
+- [x] Product cards show the active sale percentage and approved-review average/count when available; no rating is shown for unrated products.
+- [x] Product cards show accessible color swatches when color-specific imagery exists and switch images to the selected color.
+- [x] Product cards show a “Mới” label only for products explicitly marked as new in Admin, alongside existing API-driven sale and availability states.
+- [x] Product cards show “Bán chạy” only when the API reports a positive server-owned sold count.
+- [x] Product detail gallery opens a full-screen zoom dialog, supports pinch zoom, and provides both swipe and explicit previous/next image navigation.
+- [x] PDP outfit selector presents up to four published same-category related products, requires an in-stock variant for each selected item, shows a current API-price estimate, and adds items through the cart API with partial-failure feedback; the UI discloses that pairings are suggestions, not store-curated outfits.
+- [x] Product detail displays Admin-managed MP4/WebM product videos with native controls; uploads are type/size validated and videos can be removed by authorized staff.
+- [x] Product gallery videos can be shared across all colors or associated with a specific Admin-managed color and filter with the selected color.
+- [x] Product detail offers a keyboard-accessible 360-degree frame viewer for products with 24–36 Admin-ordered frames, scoped to the selected color; shoppers can drag horizontally on the image or use the range/buttons to rotate.
+- [x] Home sections and campaigns match published/configured content; no fabricated promotions, availability, or social proof. Banners, categories, collections, home-block order, and Lookbook selection come from public API/configuration; service and payment claims follow configured fees and enabled methods, and no testimonial/social-proof fixture is rendered.
+- [x] Admin can curate up to six Instagram post thumbnails and links; the homepage rail and SEO snapshot use the same configured items and hide the section when none are configured.
+- [x] Home hero supports up to four API-published campaign slides, matching mobile banner order, native-controlled video, and accessible manual slide controls without autoplay.
+- [x] Campaign banner supports an Admin-configured live countdown tied to its actual `ends_at`, with a static end date in the SEO snapshot.
+- [x] Admin can reorder and toggle each supported implemented homepage block; public configuration validates the allowlist, and interactive rendering plus SEO snapshots use the same settings.
+- [x] Admin explicitly selects the single homepage Lookbook collection; storefront and release SEO snapshot no longer infer it from whichever collection happens to have a banner.
+- [x] Best sellers default to an unfiltered Tất cả result so the rail does not appear empty when one audience has no matching products; Nam/Nữ/Phụ kiện tabs still use their API filters and preserve them in full-result links.
+- [x] Featured categories stay within six image tiles and use actual published products/categories for Nam/Nữ/Phụ kiện entry points.
+- [x] Service strip shows address-based fees, shows configured COD and bank transfer, and only links return/support terms to published content or configured contacts; SEO snapshots match.
+- [x] New arrivals and best sellers use horizontal product rails with accessible previous/next controls, touch/trackpad and keyboard scrolling, reduced-motion support, and full-results links.
+- [x] Catalog filters and cards cover every required server-supported filter, sort, view, state, and SEO requirement.
+- [x] Catalog exposes published-product facet counts for categories, brands, sizes, colors, materials, and fit values in the filter summary.
+- [x] Paginated catalog routes emit query-preserving `rel="prev"` / `rel="next"` links from API page metadata.
+- [x] Category and collection listing headers show published cover images and active category-child navigation chips from API data.
+- [x] Catalog color filters render accessible API-backed HEX swatches, and fit/silhouette filters use an Admin-maintained product field end to end.
+- [x] Catalog filters can toggle URL-backed new, best-seller, and active-sale criteria; dedicated merchandising routes show their preset criterion as locked while retaining other filter changes.
+- [x] Product detail covers variant/color selection and availability, swipe/lightbox/360° gallery, threshold-based stock and back-in-stock alerts, configured size guidance, add/buy actions, paginated/filterable reviews and questions, outfit/related/recent items, Product/Offer/Review structured data, and loading/error/not-found/empty states (`ProductDetailPage.tsx`, `ProductReviewList.tsx`, `OutfitBuilder.tsx`, `useStorefrontSeo.ts`).
+- [x] Product detail reviews consume the server-paginated response and expose previous/next page controls with current-page and total metadata.
+- [x] Product detail includes a Specifications tab from actual catalog fields and the selected variant, with an explicit no-data state when no values are configured.
+- [x] PDP shoppers can request delivery-fee estimates by province and optional ward, including only eligible configured methods and published ETA text; checkout retains authority for final fees.
+- [x] Product detail uses accessible size buttons, labels and strikes through sold-out sizes, and prevents choosing an unavailable variant.
+- [x] Product detail shows exact remaining quantity only at or below the variant's configured low-stock threshold; higher stock is shown generically and zero stock remains sold out.
+- [x] Sold-out PDP variants offer an email back-in-stock signup, stored idempotently per variant/address and notified after stock becomes available again.
+- [x] Product detail review summary includes API counts by star rating and accessible distribution bars.
+- [x] Approved storefront reviews display an optional public response managed by authorized staff in the Admin review detail drawer.
+- [x] Approved storefront reviews have an idempotent, rate-limited “Hữu ích” vote with a server-owned count and one vote per browser visitor identifier.
+- [x] Product pages emit Product/Offer/AggregateRating/Review JSON-LD from public API data in both the live app and release snapshots.
+- [x] Product reviews sort server-side by newest, highest rating, or lowest rating while preserving server pagination.
+- [x] Approved purchase reviews show the purchased color/size snapshot and fit feedback when the order item contains them.
+- [x] Product detail “Mua ngay” adds the selected variant and quantity, then opens checkout only after the cart API succeeds; product detail exposes brand/SKU, clipboard/Facebook/native-share actions, and rating links that open reviews.
+- [x] Add a store setting for the Zalo OA ID and render the official Zalo Share Plugin on explicit request; load its SDK only when the shopper opens Zalo sharing.
+- [ ] Set the real store OA ID and verify sharing in a supported browser/device before release.
+- [x] Cart supports quantity/variant changes, confirmed bulk removal with partial-failure retention, wishlist transfer, API-validated coupon eligibility/reasons and server quote, guest-cart persistence/account merge, recommendations, and empty/error/expired/stock states (`CartPage.tsx`, `CartLineItem.tsx`, `CartPromotionBox.tsx`, `useCartSession.ts`).
+- [x] Full-cart lines can be saved to the signed-in wishlist; the cart only removes a line after the save request succeeds, and guests are sent through login return flow.
+- [x] Cart lists active coupon offers from the API, explains subtotal/usage eligibility, and applies an offer through the authoritative quote.
+- [x] Full cart supports per-line/select-all selection and confirmed bulk removal through sequential canonical API mutations, preserving failed lines and reporting partial results.
+- [x] Full cart offers API-related in-stock products not already in the cart, with explicit variant selection and add-to-cart actions.
+- [x] Full-cart lines can change to another active color/size variant; the API recalculates price/stock and merges duplicate variant lines.
+- [x] Empty cart recommends up to four API-backed best sellers, with loading, retryable error, and no-results behavior.
+- [x] Cart quote warns when a server-returned unit price differs from the last synchronized cart price and shows both values.
+- [x] Checkout supports guest/member address flows, authoritative server quotes, configured COD/bank transfer, eligible shipping/pickup methods, address validation, idempotent order placement, payment instructions/order confirmation, and retry-safe field/API errors (`CheckoutPage.tsx`, `useCheckoutActions.ts`, `CheckoutSuccessPage.tsx`).
+- [x] Checkout supports configured COD and manually reconciled bank transfer/VietQR, snapshots the destination bank details per order, and protects instruction lookup with an order-scoped capability token. Automated gateway settlement is not implemented.
+- [x] Checkout requires shoppers to accept the terms and privacy policy in the UI and the API rejects order requests without explicit acceptance.
+- [x] Checkout success displays API-returned item snapshots, subtotal, discount, shipping, and COD total; order tracking remains available when refreshing the success URL.
+- [x] Guest checkout success offers optional account registration while preserving the guest order-tracking action.
+- [x] Checkout quotes province-based shipping plus active Admin-configured delivery methods scoped nationally, by province, or by selected wards; displays configured ETA text; and revalidates/locks the selected method during placement while preserving method/ETA snapshots for later order details.
+- [x] Customer account implementation covers profile/contact/password and account deletion, addresses, order history/detail/reorder, customer-owned wishlists, session revocation/passkeys, notification/privacy settings and data export, plus server logout and client-state cleanup (`AccountSettingsPage.tsx`, `AddressBookPage.tsx`, `AccountOrdersPage.tsx`, `WishlistPage.tsx`, `PasskeySettingsPanel.tsx`, `useStorefrontLogout.ts`). Device/browser and release acceptance remain separate.
+  - [x] Wishlist supports multiple customer-owned lists, create/rename/delete, product membership per list, and shareable read-only links.
+- [x] Storefront password login accepts email or phone through a single labeled identifier field; Admin remains email-only and legacy storefront `email` payloads still work.
+- [x] Storefront login includes an unchecked “Ghi nhớ tôi” option: checked sessions use a persistent refresh cookie, unchecked sessions use a browser-session cookie that stays session-only through token rotation; legacy clients retain persistent-cookie behavior.
+- [x] Customers verify a new/current phone by SMS before changing it or signing in by phone; the six-digit code is hashed, short-lived, attempt-limited, and never included in account audit logs.
+- [x] Customer avatar uploads can be cropped to a keyboard-adjustable square 512 × 512 image before upload; file type/size, unreadable image, upload errors, cancellation, and focus return are handled.
+- [x] Registration separates required terms acceptance from optional marketing-email consent and persists the subscription only after explicit opt-in.
+- [x] Checkout can optionally collect VAT invoice tax code, company name, and address; the API validates and snapshots the request, and Admin can view it on the order.
+- [x] `/account` provides an API-backed overview of the latest order and saved delivery address with resilient loading/error states and links to account tasks.
+- [x] Account order history has status tabs, order-code/product search, date filtering, and server pagination scoped to the signed-in customer.
+- [x] Address book supports Nhà/Công ty/Khác labels and independent default delivery and invoice addresses, with server-side single-default enforcement and fallback after deletion.
+- [x] Customers can reorder saved variants and quantities from an order; additions use current server stock/prices and report partial failures.
+- [x] Guest order tracking renders the API's public status history as a chronological timeline, shows carrier/tracking codes when available, and uses a neutral no-match message.
+- [x] Authenticated order details show carrier, tracking code, and ship date when shipment data exists.
+- [x] Authenticated order details show payment method and status, can be printed/saved as a PDF order summary, and link to the contact form with the order code prefilled.
+- [x] Storefront customers can request and download their owner-scoped personal data export from account settings; export jobs remain queued, pollable, and expire after seven days.
+- [ ] Public content, support, tracking, SEO, accessibility, security, data consent, and required analytics acceptance.
+- [x] `/faq` provides searchable, topic-grouped active answers; Admin staff can draft, publish, edit, and delete FAQ entries; public content is plain text and release snapshots include active FAQ structured data.
+- [x] Inner routes expose visual breadcrumbs (catalog and collection index retain their page-specific navigation; other routes use the shared shell) and matching Schema.org `BreadcrumbList` structured data.
+- [ ] Responsive and keyboard/screen-reader acceptance at 320/390/768/1440px.
+
+## P1 — growth
+
+- [x] Shared storefront shell exposes a labeled back-to-top button after scrolling; its mobile position clears the fixed navigation/safe area and it respects reduced-motion preferences.
+- [x] Lookbook detail route renders admin-positioned, keyboard-accessible hotspots in a responsive two-column editorial layout, lists the outfit's current products/prices and available variants, and lets shoppers add selected outfit items through the cart API; release SEO snapshots include the matching editorial layout.
+- [x] Catalog product cards support a responsive quick-view dialog with selectable color/size, current variant price/stock, and add-to-cart.
+- [x] Customer profiles store optional height, weight, and body measurements; the signed-in PDP pre-fills its size calculator from the customer's saved height and weight while allowing per-product edits.
+- [x] PDP review list filters approved reviews by exact star rating or reviews with images; filtering is server-side and resets pagination.
+- [x] PDP review list filters by purchased size using server-provided choices from approved order-linked reviews.
+- [x] PDP, home, and cart recently viewed rails store up to 12 product slugs in browser storage, merge with signed-in account history, and re-fetch the six most recent still-published products.
+- [x] Sold-out PDP variants accept one normalized email or, when Twilio is configured, one Vietnamese phone number for a queued one-time back-in-stock notification; SMS failures retry and restore the request.
+- [x] Customers can toggle a product price-drop email alert and subscribe to sold-out variant restock alerts from PDP and wishlist; account alerts are owner-scoped and the price watcher uses the current effective VND price with a single queued notification.
+- [x] Product Q&A supports authenticated customer submissions, answered-only public pagination, and permission-gated Admin answer/hide moderation.
+- [x] Delivered-order reviews support approved customer photos and one MP4/WebM video with server-side MIME/size validation and moderation-gated publication.
+- [x] Queue cart recovery emails at one and 24 hours for active signed-in newsletter subscribers and guests who provide an email and explicitly consent; guests can update or withdraw consent from their cart, and cart activity restarts each reminder window.
+- [x] `/stores` lists active store locations with province filtering, map/directions, and click-to-request nearby sorting; authorized staff maintain locations in Admin.
+- [x] Blog foundation: Admin creates and schedules sanitized articles, assigns an inline category and up to 12 products; Storefront lists articles with category filters, renders related posts and linked products, adds article search suggestions, metadata/BlogPosting JSON-LD, and sitemap routes.
+- [x] Membership tier and points ledger foundation: customer-scoped API, 12-month spend tiers, point expiry, delivery/payment award, refund/return adjustments, account summary, tier benefits, and paginated history.
+- [x] Public `/membership` program page presents API-backed tiers and earning rules, includes registration/account links, has metadata and structured data, and is included in sitemap and SEO prerender snapshots.
+- [x] Checkout point redemption: authenticated customers can opt in; server quotes apply available unexpired points after coupon discount and within the merchandise subtotal, lock and consume earliest-expiring point lots during order placement, snapshot points/discount on the order, and restore redeemed points proportionally after refunds or fully after returns.
+- [x] Configurable homepage membership promotion block shows API-backed tier rates, point conversion, expiry, and a link to program details; Admin can enable, disable, and reorder it, and SEO snapshots include it in the configured position.
+- [x] Customer account order details and guest tracking show the decision and staff response for cancellation/return requests where available, plus the total and timestamped amounts of recorded refunds without exposing staff-entered refund reasons.
+- [x] Customer voucher wallet lists active public coupons and personal usage history with availability filters, eligibility terms, expiry, pagination, and retryable states; customers can enter a code and continue to the cart for authoritative quote validation.
+- [x] Homepage personal recommendations use the signed-in customer's recent views and paid delivered/completed purchases to rank related in-stock published products; guests retain the browser-based recently viewed rail. Admin can toggle and reorder the recommendation block.
+- [x] Customer account notification inbox lists order-created and shipment updates with unread state, owner-scoped single/bulk mark-read actions, pagination, and order links.
+- [x] Customer notification settings persist per-event channel choices; order and price-drop email/in-app delivery honors preferences, configured browser push can be subscribed per device, and Twilio SMS jobs use the account's current phone without placing it in the queue payload.
+- [x] Zalo ZBS Template Message delivery is wired to order updates, price drops, and promotions, with customer preference/phone gating and encrypted refresh-token rotation. Configure approved templates and credentials before production; final blog/lookbook visual review remains open.
+- [x] Newsletter welcome-coupon promotion delivery honors the signed-in customer's enabled in-app, browser-push, and SMS channels; email follows explicit newsletter consent.
+- [x] Admin can compose and confirm a Storefront promotion campaign; a permission-gated queue targets active customer notification preferences and newsletter-consented email subscribers, records queue/skip/failure counts, and exposes campaign history without recipient email. Migrations `2026_11_05_380000_create_storefront_promotion_campaigns_table`, `2026_11_05_390000_create_storefront_promotion_campaign_recipients_table`, and `2026_11_05_400000_add_constraints_to_storefront_promotion_campaign_recipients_table` are applied; SQL snapshot is updated.
+- [ ] Membership commercial rules need owner confirmation before launch: tier thresholds and benefits, earn rate, expiry, and point-to-VND conversion are currently implementation defaults.
+
+## P2 — advanced
+
+- [x] Storefront appearance supports a persisted system-following color mode alongside fixed light and dark overrides.
+- [x] Gift-card UI preview supports the planned denominations, three designs, recipient/message/send-date fields, responsive 3D preview, and explicitly avoids issuing a card or order before commerce policy/API approval.
+- [x] Referral and affiliate UI previews include the planned referral code/benefit/history layout and a validated affiliate application form without inventing rewards or claiming to submit applications.
+- [ ] Gift cards: customer balance/history, redemption, issuance, expiry, refunds, and Admin controls need a defined operating policy.
+- [ ] Referrals and affiliate rewards need approved eligibility, fraud prevention, and reward rules.
+- [ ] Installments need an approved provider and payment/settlement contract.
+- [ ] EN/USD needs translated content and an authoritative exchange-rate and rounding policy.
+- [ ] Chatbot needs an approved provider, knowledge source, privacy rules, and escalation path.
+- [ ] Image search needs an approved image-matching approach and privacy/retention rules.
+- [x] Passkeys support discoverable WebAuthn enrollment, password-reset recovery, customer-owned removal, account-deletion cleanup, and browser-native passwordless login.
+- [x] Dark mode is included in the persisted appearance preference alongside system-following mode.
+- [x] Voice search is implemented for Vietnamese through browser speech recognition with typed-search fallback (see P0 search criteria).
+
+- [x] Store pickup uses a separate branch stock pool; checkout lists only active stores that can fulfill every cart line, reserves stock transactionally, snapshots branch details, and supports Admin stock adjustments and branch movement history.
+
+- [x] `/compare` compares up to four current published products, supports remove/clear/share links, and keeps selections in browser storage.
+- [x] Storefront PWA includes an install manifest, an app-shell service worker, offline fallback, and bounded offline copies of previously visited public pages/data; account, cart, checkout, and other private API responses are excluded.
+
+## Verification and release gates
+
+- [ ] Run requested frontend/API checks when the user asks; do not report unchecked results as passed.
+- [ ] Complete real-device/browser accessibility, production hosting/security/SEO/performance checks, owner approval of content and real product imagery, and release/UAT gates.

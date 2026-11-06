@@ -1,0 +1,12 @@
+.promotion-notifications { display: grid; gap: 18px; }
+.promotion-notifications__form { display: grid; gap: 16px; max-width: 760px; }
+.promotion-notifications__form textarea { min-height: 108px; resize: vertical; }
+.promotion-notifications__actions { display: flex; justify-content: flex-end; margin-top: 16px; }
+.promotion-notifications__notice { padding: 10px 14px; border-radius: 10px; background: var(--success-soft, #eaf5ef); color: var(--success, #276749); }
+.promotion-notifications__list { display: grid; gap: 12px; padding: 0; margin: 0; list-style: none; }
+.promotion-notifications__list > li { display: grid; gap: 6px; padding: 16px; border: 1px solid var(--border, #e8e2de); border-radius: 12px; }
+.promotion-notifications__campaign-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.promotion-notifications__campaign-heading h3, .promotion-notifications__list p { margin: 0; }
+.promotion-notifications__counts, .promotion-notifications__list time { color: var(--muted, #716b68); font-size: .875rem; }
+.promotion-notifications__pagination { display: flex; align-items: center; justify-content: center; gap: 14px; margin-top: 16px; }
+@media (max-width: 600px) { .promotion-notifications__campaign-heading { align-items: flex-start; flex-direction: column; } }

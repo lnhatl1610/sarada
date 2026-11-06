@@ -1,0 +1,28 @@
+.reports-page { display: grid; gap: 14px; }
+.reports-page .report-export-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.reports-page .report-filters { margin-block: 12px; }
+.reports-page .report-clear-filters { margin-top: 8px; }
+.report-chart { display: grid; gap: 10px; margin: 16px 0 24px; max-width: 1000px; }
+.report-chart figcaption { color: var(--shell-muted); font-size: 11px; font-weight: 650; }
+.report-chart ol { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.report-chart li { display: grid; grid-template-columns: minmax(110px, 1fr) minmax(100px, 3fr) max-content; align-items: center; gap: 12px; min-width: 0; }
+.report-chart-label { overflow: hidden; color: var(--shell-foreground); font-size: 11px; text-overflow: ellipsis; white-space: nowrap; }
+.report-chart-track { display: block; height: 9px; overflow: hidden; border-radius: 999px; background: var(--shell-border-subtle); }
+.report-chart-track > span { display: block; height: 100%; border-radius: inherit; background: var(--shell-primary); }
+.report-chart li strong { min-width: 72px; color: var(--shell-foreground); text-align: right; font-size: 11px; font-variant-numeric: tabular-nums; }
+@media (max-width: 640px) {
+  .report-chart li { grid-template-columns: minmax(90px, 1fr) minmax(60px, 2fr) max-content; gap: 8px; }
+  .report-chart li strong { min-width: 58px; font-size: 10px; }
+}
+@media print {
+  @page { margin: 14mm; }
+  body, .admin-shell, .admin-main { background: #fff !important; color: #111 !important; }
+  .admin-shell .sidebar, .admin-shell .admin-top, .report-export-actions, .report-filters, .report-clear-filters, .reports-page button { display: none !important; }
+  .admin-shell { display: block !important; min-height: 0 !important; }
+  .admin-main { width: 100% !important; min-width: 0 !important; margin: 0 !important; padding: 0 !important; }
+  .reports-page { display: block; }
+  .reports-page .panel { break-inside: avoid; border: 1px solid #bbb !important; box-shadow: none !important; margin-bottom: 12px; }
+  .report-chart-track { border: 1px solid #777; background: #fff; }
+  .report-chart-track > span { background: #777 !important; print-color-adjust: exact; }
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}

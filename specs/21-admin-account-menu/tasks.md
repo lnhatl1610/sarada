@@ -1,0 +1,181 @@
+# Tasks: admin account menu
+
+Optional recent-history, personal-note, bookmark, shift, saved-view, announcement, and support-ticket features were decommissioned by migration `2026_11_04_000002_remove_optional_admin_collaboration_features`.
+
+## P0 foundation
+- [x] Add permission-filtered menu summary API with 60-second per-user cache.
+- [x] Connect query to admin account menu and add permission-aware order/inventory quick links.
+- [x] Sync OpenAPI and generated frontend declarations.
+- [x] Render the account menu as a bottom Sheet below 768px, with closed-on-open inline groups and 44px minimum touch targets; show each desktop group as a hover submenu for a compact hierarchy.
+- [x] Complete every planned menu group, badge, empty/loading/error state, and responsive behavior.
+  - [x] Add the account identity completeness block with email verification/resend, copy email, staff code, localized greeting/clock, recent login IP/device, and a single actionable warning.
+  - [x] Include unread security alerts in the menu count and link new-device alerts to login history.
+  - [x] Add the planned data/downloads menu group with permission-gated inventory imports and scheduled reports; include it in mobile accordions and synchronized menu layout preferences.
+  - [x] Add a direct, anchored failed-jobs link to System health for admins with `system.health`.
+  - [x] Provide the planned `/system/failed-jobs` destination and a permission-filtered failed-job count badge in the account menu.
+  - [x] Match desktop menu width/viewport scrolling and mobile bottom-sheet accordion behavior; expose loading, retryable error, and skeleton states for summary data.
+  - [x] Open the account menu with Alt+A and preserve Radix menu keyboard navigation and focus restoration.
+  - [x] Detect browser offline/online state, mark internal account-menu links disabled with a "Cần kết nối" tooltip, and prevent offline navigation with an accessible status notice.
+  - [x] Include permission-filtered weekly reports and owner-scoped digest, permission-result, and export-complete notifications in the notification center and account-menu unread count.
+  - [x] Compute account-menu system health only for `system.health` admins and use the documented `unavailable` status otherwise.
+  - [x] Include system-health errors in the account-trigger badge so an isolated critical health error is visible.
+
+## P1 menu and personal workspace
+- [x] Add an unfamiliar-session report action that revokes only the selected login session, sends a mandatory security alert, enforces a password change through admin API middleware, and presents a forced password-change screen recommending TOTP.
+- [x] Add admin Do Not Disturb presets and weekly quiet hours; retain in-app notices, suppress email, allow configurable urgent mail, and always deliver security alerts.
+- [x] Add daily and Monday weekly admin digests with per-admin timezone, selected sections, permission-filtered data, notification channel preferences, empty-digest suppression, and per-period deduplication.
+- [x] Add owner-scoped staff 2FA reset with sudo confirmation, session/trusted-device revocation, activity audit, and notification to the affected staff member.
+- [x] Reject compromised passwords for account changes and all password creation/reset paths using Laravel's k-anonymous uncompromised password rule.
+- [x] Add menu search across localized labels and Vietnamese/English aliases; Enter opens the first match and arrow/Home/End keys navigate results.
+- [x] Track the three most frequently used destinations per admin in local storage.
+- [x] Complete task fields for description, status, due/reminder time, recurrence, linked records, assignee selection, and server-side priority/object filtering.
+- [x] Schedule personal task reminders with in-app/email preferences and one-time, daily, or weekly recurrence.
+- [x] Add login history and security score from the source plan.
+- [x] Add owner-scoped login history, a security score, and editable presence.
+  - [x] Derive automatic away status after 15 minutes without browser activity, restore availability after activity resumes, and show effective presence in staff management.
+- [x] Add a read-only permission summary page using the roles and permissions from `/admin/auth/me`.
+- [x] Add logout-all behavior that revokes admin sessions and trusted-device records.
+- [x] Add searchable in-repo Markdown help, article feedback, policy/privacy pages, and version/runtime diagnostics.
+- [x] Add notification archive, snooze, delete, filtering, searching, pagination, unread count, and 90-day pruning.
+- [x] Add permission-filtered quick links for pending orders, orders overdue for processing, pending cancellation/return requests, failed payments, pending reviews, low-stock inventory, and expiring coupons. Add URL-backed queue filters to the order and coupon lists; retain quick-create actions.
+- [x] Add direct account-menu/search links for notification preferences, store maintenance, and diagnostics using their existing route permissions.
+- [x] Complete quick-create parity with the plan by exposing content-page creation in account-menu search, the quick-create submenu, and the header quick-create menu; the existing `/pages` editor opens ready for a new page.
+- [x] Add configurable admin activity-log retention (365-day default), expose the effective period on the privacy page, and schedule indexed daily pruning through `activitylog:prune`.
+- [x] Implement owner-scoped cancellation/return request intake, a permission-gated pending-request queue, staff review, customer-visible request history, and inventory restoration only after staff transitions a received return to `returned`.
+
+## P2 advanced capabilities
+- [x] Add owner-scoped personal API tokens with explicit permission scopes, expiry, one-time plaintext display, sudo mode, a 10-token cap, last-use IP, and audit records.
+- [x] Complete trusted-device inventory and owner-scoped single/all revocation; expose only browser metadata, IP, and expiry, never the token hash.
+- [x] Add a permission-gated system health endpoint and page with a scheduled heartbeat, database latency, queue/failed-job counts, mail configuration, storage, runtime details, and 30-second refresh.
+- [x] Gate staff password-reset, session-revoke, and 2FA-reset actions behind `staff.security`; require a recent sudo confirmation and logged reason for 2FA reset.
+- [x] Add private encrypted database/media backups, manual queued runs, seven-day cleanup policy and a 48-hour health warning under `system.backup` (migration is applied; Windows needs a configured MySQL dump binary and Linux is the supported production runtime).
+- [x] Add paginated failed-job review with safe summaries, retry and delete actions under `system.health`.
+- [x] Add `/me/performance` with today/7-day/30-day comparisons, permission-filtered order/inventory/review metrics, on-time personal task counts, confirmation-time averages, and a daily comparison chart; record review approver attribution for new approvals.
+- [x] Allow staff with `staff.view_performance` to view another assignable admin/staff account's metrics; enforce the permission and section-level visibility in the API and expose the page from staff management.
+- [x] Add `/me/reminders` with owner-scoped scheduled and overdue reminders, paging, and 10-minute/1-hour/next-morning snooze actions; keep daily/weekly recurrence and the every-minute scheduler.
+- [x] Add focus mode with a floating exit control, Escape shortcut, and keyboard focus restoration.
+- [x] Record inventory CSV imports, expose paginated owner-scoped history and downloadable row-error files, and allow `exports.view_all` access to all history.
+- [x] Add copy-current-link, refresh-active-data, and clear-interface-cache utilities to the account menu.
+  - [x] Add VAPID browser push subscriptions per admin/device, secure subscribe/revoke APIs, notification click-through, and a queued test push (migration is applied; configure VAPID keys in each runtime environment before enabling push).
+  - [x] Add `/downloads` for owner-scoped personal-data and scheduled-report export files, with private download, expiry, delete, all-files access via `exports.view_all`, and retry for failed/expired personal-data and scheduled-report files.
+  - [x] Extend the Downloads Center to customer, product, order, inventory, activity, and report CSV exports; queue exports over 5,000 rows, enforce owner permissions and active-job limits, notify on completion, and support retry for failed/expired files.
+- [x] Add configurable admin idle logout with cross-tab activity reset and a one-minute continuation prompt.
+- [x] Add a role-aware first-login tour, reusable from the account menu, and a persistent role-filtered getting-started checklist.
+  - [x] Let admins pause automatic tour display for one hour with an account-synced timestamp; keep permanent dismissal and manual rerun.
+- [x] Mirror the sidebar's permission-filtered category and destination hierarchy inside account-menu quick navigation; keep the sidebar full-width with its table-of-contents groups collapsed initially and show destination submenus on hover.
+- [x] Add versioned changelog notes and a per-admin unread marker.
+
+## P3 optional capabilities
+  - [x] Add Google/Microsoft SSO login with linked-identity lookup, login-history and lockout integration, and the existing 2FA challenge flow.
+- [x] Add scheduled reports.
+  - [x] Add owner-scoped schedule schema and CRUD API requiring `reports.view` plus `reports.schedule`, validate active staff recipients with `reports.view`, support report parameters and local timezone recurrence, and add the management page.
+  - [x] Queue due runs and email private CSV/PDF exports; record artifacts as `scheduled_report` export jobs with seven-day expiry.
+  - [x] Show scheduled report artifacts in the Downloads Center and link them to their schedule/run details.
+- [x] Add account switching using metadata only; never store passwords or tokens.
+- [x] Add account-synced shortcuts for global search, sidebar toggle, screen lock, and the shortcut help dialog, with an accessibility toggle.
+- [x] Add English localization.
+  - [x] Translate idle logout and automatic screen-lock settings, including options, help text, and save/load feedback.
+  - [x] Translate personal activity filters, module/action labels, change details, empty/error states, and pagination table content.
+  - [x] Translate the system activity log, including advanced filters, audit-detail labels, action/module enums, CSV export feedback, and empty states.
+  - [x] Translate staff management, including staff/invitation/approval tables, filters, forms, validation, accessible actions, and confirmations.
+  - [x] Translate the staff role-permission matrix, role descriptions, permission modules, bulk controls, confirmation, and save feedback.
+  - [x] Translate account profile, email/password controls, signed-in session list, confirmations, validation feedback, and password-strength guidance.
+  - [x] Translate two-factor enrollment, status, recovery-code actions, confirmations, and locale-aware activation time.
+  - [x] Translate trusted-device metadata, revocation controls, confirmations, errors, and locale-aware timestamps.
+  - [x] Translate the shared account-settings navigation labels and accessible name.
+  - [x] Translate shared password visibility controls, product status switch labels, customer CSV export feedback, and two-factor status errors.
+  - [x] Translate admin-shell navigation, loading fallbacks, route access states, connection notice, toast messages, and product archive confirmations.
+  - [x] Translate personal API token permission labels, create/list states, one-time token feedback, and revoke confirmation.
+  - [x] Translate the shared sudo-confirmation dialog for sensitive admin actions.
+  - [x] Translate the avatar crop dialog, accessible labels, image-load errors, and upload actions.
+  - [x] Translate the shared change-password dialog, validation copy, and session-sign-out guidance.
+  - [x] Translate the session reauthentication dialog, password/2FA/recovery-code flow, and retry errors.
+  - [x] Translate the idle-session warning and remaining-seconds message.
+  - [x] Translate personal workspace tasks, task filters, validation, accessibility labels, and locale-aware task dates.
+  - [x] Translate personal and staff performance metrics, chart labels, date ranges, loading/empty/error states, and locale-aware number/date formatting.
+  - [x] Translate the shared sidebar user profile menu labels and accessible names.
+  - [x] Translate operations tables, filters, movement/payment labels, shipment labels, payload actions, and empty/error states.
+  - [x] Translate admin password recovery and reset confirmation copy, form validation, password guidance, and resend countdown.
+  - [x] Translate the role-aware introduction tour and getting-started checklist, including progress labels and retryable loading errors.
+  - [x] Add bundled `i18next` resources with Vietnamese default/fallback and account-synced `vi`/`en` preference.
+  - [x] Add language selection to appearance preferences and a quick switch in the account menu; translate primary sidebar labels and page titles.
+  - [x] Translate the account-menu groups, links, status and loading states, profile checklist, search and account-switch dialogs, help content, confirmations, quick tools, and focus-mode controls.
+  - [x] Provide locale-matched English Markdown for help articles and policy pages while preserving stable feedback IDs across languages.
+  - [x] Translate the static appearance preference controls, previews, accessibility options, backup/import feedback, shortcuts, and account-menu ordering controls.
+  - [x] Translate the personal reminders page, including snooze actions, recurrence labels, pagination, and locale-aware dates.
+  - [x] Translate login history filters, outcomes, security score checks, empty/loading/error states, and timestamps.
+  - [x] Translate notification delivery preferences, security alerts, Do Not Disturb, digest schedules, and browser push controls.
+  - [x] Translate report filters, metrics, charts, table labels, empty/error states, and chart accessibility text; use shared date, number, and VND formatters.
+  - [x] Translate customer list filters, status counts, profile details, order/review/cart summaries, internal notes, form controls, and API feedback.
+  - [x] Translate campaign and banner tables, filters, status/actions, validation and API feedback, accessibility labels, coupon rule previews, and locale-aware dates/VND.
+  - [x] Translate product creation/detail sections, pricing, image and variant controls, SEO fields, validation, unsaved-change confirmation, and mutation feedback.
+    - [x] Translate all product target-gender options in the detail form.
+  - [x] Translate the notification bell and center controls, alert categories, priorities, read/archive/snooze actions, pagination, and locale-aware relative dates.
+  - [x] Translate global-search trigger/dialog labels, search progress/errors, empty results, and result group headings.
+  - [x] Translate shared data-table controls/states, saved-filter controls, advanced filters, and the admin error-boundary fallback.
+  - [x] Translate common date-range, filter, confirmation, image-upload, loading, statistics, and sidebar controls.
+  - [x] Translate admin 403/404/500 states, temporary lockout copy, and shared sign-in layout text.
+  - [x] Translate the manual and CSV inventory import page, stock adjustment vouchers, and import history, including validation, confirmation, and pagination states.
+  - [x] Translate the third-party license catalog and runtime diagnostics labels, states, and copy feedback.
+  - [x] Translate changelog navigation, version status, loading feedback, and read-version action.
+  - [x] Translate backup management labels, statuses, feedback, and locale-aware timestamps.
+  - [x] Translate system health and failed-job controls, statuses, feedback, confirmations, and timestamps.
+  - [x] Translate dashboard action alerts and the recent-activity widget, including loading, empty, and error states.
+  - [x] Translate dashboard KPI cards, filters, revenue chart, status/payment breakdowns, recent orders, and top products; format chart dates and counts for the selected locale.
+  - [x] Translate the product list filters, advanced filters, bulk actions, table/card views, empty/error feedback, accessible names, and pagination controls.
+  - [x] Translate the order list filters and active chips, bulk print/status actions, table labels, payment/status states, and loading/empty/error feedback.
+  - [x] Translate product tag entry and bulk variant editing labels, validation, accessibility names, and guidance.
+  - [x] Translate the inventory threshold dialog labels, range validation, save feedback, and accessible actions.
+  - [x] Translate order delivery and shipment editor dialogs, including validation, confirmation choices, status labels, and accessible actions.
+  - [x] Translate order details, payment/refund history, shipment states, COD collection, and locale-aware VND amounts.
+  - [x] Translate invoice and delivery-slip document labels for the selected admin locale.
+  - [x] Translate shared order cancel/status/address/refund dialogs and all client-side validation messages.
+  - [x] Translate the shared order location fields while preserving official Vietnamese province and ward names.
+  - [x] Translate inventory adjustment controls, confirmation summaries, stock validation, and locale-aware quantities.
+  - [x] Translate manual order creation labels, product/customer selection, shipping details, pricing, and API fallback feedback.
+  - [x] Translate inventory movement history, movement references, actor/date filters, pagination table labels, and export feedback.
+  - [x] Translate the inventory list, stock-status tabs, search and advanced filters, active chips, table actions, and bulk threshold controls.
+  - [x] Translate dashboard period comparisons, internal order notes, product SEO preview, and rich-text editor labels/accessibility/loading states.
+  - [x] Translate review moderation tabs, filters, bulk actions, table labels, accessible names, empty/error states, and count summaries.
+  - [x] Translate store settings sections, fields, instructions, client/API validation feedback, loading, save, and test-email states.
+  - [x] Translate collection product search, assignment, drag ordering, individual/bulk removal, accessible controls, and confirmation states.
+  - [x] Translate the content-page editor, validation, template selectors, preview, list actions, and mutation feedback.
+  - [x] Translate product tag management, merge selection, form validation, accessible names, and mutation feedback.
+  - [x] Translate the Downloads Center export types/statuses, progress, file metadata, actions, and empty/error/feedback states.
+  - [x] Translate scheduled report configuration, recurrence, recipient guidance, saved-filter choices, run metadata, and mutation feedback.
+  - [x] Translate catalog reference pages for categories, brands, colors, sizes, and collections, including drag-and-drop accessibility, filters, table labels, forms, upload feedback, and empty/error states.
+  - [x] Translate the owner-only SSO domain allowlist settings and password recovery states, including labels, validation, loading, and feedback.
+  - [x] Translate the staff invitation acceptance page, including dynamic role and expiry details, validation, terms agreement, and loading/error states.
+  - [x] Translate the mobile account-menu sheet close control's accessible name.
+  - [x] Translate product image management labels, drag controls, upload queue/progress, validation and API feedback, and removal confirmation.
+  - [x] Translate review detail, moderation and deletion dialogs, including locale-aware timestamps, status labels, validation, and accessible image controls.
+  - [x] Translate shipping methods and province-rate settings, including forms, filters, status/actions, validation, confirmations, feedback, and locale-aware VND formatting.
+  - [x] Translate all remaining visible admin page, form, dialog, notification, accessibility, and error-state text.
+    - [x] Translate product target-gender filters, review-star counts, revenue chart period headings, and payment-payload actions.
+    - [x] Translate remaining customer, account, staff, store, and catalog field labels.
+    - [x] Localize shared dialog, breadcrumb, and sidebar accessible labels and close actions.
+- [x] Add account switching from the menu with up to three recent account labels (name, email, avatar) stored locally; switching revokes the current session and opens `/login` with the selected email. No password or token is stored.
+- [x] Generate npm and Composer license metadata during admin builds and provide a searchable `/help/licenses` page.
+
+## Appearance plan coverage
+- [x] Complete the appearance plan's sidebar, dashboard, formatting, accessibility, table-column, and settings backup/import controls.
+  - [x] Add account-synced font size, page zoom, breadcrumb visibility, high contrast, and stronger focus ring controls.
+  - [x] Add default admin page, pinned navigation, dashboard period/comparison/widget preferences, and per-table visible-column defaults.
+  - [x] Add account-synced date/time/number/week-start settings and accessible settings export/import. No admin calendar component currently consumes week-start.
+
+## Documentation and release
+- [x] Implement owner-controlled password age expiry with a 14-day account-menu reminder and force an initial password change for directly created or invited admin staff.
+- [x] Match account profile name validation to the 2–255 character plan; preserve per-user profile drafts in `sessionStorage` and preview the colleague-facing identity card.
+- [x] Let admins choose an account-scoped initials background color when no avatar image is set and reflect it immediately in the top-bar account avatar.
+- [x] Rotate avatar images in 90-degree increments and use the oriented image for both preview and crop output.
+- [x] Expose account update time and creator in read-only profile metadata; record creator for staff created directly or through an invitation.
+- [x] Append the signed-in admin's profile signature to internal order notes and admin-triggered customer order/shipment emails.
+- [x] Add English translations for the profile metadata, avatar fallback color control, profile preview, and crop rotation error.
+- [x] Add FR-ADM-008..009 and traceability.
+- [x] Add additive migration for personal workspace data.
+- [x] Update the data model, OpenAPI contracts, and UI documentation for implemented P0/P1 menu and workspace features.
+- [x] Update the full data model, OpenAPI, and UI documentation for every remaining feature.
+- [x] Document help pages, diagnostics, and the personal-data export scope.
+- [ ] Run requested verification only after the user asks for it.
+- [x] Add account menu group visibility and ordering preferences, persisted with admin appearance settings.
+- [x] Add account token management and the owner-controlled non-expiring-token policy; document the auth boundary and OpenAPI contract.

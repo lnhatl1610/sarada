@@ -1,0 +1,14 @@
+.brands-index-page { padding-block: clamp(48px, 8vw, 96px); }
+.brands-index-page > h1 { margin: 8px 0 10px; }
+.brands-index-intro { color: var(--muted, #686963); margin: 0 0 32px; }
+.brands-index-letters { display: flex; flex-wrap: wrap; gap: 7px; margin: 0 0 34px; }
+.brands-index-letters a { display: grid; min-width: 38px; min-height: 38px; place-items: center; border: 1px solid var(--line, #deded8); color: inherit; font-size: 12px; text-decoration: none; }
+.brands-index-letters a:hover,.brands-index-letters a:focus-visible { background: var(--ink, #252522); color: var(--paper, #fff); outline-offset: 2px; }
+.brands-index-groups { display: grid; gap: 36px; }
+.brands-index-groups h2 { margin: 0 0 12px; font: 500 28px/1.1 system-ui, sans-serif; scroll-margin-top: 110px; }
+.brands-index-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 24px; list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line, #deded8); }
+.brands-index-list li { border-bottom: 1px solid var(--line, #deded8); }
+.brands-index-list a { display: flex; justify-content: space-between; gap: 16px; padding: 20px 2px; color: inherit; text-decoration: none; }
+.brands-index-list a:hover span:first-child { text-decoration: underline; text-underline-offset: 4px; }
+@media (max-width: 700px) { .brands-index-list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 14px; } }
+@media (max-width: 380px) { .brands-index-list { grid-template-columns: 1fr; } }

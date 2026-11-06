@@ -1,0 +1,91 @@
+.product-filters {
+  display: flex;
+  gap: 10px;
+  padding: 12px 16px;
+}
+
+.product-filters > input {
+  width: min(100%, 420px);
+}
+
+.product-row-actions {
+  display: flex;
+  gap: 7px;
+}
+
+.product-thumb-image {
+  flex: none;
+  border-radius: 4px;
+ object-fit: cover;
+}
+
+.product-row-actions .secondary {
+  padding: 7px 9px;
+  font-size: 10px;
+}
+
+.product-status-cell {
+  display: inline-flex;
+  min-width: 132px;
+  align-items: center;
+  gap: 9px;
+}
+
+.product-price-cell { display: inline-grid; gap: 2px; }
+.product-price-cell strong { color: var(--shell-foreground, #282925); font-size: 11px; font-weight: 650; }
+.product-price-cell del { color: var(--shell-muted, #716e68); font-size: 9px; }
+
+.product-status-switch {
+  display: inline-flex;
+  min-height: 30px;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 0;
+  border: 0;
+  background: transparent;
+  color: var(--shell-muted, #716e68);
+  cursor: pointer;
+  font: inherit;
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+.product-status-switch:disabled { cursor: wait; opacity: .65; }
+.product-status-switch:focus-visible { border-radius: 4px; outline: 2px solid var(--shell-primary, #7f2638); outline-offset: 3px; }
+.product-status-switch-track { position: relative; display: inline-flex; width: 30px; height: 18px; flex: none; align-items: center; padding: 2px; border-radius: 999px; background: var(--shell-border, #d7d1c9); transition: background-color 140ms ease; }
+.product-status-switch.is-active .product-status-switch-track { background: var(--shell-primary, #7f2638); }
+.product-status-switch-thumb { display: block; width: 14px; height: 14px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgb(0 0 0 / 18%); transition: transform 140ms ease; }
+.product-status-switch.is-active .product-status-switch-thumb { transform: translateX(12px); }
+
+.product-list-view-toggle button[aria-pressed="true"] { border-color: var(--shell-primary, #7f2638); color: var(--shell-primary, #7f2638); }
+.product-card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; }
+.product-card { display: flex; min-width: 0; flex-direction: column; gap: 10px; padding: 12px; border: 1px solid var(--shell-border, #e5e1db); border-radius: 10px; background: var(--shell-surface, #fff); }
+.product-card-select { display: inline-flex; align-items: center; gap: 6px; align-self: flex-start; color: var(--shell-muted, #716e68); font-size: 11px; }
+.product-card-image { display: block; overflow: hidden; aspect-ratio: 4 / 3; border-radius: 7px; background: var(--shell-background, #f7f5f2); }
+.product-card-image .product-thumb { display: grid; width: 100%; height: 100%; place-items: center; border-radius: 0; object-fit: cover; font-size: 30px; }
+.product-card-main h3 { margin: 0 0 4px; color: var(--shell-foreground, #282925); font-size: 14px; }
+.product-card-main a { text-decoration: none; }
+.product-card-main small, .product-card-main p { margin: 0; color: var(--shell-muted, #716e68); font-size: 11px; }
+.product-card-main p { margin-top: 5px; }
+.product-card-price { display: flex; flex-wrap: wrap; align-items: baseline; gap: 7px; }
+.product-card-price strong { color: var(--shell-foreground, #282925); font-size: 14px; }
+.product-card-price del { color: var(--shell-muted, #716e68); font-size: 11px; }
+.product-card dl { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; margin: 0; }
+.product-card dl div { min-width: 0; }
+.product-card dt { color: var(--shell-muted, #716e68); font-size: 9px; }
+.product-card dd { margin: 3px 0 0; color: var(--shell-foreground, #282925); font-size: 11px; font-weight: 600; }
+.product-card-status { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 7px; }
+.product-card-actions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: auto; }
+.product-card-actions .secondary { padding: 6px 8px; font-size: 10px; }
+.product-grid-pagination { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 14px; color: var(--shell-muted, #716e68); font-size: 11px; }
+.product-grid-pagination > div { display: flex; gap: 6px; }
+
+@media (max-width: 600px) {
+  .product-filters {
+    flex-direction: column;
+  }
+
+  .product-filters > input {
+    width: 100%;
+  }
+}

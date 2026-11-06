@@ -1,0 +1,24 @@
+.storefront-recovery { width: min(100%, 620px); margin: 0 auto; padding: clamp(40px, 8vw, 88px) 20px; text-align: center; }
+.storefront-recovery h1 { margin: 8px 0 12px; }
+.storefront-recovery__message { color: var(--muted, #737373); }
+.storefront-recovery__search { max-width: 480px; margin: 28px auto 0; text-align: left; }
+.storefront-recovery__search label { display: block; margin-bottom: 8px; font-weight: 600; }
+.storefront-recovery__search > div { display: flex; gap: 8px; }
+.storefront-recovery__search input { min-width: 0; min-height: 44px; flex: 1; padding: 10px 12px; border: 1px solid var(--line-strong, #d4d4d4); border-radius: 2px; background: var(--bg, #fff); color: var(--fg, #171717); }
+.storefront-recovery__search input:focus-visible,
+.storefront-recovery__search button:focus-visible,
+.storefront-recovery__suggestions a:focus-visible,
+.storefront-recovery__actions a:focus-visible,
+.storefront-recovery__actions button:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+.storefront-recovery__suggestions { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 16px; margin: 16px 0 28px; font-size: 14px; }
+.storefront-recovery__suggestions a { color: inherit; text-underline-offset: 3px; }
+.storefront-recovery__quick-links { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin: 0 0 24px; }
+.storefront-recovery__quick-links a { display: grid; min-height: 52px; place-items: center; padding: 8px; border: 1px solid var(--line-strong, #d4d4d4); color: var(--fg, #171717); font-size: 13px; text-decoration: none; }
+.storefront-recovery__quick-links a:hover { background: var(--surface-soft, #f5f3ef); }
+.storefront-recovery__actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+.storefront-recovery__quick-links a:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+@media (max-width: 420px) {
+  .storefront-recovery__search > div { flex-direction: column; }
+  .storefront-recovery__search button { width: 100%; }
+}
+@media (max-width: 560px) { .storefront-recovery__quick-links { grid-template-columns: repeat(2, minmax(0, 1fr)); } }

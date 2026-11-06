@@ -1,0 +1,9 @@
+.passkey-settings>p{max-width:680px;color:var(--muted);font-size:11px;line-height:1.7}
+.passkey-list{margin:18px 0;padding:0;list-style:none;border-top:1px solid var(--line)}
+.passkey-list li{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 0;border-bottom:1px solid var(--line)}
+.passkey-list li>div:first-child{display:grid;gap:5px}.passkey-list small{color:var(--muted);font-size:10px}
+.passkey-remove-confirm{display:flex;flex-wrap:wrap;gap:8px}
+.passkey-register-form{display:flex;align-items:end;gap:12px;max-width:540px;margin-top:20px}
+.passkey-register-form label{flex:1;font-size:10px}.passkey-register-form input{display:block;width:100%;height:40px;margin-top:7px;padding:0 10px;border:1px solid var(--line);background:transparent;color:var(--ink)}
+.passkey-feedback p,.passkey-support-note{color:var(--muted)}.passkey-success{color:var(--color-success,#276846)!important}
+@media(max-width:560px){.passkey-list li,.passkey-register-form{align-items:stretch;flex-direction:column}.passkey-register-form .button{width:100%}}

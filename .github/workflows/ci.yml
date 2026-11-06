@@ -1,0 +1,65 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  openapi-types:
+    name: OpenAPI generated types
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: package-lock.json
+      - run: npm ci
+      - run: npm run api:types
+      - name: Ensure generated declarations are current
+        run: git diff --exit-code -- admin/src/types/api.d.ts storefront/src/types/api.d.ts
+
+  frontend:
+    name: ${{ matrix.app }} lint and build
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        app: [admin, storefront]
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: ${{ matrix.app }}/package-lock.json
+      - run: npm ci --prefix ${{ matrix.app }}
+      - run: npm run lint --prefix ${{ matrix.app }}
+      - run: npm run build --prefix ${{ matrix.app }}
+
+  api-static:
+    name: API Composer and PHP formatting
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: curl, dom, fileinfo, filter, gd, gmp, intl, mbstring, openssl, pdo, pdo_mysql, session, tokenizer, xml, zip
+          coverage: none
+      - name: Validate Composer manifests
+        run: composer validate --strict --working-dir=api
+      - name: Install API dependencies
+        run: composer install --working-dir=api --no-interaction --prefer-dist --no-progress
+      - name: Check PHP formatting
+        working-directory: api
+        run: vendor/bin/pint --test --format agent

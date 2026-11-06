@@ -1,0 +1,28 @@
+stateDiagram-v2
+  [*] --> pending
+  pending --> confirmed
+  pending --> cancelled
+  confirmed --> processing
+  confirmed --> cancelled
+  processing --> shipping
+  processing --> cancelled
+  shipping --> delivered
+  shipping --> delivery_failed
+  delivery_failed --> shipping
+  delivery_failed --> returned
+  delivered --> completed
+  completed --> returned
+  note left of cancelled
+    Eligible non-COD unpaid orders can transition from pending,
+    confirmed, or processing after the configured timeout.
+  end note
+  note right of shipping
+    Admin transitions are confirmed and may include a history note.
+    Cancellation requires a reason; COD delivery requires collection confirmation.
+    Bank-transfer orders remain unpaid until staff reconcile the bank statement.
+    For pickup orders, shipping means ready for store pickup; delivered means handed to the customer. Pickup orders cannot enter delivery_failed.
+  end note
+  note right of returned
+    Return approval alone does not change stock. Staff confirms receipt,
+    then transitions delivered/completed orders to returned to restore inventory.
+  end note

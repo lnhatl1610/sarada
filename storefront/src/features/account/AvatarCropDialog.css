@@ -1,0 +1,24 @@
+.avatar-crop-dialog { width: min(100% - 32px, 640px); max-width: 640px; max-height: min(90dvh, 840px); overflow-y: auto; }
+.avatar-crop-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
+.avatar-crop-heading .eyebrow { margin: 0 0 8px; }
+.avatar-crop-heading h2 { margin: 0 0 12px; font: 500 24px/1.15 system-ui, sans-serif; letter-spacing: -.04em; }
+.avatar-crop-close { width: 42px; height: 42px; flex: 0 0 42px; border: 1px solid var(--line, #dedbd4); background: transparent; color: var(--ink, #252522); font-size: 24px; cursor: pointer; }
+.avatar-crop-description { margin: 0; color: var(--muted, #6b6963); font-size: 12px; line-height: 1.7; }
+.avatar-crop-source { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+.avatar-crop-layout { display: grid; grid-template-columns: minmax(0, 280px) minmax(180px, 1fr); align-items: center; gap: 22px; margin: 18px 0; }
+.avatar-crop-preview { position: relative; width: 100%; aspect-ratio: 1; overflow: hidden; border: 1px solid var(--line, #dedbd4); border-radius: 12px; background: repeating-conic-gradient(#e6e3dc 0% 25%, #f9f8f5 0% 50%) 50% / 20px 20px; }
+.avatar-crop-preview img { position: absolute; max-width: none; max-height: none; user-select: none; }
+.avatar-crop-controls { display: grid; gap: 8px; }
+.avatar-crop-controls label { display: flex; justify-content: space-between; gap: 10px; color: var(--ink, #252522); font-size: 12px; }
+.avatar-crop-controls output { color: var(--muted, #6b6963); font-variant-numeric: tabular-nums; }
+.avatar-crop-controls input[type='range'] { width: 100%; margin: 0 0 10px; accent-color: var(--wine, #78433f); }
+.avatar-crop-error { margin: 0 0 12px; }
+.avatar-crop-actions { margin-top: 18px; }
+.avatar-crop-actions button { min-height: 44px; }
+@media (max-width: 560px) {
+  .avatar-crop-dialog { padding: 21px; }
+  .avatar-crop-layout { grid-template-columns: minmax(0, 1fr); gap: 18px; }
+  .avatar-crop-preview { width: min(100%, 300px); justify-self: center; }
+  .avatar-crop-actions { flex-direction: column-reverse; }
+  .avatar-crop-actions button { width: 100%; }
+}

@@ -1,0 +1,23 @@
+.admin-shell .admin-help-page { display: grid; gap: 16px; padding: 4px 0 24px; }
+.admin-shell .admin-help-search { display: grid; max-width: 620px; gap: 6px; color: var(--shell-muted); font-size: 12px; }
+.admin-shell .admin-help-search input { min-height: 42px; padding: 9px 12px; border: 1px solid var(--shell-border-subtle); border-radius: 9px; background: var(--shell-surface); color: var(--shell-foreground); font: inherit; }
+.admin-shell .admin-help-layout { display: grid; grid-template-columns: minmax(220px, 290px) minmax(0, 1fr); gap: 16px; align-items: start; }
+.admin-shell .admin-help-layout nav, .admin-shell .admin-help-article, .admin-shell .admin-help-policy article { padding: 16px; border: 1px solid var(--shell-border-subtle); border-radius: 12px; background: var(--shell-surface); }
+.admin-shell .admin-help-layout nav { display: grid; gap: 5px; max-height: 70vh; overflow: auto; }
+.admin-shell .admin-help-layout nav button { display: grid; gap: 4px; padding: 10px; border: 0; border-radius: 8px; background: transparent; color: var(--shell-foreground); text-align: left; cursor: pointer; }
+.admin-shell .admin-help-layout nav button:hover, .admin-shell .admin-help-layout nav button.active { background: var(--shell-surface-muted); color: var(--shell-primary); }
+.admin-shell .admin-help-layout nav small { color: var(--shell-muted); font-size: 10px; }
+.admin-shell .admin-help-article h2, .admin-shell .admin-help-policy h2 { margin: 4px 0 14px; font-size: 18px; }
+.admin-shell .admin-help-article > p:not(.eyebrow), .admin-shell .admin-help-policy p { color: var(--shell-muted); font-size: 13px; line-height: 1.7; }
+.admin-shell .admin-help-article .admin-help-bullet { padding-left: 10px; }
+.admin-shell .admin-help-article footer { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 22px; padding-top: 14px; border-top: 1px solid var(--shell-border-subtle); color: var(--shell-muted); font-size: 11px; }
+.admin-shell .admin-help-article footer button { min-height: 32px; padding: 6px 10px; border: 1px solid var(--shell-border-subtle); border-radius: 7px; background: var(--shell-background); color: var(--shell-foreground); cursor: pointer; }
+.admin-shell .admin-help-article footer button[aria-pressed=true] { border-color: var(--shell-primary); color: var(--shell-primary); }
+.admin-shell .admin-help-policy { display: grid; max-width: 860px; gap: 12px; }
+.admin-shell .admin-diagnostics-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 16px; margin: 0; padding: 8px 16px; border: 1px solid var(--shell-border-subtle); border-radius: 12px; background: var(--shell-surface); }
+.admin-shell .admin-diagnostics-list > div { display: grid; grid-template-columns: minmax(110px, .3fr) minmax(0, 1fr); gap: 10px; padding: 12px 4px; border-bottom: 1px solid var(--shell-border-subtle); }
+.admin-shell .admin-diagnostics-list dt { color: var(--shell-muted); font-size: 11px; }
+.admin-shell .admin-diagnostics-list dd { margin: 0; color: var(--shell-foreground); font-size: 12px; overflow-wrap: anywhere; }
+.admin-shell .admin-help-layout button:focus-visible, .admin-shell .admin-help-article button:focus-visible { outline: 2px solid var(--shell-primary); outline-offset: 2px; }
+@media (max-width: 760px) { .admin-shell .admin-help-layout { grid-template-columns: 1fr; } .admin-shell .admin-help-layout nav { display: flex; max-height: none; overflow-x: auto; } .admin-shell .admin-help-layout nav button { flex: 0 0 180px; } }
+@media (max-width: 700px) { .admin-shell .admin-diagnostics-list { grid-template-columns: 1fr; } }

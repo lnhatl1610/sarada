@@ -1,0 +1,21 @@
+.account-dashboard-intro{margin:-22px 0 24px;color:var(--muted,#737373);font-size:13px;line-height:1.6}
+.account-dashboard-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.account-dashboard-card{min-width:0;padding:20px;border:1px solid var(--line,#e5e5e5);background:#fff}
+.account-dashboard-card h2{margin:0;font-size:15px;font-weight:600}
+.account-dashboard-card p{font-size:12px;line-height:1.6}
+.account-dashboard-card-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}
+.account-dashboard-card-heading>a,.account-dashboard-empty>a{flex:0 0 auto;color:var(--ink,#171717);font-size:11px;text-decoration:underline;text-underline-offset:3px}
+.account-dashboard-order{display:flex;justify-content:space-between;gap:16px;padding:14px;background:var(--paper,#f8f7f4);color:inherit;text-decoration:none}
+.account-dashboard-order>span{display:grid;gap:6px;min-width:0}
+.account-dashboard-order>span:last-child{text-align:right}
+.account-dashboard-order strong{overflow-wrap:anywhere;font-size:12px}
+.account-dashboard-order small{color:var(--muted,#737373);font-size:10px}
+.account-dashboard-card address{display:grid;gap:6px;font-size:12px;font-style:normal;line-height:1.5}
+.account-dashboard-card address span{color:var(--muted,#737373)}
+.account-dashboard-empty p{margin:0 0 10px;color:var(--muted,#737373)}
+.account-dashboard-retry{padding:0;border:0;background:transparent;color:var(--ink,#171717);font:inherit;font-size:11px;text-decoration:underline;cursor:pointer}
+.account-dashboard-shortcuts{display:grid;align-content:start;gap:12px}
+.account-dashboard-shortcuts h2{margin-bottom:4px}
+.account-dashboard-shortcuts>a{width:max-content;color:var(--ink,#171717);font-size:12px;text-decoration:underline;text-underline-offset:3px}
+.account-dashboard-card :is(a,button):focus-visible{outline:2px solid #525252;outline-offset:3px}
+@media(max-width:640px){.account-dashboard-grid{grid-template-columns:1fr}.account-dashboard-intro{margin-top:-20px}}

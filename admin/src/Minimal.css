@@ -1,0 +1,116 @@
+.admin-shell {
+  --shell-background: #fafafa;
+  --shell-surface: #fff;
+  --shell-surface-muted: #f5f5f5;
+  --shell-border: #d4d4d4;
+  --shell-border-subtle: #e5e5e5;
+  --shell-foreground: #171717;
+  --shell-muted: #737373;
+  --shell-primary: #262626;
+  --shell-primary-soft: #f5f5f5;
+  --shell-primary-hover: #111;
+  --shell-primary-foreground: #fff;
+  --shell-sidebar: #fff;
+  --shell-sidebar-foreground: #262626;
+  --shell-sidebar-muted: #737373;
+  --shell-sidebar-hover: #f5f5f5;
+  --shell-sidebar-active: #f0f0f0;
+  --shell-sidebar-active-foreground: #171717;
+  --shell-sidebar-border: #e5e5e5;
+  --shell-sidebar-badge: #f5f5f5;
+  --shell-sidebar-control-border: #d4d4d4;
+  background: var(--shell-background);
+  color: var(--shell-foreground);
+  font-family: 'DM Sans', sans-serif;
+}
+
+:root[data-admin-theme='dark'] .admin-shell {
+  --shell-background: #111;
+  --shell-surface: #171717;
+  --shell-surface-muted: #202020;
+  --shell-border: #525252;
+  --shell-border-subtle: #303030;
+  --shell-foreground: #f5f5f5;
+  --shell-muted: #a3a3a3;
+  --shell-primary: #f5f5f5;
+  --shell-primary-soft: #262626;
+  --shell-primary-hover: #e5e5e5;
+  --shell-primary-foreground: #171717;
+  --shell-sidebar: #171717;
+  --shell-sidebar-foreground: #f5f5f5;
+  --shell-sidebar-muted: #a3a3a3;
+  --shell-sidebar-hover: #262626;
+  --shell-sidebar-active: #303030;
+  --shell-sidebar-active-foreground: #fff;
+  --shell-sidebar-border: #303030;
+  --shell-sidebar-badge: #303030;
+  --shell-sidebar-control-border: #525252;
+}
+
+.admin-shell :is(.panel, [data-slot='card'], .stats article, .toolbar, .account-settings-card, .connection-note) {
+  border-color: var(--shell-border-subtle);
+  border-radius: 4px;
+  box-shadow: none;
+}
+
+.admin-shell :is(h1, h2, h3, h4) {
+  font-family: 'DM Sans', sans-serif;
+  letter-spacing: -.02em;
+}
+
+.admin-shell :is(.primary, .secondary, [data-slot='button']) {
+  border-radius: 3px;
+  box-shadow: none;
+  font-family: inherit;
+}
+
+.admin-shell .primary {
+  border-color: var(--shell-primary);
+  background: var(--shell-primary);
+  color: var(--shell-primary-foreground);
+}
+
+.admin-shell :is(input:not([type='checkbox']):not([type='radio']), select, textarea) {
+  border-color: var(--shell-border);
+  border-radius: 3px;
+  background-color: var(--shell-surface);
+  color: var(--shell-foreground);
+  box-shadow: none;
+}
+
+.admin-shell .page-title h1,
+.admin-shell :is(.panel-heading h2, .stats article > strong, [data-slot='card-title']) {
+  font-family: 'DM Sans', sans-serif;
+  letter-spacing: -.02em;
+}
+
+.admin-shell .page-title h1 { font-size: 26px; font-weight: 600; }
+.admin-shell .eyebrow { font-size: 10px; letter-spacing: .08em; }
+.admin-shell :is(.primary, .secondary) { min-height: 36px; font-size: 12px; }
+.admin-shell .toolbar { font-size: 10px; letter-spacing: .04em; }
+.admin-shell .stats article > div:first-child,
+.admin-shell .stats small { font-size: 10px; }
+.admin-shell th { font-size: 10px; letter-spacing: .04em; }
+.admin-shell td { font-size: 11px; }
+.admin-shell .admin-sidebar-navigation [data-slot='sidebar-menu-button'] { font-size: 13px; }
+
+.admin-shell :is(.stats article, .panel) { background-color: var(--shell-surface); }
+.admin-shell th { background: var(--shell-surface-muted); color: var(--shell-muted); }
+.admin-shell td { color: var(--shell-muted); }
+.admin-shell .admin-top { background: var(--shell-surface); border-color: var(--shell-border-subtle); }
+.admin-shell .sidebar { background: var(--shell-sidebar); border-color: var(--shell-sidebar-border); }
+.admin-shell [data-slot='dialog-content'],
+.admin-shell [data-slot='popover-content'],
+.admin-shell [data-slot='dropdown-menu-content'] {
+  border-color: var(--shell-border-subtle);
+  border-radius: 4px;
+  box-shadow: none;
+}
+.admin-shell [data-slot='sidebar-menu-button'][data-active='true'] {
+  border-radius: 3px;
+  background: var(--shell-sidebar-active);
+  color: var(--shell-sidebar-active-foreground);
+  box-shadow: none;
+}
+
+.admin-shell :focus-visible { outline-color: var(--shell-primary); }
