@@ -2,6 +2,7 @@ import { Heart, MessageCircle, Camera as Instagram } from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
 import { EditorialSection } from "./EditorialSection";
 import { photos } from "./blazer-demo";
+
 export function SocialSection() {
   const reduced = useReducedMotion();
   return (
@@ -47,8 +48,7 @@ export function SocialSection() {
         >
           {[0, 1].map((i) => (
             <span key={i}>
-              #OOTD　 #FashionVN　 #MinimalStyle　 #WinterCollection　
-              #SaradaStyle　
+              #OOTD · #FashionVN · #MinimalStyle · #WinterCollection · #SaradaStyle
             </span>
           ))}
         </motion.div>
