@@ -23,7 +23,7 @@ import type { components } from '../types/api'
 
 type Customer = components['schemas']['StorefrontUser']
 
-const UiFirstHome = lazy(() => import('../features/home/StorefrontHomeUiFirst').then((module) => ({ default: module.StorefrontHomeUiFirst })))
+const UiFirstHome = lazy(() => import('../features/home/BlazerHome').then((module) => ({ default: module.BlazerHome })))
 const UiFirstCatalog = lazy(() => import('../features/catalog/StorefrontCatalogUiFirst').then((module) => ({ default: module.StorefrontCatalogUiFirst })))
 const UiFirstProduct = lazy(() => import('../features/catalog/StorefrontProductUiFirst').then((module) => ({ default: module.StorefrontProductUiFirst })))
 const UiFirstCart = lazy(() => import('../features/cart/StorefrontCartUiFirst').then((module) => ({ default: module.StorefrontCartUiFirst })))
