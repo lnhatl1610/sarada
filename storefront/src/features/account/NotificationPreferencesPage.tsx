@@ -1,4 +1,4 @@
-import { useEffect, useState, type FormEvent } from 'react'
+import { useState, type FormEvent } from 'react'
 import { Link } from 'react-router'
 import { useNotificationPreferences, type NotificationChannel, type NotificationEvent, type NotificationPreferences } from './notification-preferences-api'
 import './NotificationPreferencesPage.css'
@@ -14,16 +14,13 @@ const channels = Object.keys(channelLabels) as NotificationChannel[]
 
 export function NotificationPreferencesPage({ enabled }: { enabled: boolean }) {
   const { query, save, pushSubscriptions, registerPush, removePush } = useNotificationPreferences(enabled)
-  const [draft, setDraft] = useState<NotificationPreferences | null>(null)
+  const [edited, setDraft] = useState<NotificationPreferences | null>(null)
+  const draft = edited ?? query.data?.preferences ?? null
   const [notice, setNotice] = useState('')
   const [error, setError] = useState('')
 
-  useEffect(() => {
-    if (query.data) setDraft(query.data.preferences)
-  }, [query.data])
-
   const update = (event: NotificationEvent, channel: NotificationChannel, checked: boolean) => {
-    setDraft((current) => current ? { ...current, [event]: { ...current[event], [channel]: checked } } : current)
+    setDraft(draft ? { ...draft, [event]: { ...draft[event], [channel]: checked } } : draft)
     setNotice('')
     setError('')
   }

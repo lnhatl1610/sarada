@@ -66,7 +66,6 @@ class AdminWorkflowDemoSeeder extends Seeder
         return $staff;
     }
 
-
     private function seedInventoryAdjustmentBatch(User $admin): void
     {
         $note = '[Demo] Kiểm kê đa biến thể: cộng 2 sản phẩm vào tồn cho mỗi SKU mẫu.';
@@ -122,7 +121,6 @@ class AdminWorkflowDemoSeeder extends Seeder
 
     }
 
-
     private function seedReportSchedule(User $admin): void
     {
         $exists = DB::table('report_schedules')->where('user_id', $admin->id)->where('name', 'Lịch báo cáo doanh thu demo')->exists();
@@ -147,7 +145,6 @@ class AdminWorkflowDemoSeeder extends Seeder
             'updated_at' => now(),
         ]);
     }
-
 
     private function seedImportHistory(User $admin): void
     {
@@ -270,5 +267,4 @@ class AdminWorkflowDemoSeeder extends Seeder
 
         ExportJob::query()->create([...$attributes, 'created_at' => now()]);
     }
-
 }

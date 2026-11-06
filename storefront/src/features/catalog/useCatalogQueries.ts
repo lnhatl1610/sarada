@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import {
   fetchCatalogFilterOptions,
@@ -23,11 +23,13 @@ export function useCatalogQueries(options: CatalogQueryOptions) {
   const [reviewPage, setReviewPage] = useState(1)
   const [reviewSort, setReviewSort] = useState<CatalogReviewSort>('latest')
   const [reviewFilters, setReviewFilters] = useState<CatalogReviewFilters>({ rating: null, withImages: false, size: null })
-  useEffect(() => {
+  const [reviewSlug, setReviewSlug] = useState(options.detailSlug)
+  if (reviewSlug !== options.detailSlug) {
+    setReviewSlug(options.detailSlug)
     setReviewPage(1)
     setReviewSort('latest')
     setReviewFilters({ rating: null, withImages: false, size: null })
-  }, [options.detailSlug])
+  }
   const productPageQuery = useQuery({
     queryKey: ['products', 'list', options.search],
     queryFn: ({ signal }) => fetchCatalogProductPage(options.search ? `?${options.search}` : '', signal),

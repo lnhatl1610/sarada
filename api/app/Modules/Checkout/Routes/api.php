@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Controllers\Api\V1\Storefront\CheckoutController;
 use App\Http\Controllers\Api\V1\Storefront\BankTransferPaymentController;
+use App\Http\Controllers\Api\V1\Storefront\CheckoutController;
 use App\Http\Controllers\Api\V1\Storefront\LocationController;
 use Illuminate\Support\Facades\Route;
 

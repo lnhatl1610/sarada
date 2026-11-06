@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import type { WishlistList, WishlistProduct } from './account-api'
 import { Link } from 'react-router'
 import { ResponsiveImage } from '../../components/shared/ResponsiveImage'
@@ -43,11 +43,11 @@ export function WishlistPage({ lists, listsLoading, listsError, activeListId, on
   const [selectedVariants, setSelectedVariants] = useState<Record<number, number>>({})
   const activeList = lists.find((list) => list.id === activeListId)
   const [newListName, setNewListName] = useState('')
-  const [renameValue, setRenameValue] = useState('')
+  const [renameDraft, setRenameDraft] = useState<{ id: number | undefined; name: string | undefined; value: string } | null>(null)
+  const renameValue = renameDraft && renameDraft.id === activeList?.id && renameDraft.name === activeList?.name ? renameDraft.value : activeList?.name ?? ''
+  const setRenameValue = (value: string) => setRenameDraft({ id: activeList?.id, name: activeList?.name, value })
   const [listActionError, setListActionError] = useState('')
   const [shareLink, setShareLink] = useState('')
-
-  useEffect(() => setRenameValue(activeList?.name ?? ''), [activeList?.id, activeList?.name])
 
   const runListAction = async (action: () => Promise<unknown>) => {
     setListActionError('')

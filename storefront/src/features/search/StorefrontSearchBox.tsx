@@ -117,7 +117,12 @@ export function StorefrontSearchBox({ value, categories, collections, onChange, 
   const showTrending = debouncedValue.length < 2 && trendingTerms.length > 0
   const optionCount = products.length + contentSuggestions.length + matchingCategories.length + matchingCollections.length + (showHistory ? history.length : 0) + (showTrending ? trendingTerms.length : 0)
 
-  useEffect(() => setActiveIndex(-1), [debouncedValue, optionCount])
+  const resetKey = `${debouncedValue}:${optionCount}`
+  const [activeResetKey, setActiveResetKey] = useState(resetKey)
+  if (activeResetKey !== resetKey) {
+    setActiveResetKey(resetKey)
+    setActiveIndex(-1)
+  }
 
   const submit = (event?: FormEvent<HTMLFormElement>, term = value) => {
     event?.preventDefault()

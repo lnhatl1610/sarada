@@ -22,6 +22,7 @@ class StorePasswordPolicy
                 $rules[] = 'regex:'.$pattern;
             }
         }
+
         return $rules;
     }
 

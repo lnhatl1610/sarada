@@ -52,6 +52,7 @@ export function RecentlyViewedProducts({ currentSlug, accountId, formatMoney }: 
   useEffect(() => {
     const stored = readRecentProductSlugs()
     if (!currentSlug) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- syncing with browser storage (external system)
       setSlugs(stored.slice(0, 6))
       return
     }
@@ -70,6 +71,7 @@ export function RecentlyViewedProducts({ currentSlug, accountId, formatMoney }: 
       && mergedSlugs.every((slug, index) => slug === accountRecentQuery.data[index])
 
     writeBrowserStorage(RECENT_PRODUCTS_KEY, JSON.stringify(mergedSlugs))
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- syncing with browser storage (external system)
     setSlugs(mergedSlugs.filter((slug) => slug !== currentSlug).slice(0, 6))
     if (!sameAsAccount) {
       const signature = `${accountId}:${JSON.stringify(mergedSlugs)}:${JSON.stringify(accountRecentQuery.data)}`
