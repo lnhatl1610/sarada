@@ -16,25 +16,31 @@ import { TestimonialsSection } from "./TestimonialsSection";
 import { SocialSection } from "./SocialSection";
 import { BlazerNewsletter } from "./BlazerNewsletter";
 import { BlazerFooter } from "./BlazerFooter";
+import { BlazerFeatures } from "./BlazerFeatures";
+import { BlazerStyleGuide } from "./BlazerStyleGuide";
+import { BlazerFaq } from "./BlazerFaq";
 export function BlazerSections() {
   const { scrollY, scrollYProgress } = useScroll();
   const reduced = useReducedMotion();
   const [showTop, setShowTop] = useState(false);
   useMotionValueEvent(scrollY, "change", (value) => setShowTop(value > 400));
   return (
-    <div className="bg-background text-foreground [--font-display:'Cormorant_Garamond_Variable',serif] [&_a:focus-visible]:outline-2 [&_a:focus-visible]:outline-offset-4 [&_button:focus-visible]:outline-2 [&_button:focus-visible]:outline-offset-4">
+    <div className="min-w-0 overflow-x-clip bg-background text-foreground [--font-display:'Cormorant_Garamond_Variable',serif] [&_a:focus-visible]:outline-2 [&_a:focus-visible]:outline-offset-4 [&_button:focus-visible]:outline-2 [&_button:focus-visible]:outline-offset-4">
       <motion.div
         style={{ scaleX: scrollYProgress }}
         className="fixed inset-x-0 top-0 z-40 h-0.5 origin-left bg-primary"
       />
       <CategorySection />
+      <BlazerFeatures />
       <NewArrivals />
       <BestSellers />
       <PromoBanner />
       <LookbookSection />
+      <BlazerStyleGuide />
       <ServiceSection />
       <TestimonialsSection />
       <SocialSection />
+      <BlazerFaq />
       <BlazerNewsletter />
       <BlazerFooter />
       {showTop && (

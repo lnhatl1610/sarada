@@ -1,7 +1,6 @@
 ﻿import { useState } from 'react'
 import { Link } from 'react-router'
 import { Search, ShoppingBag, UserRound, X } from 'lucide-react'
-import '@fontsource-variable/cormorant-garamond'
 import { BlazerSections } from './BlazerSections'
 import './BlazerHome.css'
 
