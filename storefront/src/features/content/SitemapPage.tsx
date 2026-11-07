@@ -4,6 +4,13 @@ import { fetchCatalogFilterOptions } from '../catalog/catalog-api'
 import { fetchStorefrontCategories, fetchStorefrontCollections, fetchStorefrontPageLinks } from '../home/home-api'
 
 type SitemapLink = { label: string; href: string }
+const policySlugs = new Set(['returns', 'shipping', 'payment', 'privacy', 'terms', 'cookies'])
+
+function pageHref(slug: string): string {
+  if (policySlugs.has(slug)) return `/policies/${encodeURIComponent(slug)}`
+  if (slug === 'about' || slug === 'careers' || slug === 'size-guide') return `/${encodeURIComponent(slug)}`
+  return `/pages/${encodeURIComponent(slug)}`
+}
 
 function flattenCategories(nodes: Awaited<ReturnType<typeof fetchStorefrontCategories>>): SitemapLink[] {
   return nodes.flatMap((node) => [
@@ -31,6 +38,7 @@ export function SitemapPage() {
     { label: 'Hàng mới', href: '/new-arrivals' }, { label: 'Bán chạy', href: '/best-sellers' },
     { label: 'Khuyến mãi', href: '/sale' }, { label: 'Phối đồ theo dịp', href: '/style-guide' }, { label: 'Tạp chí phong cách', href: '/blog' },
     { label: 'Hệ thống cửa hàng', href: '/stores' }, { label: 'Trung tâm trợ giúp', href: '/faq' },
+    { label: 'Hướng dẫn mua hàng', href: '/how-to-order' }, { label: 'Chăm sóc trang phục', href: '/care-guide' }, { label: 'Hướng dẫn chọn kích cỡ', href: '/size-guide' },
     { label: 'Chương trình thành viên', href: '/membership' }, { label: 'Thẻ quà tặng', href: '/gift-cards' },
     { label: 'Giới thiệu bạn bè', href: '/refer-a-friend' }, { label: 'Cộng tác viên', href: '/affiliate' }, { label: 'Liên hệ', href: '/contact' },
   ]
@@ -44,7 +52,7 @@ export function SitemapPage() {
       <SitemapGroup title="Danh mục" query={categories} links={flattenCategories(categories.data ?? [])} />
       <SitemapGroup title="Bộ sưu tập" query={collections} links={(collections.data ?? []).map((item) => ({ label: item.name, href: `/collections/${encodeURIComponent(item.slug)}` }))} />
       <SitemapGroup title="Thương hiệu" query={brands} links={(brands.data?.brands ?? []).map((item) => ({ label: item.name, href: `/brands/${encodeURIComponent(item.slug)}` }))} />
-      <SitemapGroup title="Trang thông tin" query={pages} links={(pages.data ?? []).filter((item) => item.is_published).map((item) => ({ label: item.title, href: `/pages/${encodeURIComponent(item.slug)}` }))} />
+      <SitemapGroup title="Trang thông tin" query={pages} links={(pages.data ?? []).filter((item) => item.is_published).map((item) => ({ label: item.title, href: pageHref(item.slug) }))} />
     </div>
   </main>
 }

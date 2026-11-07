@@ -54,6 +54,21 @@ class StorefrontNotificationPreferencesController extends Controller
                     'created_at' => $now,
                     'updated_at' => $now,
                 ]);
+                DB::table('newsletter_subscriptions')->where('email', $email)->whereNotNull('unsubscribed_at')->update([
+                    'consented_at' => $now,
+                    'unsubscribed_at' => null,
+                    'unsubscribe_reason' => null,
+                    'unsubscribe_token_hash' => null,
+                    'unsubscribe_token_expires_at' => null,
+                    'pending_unsubscribe_reason' => null,
+                    'updated_at' => $now,
+                ]);
+                DB::table('newsletter_subscriptions')->where('email', $email)->whereNull('unsubscribed_at')->whereNotNull('unsubscribe_token_hash')->update([
+                    'unsubscribe_token_hash' => null,
+                    'unsubscribe_token_expires_at' => null,
+                    'pending_unsubscribe_reason' => null,
+                    'updated_at' => $now,
+                ]);
             } else {
                 DB::table('newsletter_subscriptions')->whereRaw('LOWER(email) = LOWER(?)', [$email])->delete();
             }

@@ -1,16 +1,16 @@
-﻿.ui-first-home {
-  --ui-ink: #26231f;
-  --ui-muted: #756f68;
-  --ui-line: #ded8d0;
-  --ui-paper: #f5f2ed;
-  --ui-accent: #98563f;
+.ui-first-home {
+  --ui-ink: #252522;
+  --ui-muted: #716e68;
+  --ui-line: #e5e0da;
+  --ui-paper: #f9f8f5;
+  --ui-accent: #7f2638;
   background: var(--ui-paper);
   color: var(--ui-ink);
 }
 
 .ui-first-home .ui-first-announcement {
   min-height: 32px;
-  background: #252421;
+  background: #252522;
   color: #f6f3ee;
   font-size: 10px;
   letter-spacing: .12em;
@@ -45,7 +45,7 @@
   max-width: 8ch;
   margin: 0 0 26px;
   color: #25231f;
-  font: 400 clamp(58px, 7vw, 96px)/.91 var(--font-display, Georgia, serif);
+  font: 400 clamp(58px, 7vw, 96px)/.91 var(--font-display, var(--font-body));
   letter-spacing: -.045em;
   text-wrap: balance;
 }
@@ -136,7 +136,7 @@
 .ui-first-home .ui-first-membership h2,
 .ui-first-home .ui-first-newsletter h2 {
   color: inherit;
-  font-family: var(--font-display, Georgia, serif);
+  font-family: var(--font-display, var(--font-body));
   font-weight: 400;
   letter-spacing: -.035em;
 }
@@ -176,7 +176,7 @@
 .ui-first-home .ui-first-product__image:hover img { transform: scale(1.035); }
 
 .ui-first-home .ui-first-category-copy strong {
-  font: 400 clamp(28px, 3vw, 42px)/1 var(--font-display, Georgia, serif);
+  font: 400 clamp(28px, 3vw, 42px)/1 var(--font-display, var(--font-body));
 }
 
 .ui-first-home .ui-first-category-copy small { font-size: 11px; }
@@ -303,7 +303,7 @@
 .ui-first-home .ui-first-membership-mark {
   width: min(100%, 180px);
   border-radius: 50%;
-  font-family: var(--font-display, Georgia, serif);
+  font-family: var(--font-display, var(--font-body));
 }
 
 .ui-first-home .ui-first-membership h2 em { color: #c5a48d; }
@@ -329,7 +329,7 @@
 }
 
 .ui-first-home :is(a, button, input):focus-visible {
-  outline: 2px solid #8f4f3c;
+  outline: 2px solid #7f2638;
   outline-offset: 4px;
 }
 

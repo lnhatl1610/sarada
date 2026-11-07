@@ -5,7 +5,8 @@ import { STOREFRONT_API_BASE_URL } from './api-base'
 
 const baseURL = STOREFRONT_API_BASE_URL
 let accessToken: string | null = null
-let refreshInFlight: Promise<string | null> | null = null
+let refreshInFlight: Promise<{ token: string | null; rejected: boolean }> | null = null
+let sessionExpiryRedirectStarted = false
 
 type RetriableRequest = InternalAxiosRequestConfig & { _fashionRetry?: boolean }
 
@@ -49,17 +50,27 @@ api.interceptors.response.use((response) => {
   refreshInFlight ??= refreshClient.post<components['schemas']['StorefrontRefreshEnvelope']>('/auth/refresh')
     .then(({ data }) => {
       accessToken = data.data.access_token
-      return accessToken
+      return { token: accessToken, rejected: false }
     })
-    .catch(() => {
+    .catch((refreshError: AxiosError) => {
       accessToken = null
-      return null
+      return { token: null, rejected: refreshError.response?.status === 401 || refreshError.response?.status === 419 }
     })
     .finally(() => { refreshInFlight = null })
 
-  const refreshedToken = await refreshInFlight
-  if (!refreshedToken) return Promise.reject(error)
-  request.headers.set('Authorization', `Bearer ${refreshedToken}`)
+  const refreshResult = await refreshInFlight
+  if (!refreshResult.token) {
+    if (refreshResult.rejected && !sessionExpiryRedirectStarted) {
+      sessionExpiryRedirectStarted = true
+      const currentPath = `${window.location.pathname}${window.location.search}${window.location.hash}`
+      const isAuthEntry = /^\/(login|register|forgot-password|reset-password|verify-email|pending-approval)(\/|$)/.test(window.location.pathname)
+      const params = new URLSearchParams({ session: 'expired' })
+      if (!isAuthEntry) params.set('returnTo', currentPath)
+      window.location.assign(`/login?${params.toString()}`)
+    }
+    return Promise.reject(error)
+  }
+  request.headers.set('Authorization', `Bearer ${refreshResult.token}`)
   return api(request)
 })
 

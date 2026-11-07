@@ -29,7 +29,7 @@
   color: #171717;
 }
 
-.store :is(h1, h2, h3, h4) { font-family: var(--font-display, Fraunces, Georgia, 'Times New Roman', serif); letter-spacing: -.025em; font-weight: 400; }
+.store :is(h1, h2, h3, h4) { font-family: var(--font-display, var(--font-display)); letter-spacing: -.025em; font-weight: 400; }
 
 .store > .topline {
   height: 30px;
@@ -90,8 +90,8 @@
 .store .values span { color: #737373; font-size: 10px; letter-spacing: .06em; }
 .store .collection { padding-top: 68px; padding-bottom: 76px; }
 .store .section-title { margin-bottom: 24px; }
-.store .section-title h2, .store .newsletter h2 { font-family: Georgia, 'Times New Roman', serif; font-size: 29px; font-weight: 400; letter-spacing: -.03em; }
-.store .grid { gap: 20px; }
+.store .section-title h2, .store .newsletter h2 { font-family: var(--font-body); font-size: 29px; font-weight: 400; letter-spacing: -.03em; }
+.store .product-grid { gap: 20px; }
 .store .art { background: #f5f5f4; }
 .store .art > button { border-radius: 50%; background: #fff; }
 .store .card-info { padding-top: 11px; }
@@ -99,7 +99,7 @@
 .store .card-info p, .store .card-info > b { font-size: 11px; }
 .store .story { min-height: 400px; background: #f5f5f4; }
 .store .story-image { background: #eee; }
-.store .story h2 { font: 400 38px/1.08 Georgia, 'Times New Roman', serif; letter-spacing: -.035em; }
+.store .story h2 { font: 400 38px/1.08 var(--font-body); letter-spacing: -.035em; }
 .store .newsletter { padding: 72px 20px 80px; }
 .store footer { border-color: var(--line); }
 .store .button, .store input, .store select, .store textarea { box-shadow: none; }
@@ -111,7 +111,7 @@
 .store .product-info { padding-top: 28px; }
 .store .product-info h1 { font-size: clamp(30px, 4vw, 40px); }
 .store .gallery-main, .store .catalog-page .catalog-product-art { background: #f5f5f4; }
-.store .catalog-page .section-title h1 { font: 400 clamp(32px, 4vw, 46px)/1.1 Georgia, 'Times New Roman', serif; letter-spacing: -.035em; }
+.store .catalog-page .section-title h1 { font: 400 clamp(32px, 4vw, 46px)/1.1 var(--font-body); letter-spacing: -.035em; }
 .store .catalog-count, .store .catalog-sort input, .store .catalog-breadcrumb { font-size: 12px; }
 .store .catalog-collection-description { font-size: 14px; }
 .store .catalog-sale-badge { border-radius: 999px; font-size: 11px; }
@@ -137,7 +137,7 @@
   .store .hero-copy { padding-top: 36px; }
   .store .hero h1 { font-size: 48px; }
   .store .collection { padding-top: 48px; padding-bottom: 56px; }
-  .store .grid { gap: 20px 12px; }
+  .store .product-grid { gap: 20px 12px; }
   .store .story h2 { font-size: 32px; }
 }
 
@@ -222,7 +222,7 @@
   background: #fffdf9;
 }
 
-.store .catalog-page .grid {
+.store .catalog-page .product-grid {
   column-gap: clamp(14px, 1.8vw, 26px);
   row-gap: 38px;
 }

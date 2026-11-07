@@ -19,7 +19,7 @@ export type OrderDetail = {
   shipping_fee: number; coupon_code: string | null; note: string | null
   items: { id: number; product_id: number | null; variant_id: number | null; product_name: string; variant_name: string | null; sku: string | null; image: string | null; unit_price: number; quantity: number; line_total: number }[]
   payments: { id: number; provider: string; amount: number; status: string; transaction_ref: string | null; paid_at: string | null; created_at: string; payload: unknown; refunded_amount?: number; refundable_amount?: number; refunds?: { id: number; amount: number; reason: string; recorded_by_name: string | null; created_at: string }[] }[]
-  shipments: { id: number; carrier: string | null; tracking_code: string | null; status: string; shipped_at: string | null; delivered_at: string | null; created_at: string }[]
+  shipments: { id: number; carrier: string | null; tracking_code: string | null; tracking_url: string | null; status: string; shipped_at: string | null; delivered_at: string | null; created_at: string }[]
   history: { id: number; from_status: string | null; to_status: string; note: string | null; type?: 'internal_note' | 'status_change'; changed_by: number | null; changed_by_name: string | null; created_at: string }[]
   change_requests: { id: number; requester_id: number | null; requester_name: string | null; type: 'cancellation' | 'return'; status: 'pending' | 'approved' | 'rejected'; reason: string; resolution_note: string | null; reviewed_by: number | null; reviewer_name: string | null; created_at: string; reviewed_at: string | null }[]
 }

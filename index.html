@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LUMIÈRE – Fashion Store</title>
+<style>
+  :root {
+    --ink: #1a1a1a;
+    --muted: #6b6b6b;
+    --line: #e8e4de;
+    --bg: #faf8f5;
+    --accent: #b08d57;
+    --sale: #c0392b;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif; color: var(--ink); background: #fff; line-height: 1.5; }
+  a { color: inherit; text-decoration: none; }
+  img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  ul { list-style: none; }
+  .container { width: min(1200px, 92%); margin: 0 auto; }
+  section { padding: 72px 0; }
+  .section-title { text-align: center; margin-bottom: 40px; }
+  .section-title h2 { font-size: 30px; letter-spacing: 2px; text-transform: uppercase; font-weight: 600; }
+  .section-title p { color: var(--muted); margin-top: 8px; }
+  .btn { display: inline-block; padding: 14px 34px; background: var(--ink); color: #fff; border: 1px solid var(--ink); font-size: 14px; letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer; transition: .25s; }
+  .btn:hover { background: transparent; color: var(--ink); }
+  .btn.light { background: #fff; color: var(--ink); border-color: #fff; }
+  .btn.light:hover { background: transparent; color: #fff; }
+
+  /* ===== HEADER ===== */
+  .announce { background: var(--ink); color: #fff; text-align: center; font-size: 13px; padding: 9px 12px; letter-spacing: .5px; }
+  header { position: sticky; top: 0; z-index: 50; background: #fff; border-bottom: 1px solid var(--line); }
+  .nav { display: flex; align-items: center; justify-content: space-between; height: 72px; gap: 24px; }
+  .logo { font-size: 26px; font-weight: 700; letter-spacing: 6px; }
+  .menu { display: flex; gap: 32px; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; }
+  .menu a { padding: 6px 0; border-bottom: 2px solid transparent; transition: .2s; }
+  .menu a:hover { border-color: var(--accent); }
+  .menu a.sale { color: var(--sale); }
+  .actions { display: flex; align-items: center; gap: 18px; font-size: 14px; }
+  .search { display: flex; border: 1px solid var(--line); border-radius: 30px; overflow: hidden; }
+  .search input { border: 0; outline: 0; padding: 8px 14px; width: 160px; font-size: 13px; }
+  .search button { border: 0; background: none; padding: 0 12px; cursor: pointer; }
+  .cart { position: relative; }
+  .cart span { position: absolute; top: -8px; right: -12px; background: var(--sale); color: #fff; font-size: 11px; width: 18px; height: 18px; border-radius: 50%; display: grid; place-items: center; }
+
+  /* ===== HERO ===== */
+  .hero { position: relative; height: 640px; padding: 0; color: #fff; overflow: hidden; }
+  .hero img { position: absolute; inset: 0; filter: brightness(.6); }
+  .hero-content { position: relative; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; gap: 18px; }
+  .hero-content small { letter-spacing: 4px; text-transform: uppercase; color: #e5c995; }
+  .hero-content h1 { font-size: clamp(36px, 6vw, 68px); line-height: 1.1; font-weight: 600; max-width: 600px; }
+  .hero-content p { max-width: 460px; opacity: .9; }
+
+  /* ===== CATEGORIES ===== */
+  .cat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+  .cat { position: relative; aspect-ratio: 3/4; overflow: hidden; }
+  .cat img { transition: transform .5s; }
+  .cat:hover img { transform: scale(1.08); }
+  .cat::after { content: ""; position: absolute; inset: 0; background: linear-gradient(transparent 55%, rgba(0,0,0,.65)); }
+  .cat h3 { position: absolute; left: 20px; bottom: 20px; z-index: 2; color: #fff; font-size: 20px; letter-spacing: 1px; }
+
+  /* ===== PRODUCTS ===== */
+  .bg-soft { background: var(--bg); }
+  .product-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px; }
+  .product { background: #fff; }
+  .p-img { position: relative; aspect-ratio: 3/4; overflow: hidden; background: #eee; }
+  .p-img img { transition: transform .5s; }
+  .product:hover .p-img img { transform: scale(1.06); }
+  .tag { position: absolute; top: 12px; left: 12px; background: var(--ink); color: #fff; font-size: 11px; padding: 4px 10px; letter-spacing: 1px; text-transform: uppercase; z-index: 2; }
+  .tag.sale { background: var(--sale); }
+  .heart { position: absolute; top: 10px; right: 12px; z-index: 2; background: #fff; width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,.1); }
+  .add { position: absolute; left: 0; right: 0; bottom: -50px; background: var(--ink); color: #fff; text-align: center; padding: 12px; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; transition: .3s; cursor: pointer; z-index: 2; }
+  .product:hover .add { bottom: 0; }
+  .p-info { padding: 14px 4px 20px; }
+  .p-info h3 { font-size: 15px; font-weight: 500; }
+  .stars { color: #e0a800; font-size: 13px; }
+  .price { margin-top: 4px; font-weight: 600; }
+  .price del { color: var(--muted); font-weight: 400; margin-left: 8px; font-size: 14px; }
+  .price .now { color: var(--sale); }
+
+  /* ===== PROMO ===== */
+  .promo { position: relative; padding: 0; height: 420px; color: #fff; overflow: hidden; }
+  .promo img { position: absolute; inset: 0; filter: brightness(.5); }
+  .promo-content { position: relative; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 14px; }
+  .promo-content h2 { font-size: clamp(30px, 5vw, 52px); letter-spacing: 3px; }
+  .countdown { display: flex; gap: 16px; margin: 6px 0 10px; }
+  .countdown div { background: rgba(255,255,255,.15); backdrop-filter: blur(4px); padding: 10px 16px; min-width: 72px; }
+  .countdown b { display: block; font-size: 26px; }
+  .countdown span { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; }
+
+  /* ===== LOOKBOOK ===== */
+  .look-grid { display: grid; grid-template-columns: 1.2fr 1fr 1fr; grid-template-rows: 280px 280px; gap: 18px; }
+  .look { position: relative; overflow: hidden; }
+  .look:first-child { grid-row: span 2; }
+  .look img { transition: transform .5s; }
+  .look:hover img { transform: scale(1.07); }
+  .look span { position: absolute; left: 16px; bottom: 16px; background: #fff; padding: 6px 14px; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; }
+
+  /* ===== SERVICES ===== */
+  .services { padding: 48px 0; border-block: 1px solid var(--line); }
+  .service-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; text-align: center; }
+  .service .ic { font-size: 30px; }
+  .service h4 { margin: 8px 0 4px; font-size: 15px; text-transform: uppercase; letter-spacing: 1px; }
+  .service p { color: var(--muted); font-size: 14px; }
+
+  /* ===== TESTIMONIALS ===== */
+  .t-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .t-card { background: #fff; padding: 28px; border: 1px solid var(--line); }
+  .t-card p { margin: 12px 0 20px; color: #444; font-style: italic; }
+  .t-user { display: flex; align-items: center; gap: 12px; }
+  .t-user .av { width: 48px; height: 48px; border-radius: 50%; overflow: hidden; }
+  .t-user b { display: block; font-size: 14px; }
+  .t-user small { color: var(--muted); }
+
+  /* ===== INSTAGRAM ===== */
+  .insta-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; }
+  .insta-grid a { aspect-ratio: 1; overflow: hidden; display: block; }
+  .insta-grid img { transition: transform .4s, filter .4s; }
+  .insta-grid a:hover img { transform: scale(1.1); filter: brightness(.8); }
+
+  /* ===== NEWSLETTER ===== */
+  .newsletter { background: var(--ink); color: #fff; text-align: center; }
+  .newsletter h2 { font-size: 28px; letter-spacing: 2px; text-transform: uppercase; }
+  .newsletter p { color: #bbb; margin: 8px 0 24px; }
+  .news-form { display: flex; justify-content: center; max-width: 520px; margin: 0 auto; }
+  .news-form input { flex: 1; padding: 14px 18px; border: 0; outline: 0; font-size: 14px; }
+  .news-form button { padding: 14px 28px; border: 0; background: var(--accent); color: #fff; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; }
+
+  /* ===== FOOTER ===== */
+  footer { background: #111; color: #bbb; padding: 64px 0 0; font-size: 14px; }
+  .f-grid { display: grid; grid-template-columns: 1.6fr 1fr 1fr 1.2fr; gap: 40px; padding-bottom: 48px; }
+  footer h4 { color: #fff; margin-bottom: 18px; text-transform: uppercase; letter-spacing: 1.5px; font-size: 14px; }
+  footer li { margin-bottom: 10px; }
+  footer a:hover { color: var(--accent); }
+  .f-logo { font-size: 24px; font-weight: 700; letter-spacing: 5px; color: #fff; margin-bottom: 14px; }
+  .socials { display: flex; gap: 10px; margin-top: 18px; }
+  .socials a { width: 36px; height: 36px; border: 1px solid #444; border-radius: 50%; display: grid; place-items: center; font-size: 13px; }
+  .pay { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px; }
+  .pay span { border: 1px solid #444; padding: 4px 10px; font-size: 12px; border-radius: 4px; }
+  .copy { border-top: 1px solid #2a2a2a; text-align: center; padding: 20px 0; font-size: 13px; }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 992px) {
+    .menu, .search { display: none; }
+    .cat-grid, .product-grid { grid-template-columns: repeat(2, 1fr); }
+    .service-grid { grid-template-columns: repeat(2, 1fr); }
+    .t-grid { grid-template-columns: 1fr; }
+    .insta-grid { grid-template-columns: repeat(3, 1fr); }
+    .f-grid { grid-template-columns: 1fr 1fr; }
+    .look-grid { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
+    .look:first-child { grid-row: auto; grid-column: span 2; height: 320px; }
+    .look { height: 220px; }
+  }
+  @media (max-width: 560px) {
+    section { padding: 48px 0; }
+    .hero { height: 520px; }
+    .countdown div { min-width: 60px; padding: 8px 10px; }
+    .f-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ================= HEADER ================= -->
+<div class="announce">🚚 Miễn phí vận chuyển đơn từ 500.000đ &nbsp;|&nbsp; Nhập mã <b>WELCOME10</b> giảm 10%</div>
+<header>
+  <div class="container nav">
+    <a href="#" class="logo">LUMIÈRE</a>
+    <nav>
+      <ul class="menu">
+        <li><a href="#">Nữ</a></li>
+        <li><a href="#">Nam</a></li>
+        <li><a href="#">Phụ kiện</a></li>
+        <li><a href="#new">Hàng mới</a></li>
+        <li><a href="#lookbook">Lookbook</a></li>
+        <li><a href="#sale" class="sale">Sale</a></li>
+      </ul>
+    </nav>
+    <div class="actions">
+      <form class="search" onsubmit="return false">
+        <input type="text" placeholder="Tìm sản phẩm...">
+        <button>🔍</button>
+      </form>
+      <a href="#">👤</a>
+      <a href="#">♡</a>
+      <a href="#" class="cart">🛍<span>2</span></a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <!-- ================= HERO ================= -->
+  <section class="hero">
+    <img src="https://picsum.photos/seed/fashion-hero/1600/900" alt="Bộ sưu tập mới">
+    <div class="container hero-content">
+      <small>Bộ sưu tập Thu Đông 2026</small>
+      <h1>Phong cách tối giản, đẳng cấp mỗi ngày</h1>
+      <p>Khám phá những thiết kế mới nhất với chất liệu cao cấp, đường cắt tinh tế.</p>
+      <a href="#new" class="btn light">Khám phá ngay</a>
+    </div>
+  </section>
+
+  <!-- ================= DANH MỤC ================= -->
+  <section>
+    <div class="container">
+      <div class="section-title"><h2>Danh mục nổi bật</h2><p>Tìm nhanh món đồ bạn yêu thích</p></div>
+      <div class="cat-grid">
+        <a href="#" class="cat"><img src="https://picsum.photos/seed/cat-shirt/600/800" alt="Áo"><h3>Áo</h3></a>
+        <a href="#" class="cat"><img src="https://picsum.photos/seed/cat-pants/600/800" alt="Quần"><h3>Quần</h3></a>
+        <a href="#" class="cat"><img src="https://picsum.photos/seed/cat-dress/600/800" alt="Váy"><h3>Váy & Đầm</h3></a>
+        <a href="#" class="cat"><img src="https://picsum.photos/seed/cat-bag/600/800" alt="Phụ kiện"><h3>Phụ kiện</h3></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= NEW ARRIVALS ================= -->
+  <section class="bg-soft" id="new">
+    <div class="container">
+      <div class="section-title"><h2>Hàng mới về</h2><p>Những thiết kế vừa lên kệ tuần này</p></div>
+      <div class="product-grid">
+        <article class="product">
+          <div class="p-img"><span class="tag">New</span><span class="heart">♡</span>
+            <img src="https://picsum.photos/seed/new1/600/800" alt="Áo sơ mi linen"><div class="add">Thêm vào giỏ</div></div>
+          <div class="p-info"><h3>Áo sơ mi linen oversize</h3><div class="price">490.000đ</div></div>
+        </article>
+        <article class="product">
+          <div class="p-img"><span class="tag">New</span><span class="heart">♡</span>
+            <img src="https://picsum.photos/seed/new2/600/800" alt="Quần ống rộng"><div class="add">Thêm vào giỏ</div></div>
+          <div class="p-info"><h3>Quần ống rộng cạp cao</h3><div class="price">550.000đ</div></div>
+        </article>
+        <article class="product">
+          <div class="p-img"><span class="tag">New</span><span class="heart">♡</span>
+            <img src="https://picsum.photos/seed/new3/600/800" alt="Áo khoác"><div class="add">Thêm vào giỏ</div></div>
+          <div class="p-info"><h3>Áo khoác blazer basic</h3><div class="price">890.000đ</div></div>
+        </article>
+        <article class="product">
+          <div class="p-img"><span class="tag">New</span><span class="heart">♡</span>
+            <img src="https://picsum.photos/seed/new4/600/800" alt="Váy midi"><div class="add">Thêm vào giỏ</div></div>
+          <div class="p-info"><h3>Váy midi xếp ly</h3><div class="price">690.000đ</div></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= BEST SELLERS ================= -->
+  <section>
+    <div class="container">
+      <div class="section-title"><h2>Bán chạy nhất</h2><p>Được yêu thích bởi hàng ngàn khách hàng</p></div>
+      <div class="product-grid">
+        <article class="product">
+          <div class="p-img"><span class="tag sale">-30%</span><span class="heart">♡</span>
+            <img src="https://picsum.photos/seed/best1/600/800" alt="Áo thun"><div class="add">Thêm vào giỏ</div></div>
+          <div class="p-info"><div class="stars">★★★★★ <small>(128)</small></div><h3>Áo thun cotton premium</h3>
+            <div class="price"><span class="now">245.000đ</span><del>350.000đ</del></div></div>
+        </article>
+        <article class="product">
+          <div class="p-img"><span class="heart">♡</span>
+            <img src="https://picsum.photos/seed/best2/600/800" alt="Quần jean"><div class="add">Thêm vào giỏ</div></div>
+          <div class="p-info"><div class="stars">★★★★☆ <small>(94)</small></div><h3>Quần jean slim-fit</h3><div class="price">620.000đ</div></div>
+        </article>
+        <article class="product">
+          <div class="p-img"><span class="tag sale">-20%</span><span class="heart">♡</span>
+            <img src="https://picsum.photos/seed/best3/600/800" alt="Túi xách"><div class="add">Thêm vào giỏ</div></div>
+          <div class="p-info"><div class="stars">★★★★★ <small>(211)</small></div><h3>Túi tote da mini</h3>
+            <div class="price"><span class="now">720.000đ</span><del>900.000đ</del></div></div>
+        </article>
+        <article class="product">
+          <div class="p-img"><span class="heart">♡</span>
+            <img src="https://picsum.photos/seed/best4/600/800" alt="Giày sneaker"><div class="add">Thêm vào giỏ</div></div>
+          <div class="p-info"><div class="stars">★★★★★ <small>(76)</small></div><h3>Giày sneaker trắng</h3><div class="price">990.000đ</div></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= PROMO ================= -->
+  <section class="promo" id="sale">
+    <img src="https://picsum.photos/seed/promo-sale/1600/700" alt="Flash sale">
+    <div class="container promo-content">
+      <small style="letter-spacing:4px;text-transform:uppercase">Flash Sale cuối tuần</small>
+      <h2>GIẢM ĐẾN 50%</h2>
+      <div class="countdown">
+        <div><b id="d">02</b><span>Ngày</span></div>
+        <div><b id="h">12</b><span>Giờ</span></div>
+        <div><b id="m">30</b><span>Phút</span></div>
+        <div><b id="s">45</b><span>Giây</span></div>
+      </div>
+      <a href="#" class="btn light">Mua ngay</a>
+    </div>
+  </section>
+
+  <!-- ================= LOOKBOOK ================= -->
+  <section id="lookbook">
+    <div class="container">
+      <div class="section-title"><h2>Lookbook</h2><p>Gợi ý phối đồ cho mùa mới</p></div>
+      <div class="look-grid">
+        <a href="#" class="look"><img src="https://picsum.photos/seed/look1/800/1000" alt="Look 1"><span>Office Chic</span></a>
+        <a href="#" class="look"><img src="https://picsum.photos/seed/look2/600/500" alt="Look 2"><span>Weekend Casual</span></a>
+        <a href="#" class="look"><img src="https://picsum.photos/seed/look3/600/500" alt="Look 3"><span>Street Style</span></a>
+        <a href="#" class="look"><img src="https://picsum.photos/seed/look4/600/500" alt="Look 4"><span>Date Night</span></a>
+        <a href="#" class="look"><img src="https://picsum.photos/seed/look5/600/500" alt="Look 5"><span>Minimalist</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= SERVICES ================= -->
+  <section class="services">
+    <div class="container service-grid">
+      <div class="service"><div class="ic">🚚</div><h4>Miễn phí vận chuyển</h4><p>Cho đơn từ 500.000đ</p></div>
+      <div class="service"><div class="ic">🔄</div><h4>Đổi trả 7 ngày</h4><p>Đổi size, đổi mẫu dễ dàng</p></div>
+      <div class="service"><div class="ic">🔒</div><h4>Thanh toán an toàn</h4><p>Bảo mật tuyệt đối</p></div>
+      <div class="service"><div class="ic">💬</div><h4>Hỗ trợ 24/7</h4><p>Hotline & chat trực tuyến</p></div>
+    </div>
+  </section>
+
+  <!-- ================= TESTIMONIALS ================= -->
+  <section class="bg-soft">
+    <div class="container">
+      <div class="section-title"><h2>Khách hàng nói gì</h2><p>Hơn 10.000 đánh giá 5 sao</p></div>
+      <div class="t-grid">
+        <div class="t-card"><div class="stars">★★★★★</div><p>“Chất vải mát, form chuẩn, giao hàng nhanh. Mình đã mua lần thứ ba rồi!”</p>
+          <div class="t-user"><div class="av"><img src="https://picsum.photos/seed/user1/100/100" alt=""></div><div><b>Minh Anh</b><small>Đà Nẵng</small></div></div></div>
+        <div class="t-card"><div class="stars">★★★★★</div><p>“Thiết kế đẹp, đúng như hình. Nhân viên tư vấn size rất nhiệt tình.”</p>
+          <div class="t-user"><div class="av"><img src="https://picsum.photos/seed/user2/100/100" alt=""></div><div><b>Quốc Bảo</b><small>Hà Nội</small></div></div></div>
+        <div class="t-card"><div class="stars">★★★★☆</div><p>“Đóng gói cẩn thận, đổi size nhanh gọn. Sẽ ủng hộ dài dài.”</p>
+          <div class="t-user"><div class="av"><img src="https://picsum.photos/seed/user3/100/100" alt=""></div><div><b>Thu Hà</b><small>TP. Hồ Chí Minh</small></div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= INSTAGRAM ================= -->
+  <section>
+    <div class="container">
+      <div class="section-title"><h2>@lumiere.fashion</h2><p>Chia sẻ phong cách của bạn với #LumiereStyle</p></div>
+      <div class="insta-grid">
+        <a href="#"><img src="https://picsum.photos/seed/ig1/400/400" alt=""></a>
+        <a href="#"><img src="https://picsum.photos/seed/ig2/400/400" alt=""></a>
+        <a href="#"><img src="https://picsum.photos/seed/ig3/400/400" alt=""></a>
+        <a href="#"><img src="https://picsum.photos/seed/ig4/400/400" alt=""></a>
+        <a href="#"><img src="https://picsum.photos/seed/ig5/400/400" alt=""></a>
+        <a href="#"><img src="https://picsum.photos/seed/ig6/400/400" alt=""></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= NEWSLETTER ================= -->
+  <section class="newsletter">
+    <div class="container">
+      <h2>Đăng ký nhận tin</h2>
+      <p>Nhận ngay voucher 10% cho đơn hàng đầu tiên và cập nhật bộ sưu tập mới.</p>
+      <form class="news-form" onsubmit="event.preventDefault(); alert('Cảm ơn bạn đã đăng ký!');">
+        <input type="email" placeholder="Nhập email của bạn" required>
+        <button type="submit">Đăng ký</button>
+      </form>
+    </div>
+  </section>
+</main>
+
+<!-- ================= FOOTER ================= -->
+<footer>
+  <div class="container f-grid">
+    <div>
+      <div class="f-logo">LUMIÈRE</div>
+      <p>Thương hiệu thời trang tối giản dành cho những ai yêu sự tinh tế.</p>
+      <p style="margin-top:14px">📍 123 Trần Phú, Hải Châu, Đà Nẵng<br>📞 1900 1234<br>✉️ hello@lumiere.vn</p>
+      <div class="socials"><a href="#">f</a><a href="#">ig</a><a href="#">tt</a><a href="#">yt</a></div>
+    </div>
+    <div>
+      <h4>Hỗ trợ</h4>
+      <ul>
+        <li><a href="#">Hướng dẫn chọn size</a></li>
+        <li><a href="#">Chính sách đổi trả</a></li>
+        <li><a href="#">Chính sách bảo mật</a></li>
+        <li><a href="#">Vận chuyển & thanh toán</a></li>
+        <li><a href="#">Liên hệ</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Cửa hàng</h4>
+      <ul>
+        <li><a href="#">Thời trang nữ</a></li>
+        <li><a href="#">Thời trang nam</a></li>
+        <li><a href="#">Phụ kiện</a></li>
+        <li><a href="#">Hàng mới về</a></li>
+        <li><a href="#">Khuyến mãi</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Thanh toán</h4>
+      <div class="pay"><span>VISA</span><span>Mastercard</span><span>MoMo</span><span>ZaloPay</span><span>COD</span></div>
+      <h4 style="margin-top:24px">Vận chuyển</h4>
+      <div class="pay"><span>GHN</span><span>GHTK</span><span>Viettel Post</span></div>
+    </div>
+  </div>
+  <div class="copy">© 2026 LUMIÈRE Fashion Store. All rights reserved.</div>
+</footer>
+
+<script>
+  // Đồng hồ đếm ngược flash sale (mốc: 3 ngày kể từ lúc mở trang)
+  const end = Date.now() + 3 * 24 * 60 * 60 * 1000;
+  const pad = n => String(n).padStart(2, "0");
+  function tick() {
+    let diff = Math.max(0, end - Date.now());
+    const d = Math.floor(diff / 86400000); diff %= 86400000;
+    const h = Math.floor(diff / 3600000);  diff %= 3600000;
+    const m = Math.floor(diff / 60000);    diff %= 60000;
+    const s = Math.floor(diff / 1000);
+    document.getElementById("d").textContent = pad(d);
+    document.getElementById("h").textContent = pad(h);
+    document.getElementById("m").textContent = pad(m);
+    document.getElementById("s").textContent = pad(s);
+  }
+  tick(); setInterval(tick, 1000);
+
+  // Tim yêu thích
+  document.querySelectorAll(".heart").forEach(h =>
+    h.addEventListener("click", () => { h.textContent = h.textContent === "♡" ? "♥" : "♡"; h.style.color = h.textContent === "♥" ? "#c0392b" : ""; })
+  );
+</script>
+</body>
+</html>

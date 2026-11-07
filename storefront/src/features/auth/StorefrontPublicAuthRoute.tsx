@@ -9,13 +9,15 @@ type LoginState = ReturnType<typeof useStorefrontLogin>
 
 type StorefrontPublicAuthRouteProps = {
   path: string
+  search: string
   login: LoginState
   registrationEnabled: boolean
 }
 
-export function StorefrontPublicAuthRoute({ path, login, registrationEnabled }: StorefrontPublicAuthRouteProps) {
+export function StorefrontPublicAuthRoute({ path, search, login, registrationEnabled }: StorefrontPublicAuthRouteProps) {
   if (path === '/login') {
-    return <LoginPage passwordVisible={login.passwordVisible} busy={login.busy} passkeyBusy={login.passkeyBusy} passkeySupported={login.passkeySupported} error={login.error} registrationEnabled={registrationEnabled} onTogglePassword={login.togglePassword} onSubmit={login.submit} onPasskeyLogin={login.submitPasskey} />
+    const sessionExpired = new URLSearchParams(search).get('session') === 'expired'
+    return <LoginPage passwordVisible={login.passwordVisible} busy={login.busy} passkeyBusy={login.passkeyBusy} passkeySupported={login.passkeySupported} error={login.error} registrationEnabled={registrationEnabled} sessionExpired={sessionExpired} onTogglePassword={login.togglePassword} onSubmit={login.submit} onPasskeyLogin={login.submitPasskey} />
   }
   if (path === '/forgot-password') return <PasswordRecoveryPage page="request" />
   if (path === '/forgot-password/sent') return <PasswordRecoveryPage page="sent" />

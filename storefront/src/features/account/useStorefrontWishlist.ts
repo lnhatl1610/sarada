@@ -1,7 +1,29 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from 'react-router'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { fetchCatalogProduct } from '../catalog/catalog-api'
+import { readBrowserStorage, writeBrowserStorage } from '../../lib/browser-storage'
 import { createWishlistList, deleteWishlistList, getProductPriceAlertIds, getWishlist, getWishlistListProducts, getWishlistLists, renameWishlistList, setProductPriceAlert, setWishlistListSharing, subscribeAccountStockAlert, updateWishlist, updateWishlistListProduct, type WishlistProduct } from './account-api'
+
+type GuestWishlistRef = { productId: number; slug: string }
+const GUEST_WISHLIST_KEY = 'sarada.guest-wishlist.v1'
+const MAX_GUEST_WISHLIST_ITEMS = 24
+
+function readGuestWishlist(): GuestWishlistRef[] {
+  try {
+    const stored = JSON.parse(readBrowserStorage(GUEST_WISHLIST_KEY) ?? '[]') as unknown
+    if (!Array.isArray(stored)) return []
+    return stored.flatMap((entry): GuestWishlistRef[] => {
+      if (!entry || typeof entry !== 'object') return []
+      const item = entry as Record<string, unknown>
+      return Number.isInteger(item.productId) && Number(item.productId) > 0 && typeof item.slug === 'string' && /^[a-z0-9-]{1,180}$/.test(item.slug)
+        ? [{ productId: Number(item.productId), slug: item.slug }]
+        : []
+    }).slice(0, MAX_GUEST_WISHLIST_ITEMS)
+  } catch {
+    return []
+  }
+}
 
 type Options = {
   accessToken: string
@@ -13,6 +35,12 @@ type Options = {
 export function useStorefrontWishlist({ accessToken, customerId, returnTo, onToast }: Options) {
   const navigate = useNavigate()
   const queryClient = useQueryClient()
+  const [guestWishlist, setGuestWishlist] = useState(readGuestWishlist)
+  const guestMergeAttempt = useRef('')
+  const persistGuestWishlist = (next: GuestWishlistRef[]) => {
+    setGuestWishlist(next)
+    writeBrowserStorage(GUEST_WISHLIST_KEY, JSON.stringify(next))
+  }
   const listsQueryKey = ['account', 'wishlist-lists', customerId ?? 'current'] as const
   const listsQuery = useQuery({
     queryKey: listsQueryKey,
@@ -28,6 +56,17 @@ export function useStorefrontWishlist({ accessToken, customerId, returnTo, onToa
     queryFn: () => activeListId ? getWishlistListProducts({ accessToken, listId: activeListId }) : getWishlist({ accessToken }),
     enabled: Boolean(accessToken),
   })
+  const guestProductsQuery = useQuery({
+    queryKey: ['guest-wishlist-products', guestWishlist.map((item) => item.slug)],
+    enabled: !accessToken && guestWishlist.length > 0,
+    queryFn: async ({ signal }) => {
+      const results = await Promise.allSettled(guestWishlist.map((item) => fetchCatalogProduct(item.slug, signal)))
+      return {
+        products: results.flatMap((result) => result.status === 'fulfilled' ? [result.value] : []),
+        unavailableCount: results.filter((result) => result.status === 'rejected').length,
+      }
+    },
+  })
   const priceAlertQueryKey = ['account', 'product-price-alerts', customerId ?? 'current'] as const
   const priceAlertQuery = useQuery({
     queryKey: priceAlertQueryKey,
@@ -37,9 +76,61 @@ export function useStorefrontWishlist({ accessToken, customerId, returnTo, onToa
   const [priceAlertBusyProductId, setPriceAlertBusyProductId] = useState<number | null>(null)
   const [restockBusyVariantId, setRestockBusyVariantId] = useState<number | null>(null)
 
+  useEffect(() => {
+    if (!accessToken || !customerId || !defaultList?.id || !guestWishlist.length) return
+    const attemptKey = `${customerId}:${guestWishlist.map((item) => item.productId).join(',')}`
+    if (guestMergeAttempt.current === attemptKey) return
+    guestMergeAttempt.current = attemptKey
+    void (async () => {
+      try {
+        const current = await getWishlistListProducts({ accessToken, listId: defaultList.id })
+        const savedIds = new Set(current.map((product) => product.id))
+        const pending: GuestWishlistRef[] = []
+        let added = 0
+        for (const item of guestWishlist) {
+          if (savedIds.has(item.productId)) continue
+          try {
+            await updateWishlistListProduct({ accessToken, listId: defaultList.id, productId: item.productId, saved: false })
+            savedIds.add(item.productId)
+            added += 1
+          } catch {
+            pending.push(item)
+          }
+        }
+        persistGuestWishlist(pending)
+        void queryClient.invalidateQueries({ queryKey: ['account', 'wishlist-lists', customerId] })
+        void queryClient.invalidateQueries({ queryKey: ['account', 'wishlist', customerId] })
+        guestMergeAttempt.current = pending.length
+          ? `${customerId}:${pending.map((item) => item.productId).join(',')}`
+          : attemptKey
+        if (added || pending.length) {
+          onToast(pending.length
+            ? `Đã đồng bộ ${added} sản phẩm; ${pending.length} sản phẩm chưa đồng bộ và vẫn được giữ trên thiết bị.`
+            : `Đã đồng bộ ${added} sản phẩm yêu thích vào tài khoản.`)
+          window.setTimeout(() => onToast(''), 3500)
+        }
+      } catch {
+        guestMergeAttempt.current = ''
+        onToast('Chưa đồng bộ được danh sách yêu thích. Danh sách trên thiết bị vẫn được giữ lại.')
+        window.setTimeout(() => onToast(''), 3500)
+      }
+    })()
+  }, [accessToken, customerId, defaultList?.id, guestWishlist, onToast, queryClient])
+
   const toggle = async (item: WishlistProduct) => {
     if (!accessToken) {
-      navigate(`/login?returnTo=${encodeURIComponent(returnTo)}`)
+      const saved = guestWishlist.some((product) => product.productId === item.id)
+      if (!saved && guestWishlist.length >= MAX_GUEST_WISHLIST_ITEMS) {
+        onToast(`Danh sách lưu trên thiết bị có thể chứa tối đa ${MAX_GUEST_WISHLIST_ITEMS} sản phẩm.`)
+        window.setTimeout(() => onToast(''), 3000)
+        return
+      }
+      const next = saved
+        ? guestWishlist.filter((product) => product.productId !== item.id)
+        : [{ productId: item.id, slug: item.slug }, ...guestWishlist].slice(0, MAX_GUEST_WISHLIST_ITEMS)
+      persistGuestWishlist(next)
+      onToast(saved ? 'Đã xóa khỏi danh sách yêu thích' : 'Đã lưu trên thiết bị này')
+      window.setTimeout(() => onToast(''), 2200)
       return
     }
 
@@ -156,9 +247,12 @@ export function useStorefrontWishlist({ accessToken, customerId, returnTo, onToa
   }
 
   return {
-    products: accessToken ? query.data ?? [] : [],
-    loading: Boolean(accessToken) && query.isPending,
-    error: query.isError ? query.error.message : '',
+    products: accessToken ? query.data ?? [] : guestProductsQuery.data?.products ?? [],
+    count: accessToken ? query.data?.length ?? 0 : guestWishlist.length,
+    loading: accessToken ? query.isPending : guestWishlist.length > 0 && guestProductsQuery.isPending,
+    error: accessToken ? query.isError ? query.error.message : '' : guestProductsQuery.isError ? guestProductsQuery.error.message : '',
+    guestMode: !accessToken,
+    guestUnavailableCount: accessToken ? 0 : guestProductsQuery.data?.unavailableCount ?? 0,
     priceAlertProductIds: accessToken ? priceAlertQuery.data ?? [] : [],
     priceAlertsLoading: Boolean(accessToken) && priceAlertQuery.isPending,
     priceAlertsError: priceAlertQuery.isError ? priceAlertQuery.error.message : '',
@@ -178,6 +272,6 @@ export function useStorefrontWishlist({ accessToken, customerId, returnTo, onToa
     shareList,
     togglePriceAlert,
     notifyWhenRestocked,
-    retry: () => void query.refetch(),
+    retry: () => void (accessToken ? query.refetch() : guestProductsQuery.refetch()),
   }
 }

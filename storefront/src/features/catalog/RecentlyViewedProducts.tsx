@@ -99,7 +99,7 @@ export function RecentlyViewedProducts({ currentSlug, accountId, formatMoney }: 
 
   return <section className="related-products recently-viewed-products" aria-labelledby="recently-viewed-title">
     <h2 id="recently-viewed-title">Đã xem gần đây</h2>
-    <div className="grid">{products.map((product) => {
+    <div className="product-grid">{products.map((product) => {
       const image = product.images?.[0]
       const mediaLabel = getMediaDisclosureLabel(image?.alt)
       return <article className="card" key={product.id}>

@@ -19,10 +19,21 @@ const audienceChoices = [
 ]
 
 export function CategoryRail({ categories, isLoading, isError, onRetry }: CategoryRailProps) {
+  const accessoryCategory = categories.find((category) => /(^|-)phu-kien($|-)|accessor(y|ies)?/i.test(category.slug))
+  const otherCategories = categories.filter((category) => category.slug !== 'hang-moi' && category.id !== accessoryCategory?.id).slice(0, accessoryCategory ? 3 : 4)
+  const categoryCandidates = accessoryCategory ? [...otherCategories, accessoryCategory] : otherCategories
   const audienceQueries = useQueries({
     queries: audienceChoices.map(({ gender }) => ({
       queryKey: ['products', 'home-audience-tile', gender],
       queryFn: ({ signal }: { signal: AbortSignal }) => fetchCatalogProducts(`?target_gender=${gender}&sort=newest&per_page=1`, signal),
+      staleTime: 60_000,
+    })),
+  })
+  const categoryImageQueries = useQueries({
+    queries: categoryCandidates.map((category) => ({
+      queryKey: ['products', 'home-category-tile', category.slug],
+      queryFn: ({ signal }: { signal: AbortSignal }) => fetchCatalogProducts(`?category=${encodeURIComponent(category.slug)}&sort=newest&per_page=4`, signal),
+      enabled: !category.image && category.product_count > 0,
       staleTime: 60_000,
     })),
   })
@@ -42,8 +53,6 @@ export function CategoryRail({ categories, isLoading, isError, onRetry }: Catego
     </section>
   }
 
-  const accessoryCategory = categories.find((category) => /(^|-)phu-kien($|-)|accessor(y|ies)?/i.test(category.slug))
-  const otherCategories = categories.filter((category) => category.slug !== 'hang-moi' && category.id !== accessoryCategory?.id).slice(0, accessoryCategory ? 2 : 3)
   const audienceTiles = audienceChoices.flatMap((choice, index) => {
     const product = audienceQueries[index]?.data?.[0]
     const image = product?.images?.[0]
@@ -57,27 +66,23 @@ export function CategoryRail({ categories, isLoading, isError, onRetry }: Catego
       srcSet: image.srcset ?? undefined,
     }] : []
   })
-  const categoryTiles = otherCategories.map((category) => ({
-    key: `category-${category.id}`,
-    label: category.name,
-    href: `/categories/${encodeURIComponent(category.slug)}`,
-    image: category.image,
-    alt: category.image_alt?.trim() || `Ảnh danh mục ${category.name}`,
-    disclosureAlt: category.image_alt,
-    srcSet: undefined,
-  }))
-  if (accessoryCategory) {
-    categoryTiles.push({
-      key: `category-${accessoryCategory.id}`,
-      label: accessoryCategory.name,
-      href: `/categories/${encodeURIComponent(accessoryCategory.slug)}`,
-      image: accessoryCategory.image,
-      alt: accessoryCategory.image_alt?.trim() || `Ảnh danh mục ${accessoryCategory.name}`,
-      disclosureAlt: accessoryCategory.image_alt,
-      srcSet: undefined,
-    })
-  }
-  const tiles = [...audienceTiles, ...categoryTiles].slice(0, 5)
+  const categoryTiles = categoryCandidates.flatMap((category, index) => {
+    const fallbackProduct = categoryImageQueries[index]?.data?.find((product) => product.images?.some((image) => image.url))
+    const fallbackImage = fallbackProduct?.images?.find((image) => image.url)
+    const image = category.image || fallbackImage?.url
+    if (!image) return []
+
+    return [{
+      key: `category-${category.id}`,
+      label: category.name,
+      href: `/categories/${encodeURIComponent(category.slug)}`,
+      image,
+      alt: category.image ? category.image_alt?.trim() || `Ảnh danh mục ${category.name}` : fallbackImage?.alt?.trim() || fallbackProduct?.name || `Sản phẩm thuộc danh mục ${category.name}`,
+      disclosureAlt: category.image ? category.image_alt : fallbackImage?.alt,
+      srcSet: category.image ? undefined : fallbackImage?.srcset ?? undefined,
+    }]
+  })
+  const tiles = [...audienceTiles, ...categoryTiles].slice(0, 6)
 
   if (!tiles.length) return null
 

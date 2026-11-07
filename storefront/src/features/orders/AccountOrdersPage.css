@@ -346,16 +346,16 @@
 
 p.order-review-status {
   padding: 12px 14px;
-  border-left: 3px solid var(--ui-primary, #69523d);
-  background: var(--ui-surface, #f5f2ed);
+  border-left: 3px solid var(--ui-primary, #7f2638);
+  background: var(--ui-surface, #f9f8f5);
 }
 
 .order-return-deadline,
 .order-return-expired {
   margin: 18px 0 10px;
   padding: 12px 14px;
-  border-left: 3px solid var(--ui-primary, #69523d);
-  background: var(--ui-surface, #f5f2ed);
+  border-left: 3px solid var(--ui-primary, #7f2638);
+  background: var(--ui-surface, #f9f8f5);
   color: var(--ui-foreground, #292720);
   font-size: 13px;
   line-height: 1.55;

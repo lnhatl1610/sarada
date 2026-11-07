@@ -18,6 +18,7 @@ Single-vendor; Laravel API and two independent React/Vite TypeScript SPAs; MySQL
 - Inventory is the single owner of stock quantity and movement writes; checkout, orders, catalog initialization, and admin adjustment call its public service within their business transactions (ADR-0009).
 - Inventory owns both the online fulfillment pool and isolated per-store pickup balances. Pickup availability is cart-wide, checkout locks and reserves the selected branch rows, and all branch adjustments/sales/releases/returns append to the shared movement ledger with a store reference (ADR-0019).
 - Admin manages the ordered visibility list for supported Storefront home sections through the existing settings boundary; public configuration exposes only validated section keys (ADR-0017).
+- Frontend interaction libraries follow the one-choice-per-role matrix in `lib.md`: Recharts/Driver.js in Admin; ReactPlayer, React Leaflet, and react-share in Storefront; Sonner in both; existing GA4 remains the only analytics provider and stays behind analytics consent (ADR-0020).
 
 ## Request path and ownership
 

@@ -5,6 +5,7 @@ import './index.css'
 import App from './App.tsx'
 import './Minimal.css'
 import { publishAdminToast } from './lib/admin-toast.ts'
+import { Toaster } from 'sonner'
 import { installAdminConsoleHistory } from './lib/admin-console-history.ts'
 import './lib/i18n'
 
@@ -36,6 +37,6 @@ const queryClient = new QueryClient({
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <QueryClientProvider client={queryClient}><App /></QueryClientProvider>
+    <QueryClientProvider client={queryClient}><App /><Toaster position="top-right" offset={72} closeButton theme="light" toastOptions={{ style: { background: 'var(--popover)', color: 'var(--popover-foreground)', border: '1px solid var(--border)' } }} /></QueryClientProvider>
   </StrictMode>,
 )

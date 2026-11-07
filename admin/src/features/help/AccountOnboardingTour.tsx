@@ -1,7 +1,9 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { driver } from 'driver.js'
+import 'driver.js/dist/driver.css'
+import '../../OnboardingTour.css'
 import { Button } from '../../components/ui/button'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '../../components/ui/dialog'
 import { adminApiFetch } from '../../lib/admin-api'
 import { ADMIN_API_BASE_URL } from '../../lib/api-base'
 import { useTranslation } from 'react-i18next'
@@ -16,8 +18,9 @@ export function AccountOnboardingTour({ userId, roles, permissions, forceOpen = 
   const { t } = useTranslation()
   const client = useQueryClient()
   const [openOverride, setOpenOverride] = useState<boolean | null>(null)
-  const [step, setStep] = useState(0)
   const [now, setNow] = useState(0)
+  const finishTourRef = useRef<(completed: boolean) => void>(() => {})
+  const snoozeTourRef = useRef<() => void>(() => {})
   const preference = useQuery({
     queryKey: ['account-preferences', userId, 'admin_onboarding'],
     enabled: Boolean(userId),
@@ -63,6 +66,7 @@ export function AccountOnboardingTour({ userId, roles, permissions, forceOpen = 
     },
     onSuccess: (value) => { client.setQueryData(['account-preferences', userId, 'admin_onboarding'], value); void client.invalidateQueries({ queryKey: ['admin-account-menu-summary', userId] }) },
   })
+  const savePreference = save.mutate
   useEffect(() => {
     const initialTimer = window.setTimeout(() => setNow(Date.now()), 0)
     const timer = window.setInterval(() => setNow(Date.now()), 60_000)
@@ -74,33 +78,79 @@ export function AccountOnboardingTour({ userId, roles, permissions, forceOpen = 
   const open = openOverride ?? (forceOpen || shouldAutoOpen)
   useEffect(() => {
     if (!open) return
-    const handler = (event: KeyboardEvent) => {
-      if (event.key === 'ArrowRight') setStep((current) => Math.min(current + 1, steps.length - 1))
-      if (event.key === 'ArrowLeft') setStep((current) => Math.max(current - 1, 0))
+    let finished = false
+    const tour = driver({
+      showProgress: true,
+      allowClose: true,
+      allowKeyboardControl: true,
+      overlayColor: 'var(--foreground)',
+      overlayOpacity: 0.58,
+      popoverClass: 'sarada-driver-popover',
+      nextBtnText: t('Tiếp theo'),
+      prevBtnText: t('Quay lại'),
+      doneBtnText: t('Hoàn tất'),
+      closeBtnLabel: t('Đóng hướng dẫn'),
+      steps: steps.map((item) => ({
+        element: item.href === '/' ? '#admin-main-content' : `[data-tour-href="${item.href}"]`,
+        skipMissingElement: true,
+        popover: { title: item.title, description: item.description, side: item.href === '/' ? 'bottom' as const : 'right' as const, align: 'start' as const },
+      })),
+      onPopoverRender: (popover, options) => {
+        const current = steps[options.index ?? 0]
+        if (!current) return
+        const link = document.createElement('a')
+        link.className = 'sarada-driver-action'
+        link.href = current.href
+        link.target = '_blank'
+        link.rel = 'noreferrer'
+        link.textContent = current.action
+        popover.description.append(link)
+        const snooze = document.createElement('button')
+        snooze.type = 'button'
+        snooze.className = 'sarada-driver-snooze'
+        snooze.textContent = t('Tạm ẩn trong 1 giờ')
+        snooze.addEventListener('click', () => {
+          tour.destroy()
+        snoozeTourRef.current()
+        })
+        popover.footer.prepend(snooze)
+      },
+      onDestroyed: (_element, _currentStep, options) => {
+        if (finished) return
+        finished = true
+        if (options.reason === 'done') finishTourRef.current(true)
+        else if (options.reason === 'close' || options.reason === 'escape' || options.reason === 'overlay') finishTourRef.current(false)
+      },
+    })
+    tour.drive()
+    return () => {
+      finished = true
+      tour.destroy()
     }
-    window.addEventListener('keydown', handler)
-    return () => window.removeEventListener('keydown', handler)
-  }, [open, steps.length])
+  }, [open, steps, t])
 
-  function finish(completed: boolean) {
+  const finish = useCallback((completed: boolean) => {
     setOpenOverride(false)
     const current = preference.data ?? defaultState
-    save.mutate({ completed: completed ? [...new Set([...current.completed, 'intro_tour'])] : current.completed, dismissed: !completed, snoozed_until: null })
-  }
+    savePreference({ completed: completed ? [...new Set([...current.completed, 'intro_tour'])] : current.completed, dismissed: !completed, snoozed_until: null })
+  }, [preference.data, savePreference])
 
-  function snoozeOneHour() {
+  const snoozeOneHour = useCallback(() => {
     const current = preference.data ?? defaultState
-    save.mutate({
+    savePreference({
       completed: current.completed,
       dismissed: false,
       snoozed_until: new Date(Date.now() + 60 * 60 * 1000).toISOString(),
     }, { onSuccess: () => setOpenOverride(false) })
-  }
+  }, [preference.data, savePreference])
+  useEffect(() => {
+    finishTourRef.current = finish
+    snoozeTourRef.current = snoozeOneHour
+  }, [finish, snoozeOneHour])
 
   if (!userId || (!forceOpen && (preference.isPending || preference.isError)) || steps.length === 0) return null
   if (forceOpen && preference.isPending) return <section className="onboarding-launcher" role="status" aria-busy="true">{t('Đang tải tiến độ hướng dẫn…')}</section>
   if (forceOpen && preference.isError) return <section className="onboarding-launcher" role="alert"><p>{t(preference.error.message)}</p><Button variant="outline" onClick={() => void preference.refetch()}>{t('Thử tải lại')}</Button></section>
-  const current = steps[step]
   const onboarding = preference.data ?? defaultState
   const updateChecklist = (id: string, checked: boolean) => {
     const completed = new Set(onboarding.completed)
@@ -109,21 +159,8 @@ export function AccountOnboardingTour({ userId, roles, permissions, forceOpen = 
     save.mutate({ completed: [...completed], dismissed: onboarding.dismissed, snoozed_until: onboarding.snoozed_until })
   }
   return <>
-    {forceOpen && <section className="onboarding-launcher"><p className="eyebrow">{t('HƯỚNG DẪN BẮT ĐẦU')}</p><h1>{t('Tour giới thiệu trang quản trị')}</h1><p>{t('Đi qua các khu vực chính phù hợp với quyền tài khoản của bạn.')}</p><Button onClick={() => { setStep(0); setOpenOverride(true) }}>{open ? t('Tour đang mở') : t('Bắt đầu hoặc xem lại tour')}</Button>
+    {forceOpen && <section className="onboarding-launcher"><p className="eyebrow">{t('HƯỚNG DẪN BẮT ĐẦU')}</p><h1>{t('Tour giới thiệu trang quản trị')}</h1><p>{t('Đi qua các khu vực chính phù hợp với quyền tài khoản của bạn.')}</p><Button onClick={() => setOpenOverride(true)}>{open ? t('Tour đang mở') : t('Bắt đầu hoặc xem lại tour')}</Button>
       <h2>{t('Checklist bắt đầu')}</h2><p>{t('Đánh dấu các bước đã hoàn tất để lưu tiến độ cho tài khoản của bạn.')}</p>{save.isError && <p role="alert">{t(save.error.message)}</p>}<ul className="onboarding-checklist">{checklist.map((item) => <li key={item.id}><label><input type="checkbox" checked={onboarding.completed.includes(item.id)} onChange={(event) => updateChecklist(item.id, event.target.checked)} /> <a href={item.href}>{item.label}</a></label></li>)}</ul>
     </section>}
-    <Dialog open={open} onOpenChange={(next) => { if (!next && open) finish(false); else setOpenOverride(next) }}>
-    <DialogContent className="onboarding-dialog" aria-describedby="onboarding-description" showCloseButton={false}>
-      <DialogHeader><p className="eyebrow">{t('LÀM QUEN VỚI TRANG QUẢN TRỊ · BƯỚC {{current}}/{{total}}', { current: step + 1, total: steps.length })}</p><DialogTitle>{current.title}</DialogTitle><DialogDescription id="onboarding-description">{current.description}</DialogDescription></DialogHeader>
-      <a className="onboarding-link" href={current.href} target="_blank" rel="noreferrer">{current.action} ↗</a>
-      <div className="onboarding-progress" aria-label={t('Bước {{current}} trên {{total}}', { current: step + 1, total: steps.length })}>{steps.map((item, index) => <span key={item.title} className={index <= step ? 'active' : ''} />)}</div>
-      {save.isError && <p role="alert">{t(save.error.message)}</p>}
-      <div className="onboarding-snooze" aria-label={t('Tạm ẩn tour')}>
-        <span>{t('Tạm ẩn hướng dẫn:')}</span>
-        <Button type="button" size="sm" variant="outline" disabled={save.isPending} onClick={snoozeOneHour} aria-label={t('Tạm ẩn hướng dẫn trong 1 giờ')}>{t('1 giờ')}</Button>
-      </div>
-      <DialogFooter><Button variant="outline" onClick={() => finish(false)}>{t('Bỏ qua')}</Button>{step > 0 && <Button variant="outline" onClick={() => setStep(step - 1)}>{t('Quay lại')}</Button>}{step < steps.length - 1 ? <Button onClick={() => setStep(step + 1)}>{t('Tiếp theo')}</Button> : <Button disabled={save.isPending} onClick={() => finish(true)}>{t('Hoàn tất')}</Button>}</DialogFooter>
-    </DialogContent>
-    </Dialog>
   </>
 }

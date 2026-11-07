@@ -20,7 +20,7 @@ export function BlazerNewsletter() {
         </p>
         <h2
           id="blazer-newsletter-title"
-          className="font-['Cormorant_Garamond_Variable'] text-4xl md:text-5xl"
+          className="font-sans text-4xl md:text-5xl"
         >
           Giảm 10% cho
           <br />

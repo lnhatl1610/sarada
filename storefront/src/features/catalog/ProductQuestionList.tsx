@@ -47,7 +47,7 @@ export function ProductQuestionList({ slug, accessToken, authenticated, enabled 
         <small>{question.customer_name} · {new Date(question.created_at).toLocaleDateString('vi-VN')}</small>
         <div><strong>{question.answered_by || 'Cửa hàng'}</strong><p>{question.answer}</p></div>
       </article>)}</div>
-      {meta && meta.last_page > 1 && <nav className="product-question-pagination" aria-label="Trang câu hỏi"><button type="button" disabled={meta.current_page <= 1} onClick={() => setPage(meta.current_page - 1)}>Trang trước</button><span>Trang {meta.current_page} / {meta.last_page}</span><button type="button" disabled={meta.current_page >= meta.last_page} onClick={() => setPage(meta.current_page + 1)}>Trang sau</button></nav>}
+      {meta && meta.last_page > 1 && <nav className="product-question-pagination" aria-label="Trang câu hỏi"><button type="button" disabled={meta.current_page <= 1} onClick={() => setPage(meta.current_page - 1)}>Trang trước</button><span aria-live="polite" aria-atomic="true">Trang {meta.current_page} / {meta.last_page} · {meta.total} câu hỏi</span><button type="button" disabled={meta.current_page >= meta.last_page} onClick={() => setPage(meta.current_page + 1)}>Trang sau</button></nav>}
     </> : <p>Chưa có câu hỏi nào được cửa hàng trả lời.</p>}
   </section>
 }

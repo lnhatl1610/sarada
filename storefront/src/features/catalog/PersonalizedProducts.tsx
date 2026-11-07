@@ -27,7 +27,7 @@ export function PersonalizedProducts({ accountId, formatMoney }: {
   return <section className="related-products personalized-products" aria-labelledby="personalized-products-title">
     <h2 id="personalized-products-title">Gợi ý dành cho bạn</h2>
     <p>Dựa trên sản phẩm bạn đã xem và đơn hàng đã hoàn tất.</p>
-    <div className="grid">{query.data.map((product) => {
+    <div className="product-grid">{query.data.map((product) => {
       const image = product.images?.[0]
       const mediaLabel = getMediaDisclosureLabel(image?.alt)
       return <article className="card" key={product.id}>

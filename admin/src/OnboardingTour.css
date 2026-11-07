@@ -1,11 +1,102 @@
-.onboarding-dialog { max-width: 34rem; }
-.onboarding-link { display: inline-flex; width: fit-content; align-items: center; gap: .35rem; color: var(--primary); font-weight: 600; text-decoration: underline; text-underline-offset: .2rem; }
-.onboarding-progress { display: flex; gap: .35rem; margin: .5rem 0; }
-.onboarding-progress span { height: .3rem; flex: 1; border-radius: 999px; background: var(--muted); }
-.onboarding-progress span.active { background: var(--primary); }
-.onboarding-dialog [data-slot="dialog-footer"] { justify-content: space-between; }
-.onboarding-snooze { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: .4rem; color: var(--muted-foreground); font-size: .75rem; }
-.onboarding-snooze > span { margin-right: auto; }
+.driver-popover.sarada-driver-popover {
+  z-index: 1200;
+  max-width: min(23rem, calc(100vw - 2rem));
+  padding: 1.1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--popover);
+  color: var(--popover-foreground);
+  box-shadow: 0 14px 36px rgb(0 0 0 / 20%);
+  font-family: inherit;
+}
+
+.sarada-driver-popover .driver-popover-title {
+  padding-right: 1.75rem;
+  color: var(--foreground);
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.sarada-driver-popover .driver-popover-description {
+  margin-top: .55rem;
+  color: var(--muted-foreground);
+  font-size: .875rem;
+  line-height: 1.55;
+}
+
+.sarada-driver-popover .driver-popover-close-btn {
+  color: var(--muted-foreground);
+}
+
+.sarada-driver-popover .driver-popover-close-btn:hover,
+.sarada-driver-popover .driver-popover-close-btn:focus-visible {
+  color: var(--foreground);
+}
+
+.sarada-driver-popover .driver-popover-footer {
+  flex-wrap: wrap;
+  gap: .5rem;
+  margin-top: 1rem;
+}
+
+.sarada-driver-popover .driver-popover-progress-text {
+  color: var(--muted-foreground);
+}
+
+.sarada-driver-popover .driver-popover-footer-btn,
+.sarada-driver-action,
+.sarada-driver-snooze {
+  display: inline-flex;
+  min-height: 2rem;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border);
+  border-radius: calc(var(--radius) - 2px);
+  background: var(--background);
+  color: var(--foreground);
+  font: inherit;
+  font-size: .75rem;
+  font-weight: 600;
+  line-height: 1.25;
+  text-decoration: none;
+}
+
+.sarada-driver-popover .driver-popover-footer-btn { padding: .35rem .65rem; }
+.sarada-driver-popover .driver-popover-footer-btn:hover,
+.sarada-driver-action:hover,
+.sarada-driver-snooze:hover { background: var(--accent); }
+
+.sarada-driver-popover .driver-popover-next-btn,
+.sarada-driver-popover .driver-popover-done-btn {
+  border-color: var(--primary);
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+
+.sarada-driver-action,
+.sarada-driver-snooze { padding: .35rem .55rem; }
+
+.sarada-driver-action {
+  width: fit-content;
+  margin-top: .75rem;
+  border-color: transparent;
+  background: transparent;
+  color: var(--primary);
+  text-decoration: underline;
+  text-underline-offset: .2rem;
+}
+
+.sarada-driver-action:hover { background: var(--accent); }
+.sarada-driver-popover .driver-popover-arrow { border-color: var(--popover); }
+.sarada-driver-popover .driver-popover-arrow-side-left { border-top-color: transparent; border-bottom-color: transparent; border-left-color: transparent; }
+.sarada-driver-popover .driver-popover-arrow-side-right { border-top-color: transparent; border-bottom-color: transparent; border-right-color: transparent; }
+.sarada-driver-popover .driver-popover-arrow-side-top { border-top-color: transparent; border-left-color: transparent; border-right-color: transparent; }
+.sarada-driver-popover .driver-popover-arrow-side-bottom { border-bottom-color: transparent; border-left-color: transparent; border-right-color: transparent; }
+.sarada-driver-popover :focus-visible,
+.sarada-driver-snooze:focus-visible,
+.sarada-driver-action:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+
 .onboarding-launcher { max-width: 48rem; padding: 1.5rem; margin: 2rem auto; border: 1px solid var(--border); border-radius: var(--radius); background: var(--card); }
 .onboarding-launcher h1 { margin: .3rem 0; font-size: 1.5rem; }
 .onboarding-launcher p:not(.eyebrow) { color: var(--muted-foreground); }

@@ -297,6 +297,7 @@ function ShipmentEditor({ row, apiUrl, accessToken, onClose, onSaved }: { row: R
       orderId={Number(row.order_id)}
       carrier={String(row.carrier ?? '')}
       trackingCode={String(row.tracking_code ?? '')}
+      trackingUrl={String(row.tracking_url ?? '')}
       status={String(row.status ?? 'pending')}
       apiUrl={apiUrl}
       accessToken={accessToken}

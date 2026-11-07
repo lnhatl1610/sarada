@@ -30,6 +30,7 @@ final class StorefrontNotificationPreferences
         if ($saved === null) {
             $defaults['promotions']['email'] = DB::table('newsletter_subscriptions')
                 ->whereRaw('LOWER(email) = LOWER(?)', [$user->email])
+                ->whereNull('unsubscribed_at')
                 ->exists();
         }
 

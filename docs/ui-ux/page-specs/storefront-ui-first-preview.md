@@ -12,6 +12,8 @@ Purpose: build and review storefront screens with local fixture data before wiri
 
 The preview routes are enabled only in Vite development mode. `StorefrontApplication` selects them before mounting the connected storefront component, so cart, catalog, account, configuration, analytics, and session API hooks are not initialized for these screens. Fixture interactions are in-memory and do not persist or create orders. Fixture products and images are for layout review; avoid presenting fixture values as verified store inventory, reviews, promotions, delivery terms, or payment availability. The production routes and existing API-backed pages remain separate.
 
+The editorial home preview footer uses a full-width white surface and a constrained inner container. Its five desktop groups become three columns at tablet widths and two at mobile widths. Keep the preview footer layout explicitly scoped so the shared storefront footer grid rules cannot constrain its container.
+
 ## Screen order
 
 1. Home — implemented.

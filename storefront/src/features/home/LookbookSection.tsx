@@ -47,7 +47,7 @@ export function LookbookSection() {
       title="Lookbook Thu Đông 2026"
       subtitle="Phối đồ cùng stylist của chúng tôi"
     >
-      <div className="grid gap-8 md:grid-cols-[1.3fr_1fr]">
+      <div className="grid grid-cols-1 gap-8 md:grid-cols-[1.3fr_1fr]">
         <div className="relative aspect-3/4 overflow-hidden bg-muted md:aspect-4/5">
           <AnimatePresence mode="wait">
             <motion.img
@@ -108,7 +108,7 @@ export function LookbookSection() {
           </span>
         </div>
         <div className="flex flex-col justify-center">
-          <p className="mb-6 font-['Cormorant_Garamond_Variable'] text-4xl italic">
+          <p className="mb-6 font-sans text-4xl italic">
             Ít hơn, nhưng khác biệt.
           </p>
           {looks.map((item, i) => (
@@ -133,7 +133,7 @@ export function LookbookSection() {
                 <small className="text-xs text-muted-foreground">
                   0{i + 1}
                 </small>
-                <strong className="block font-['Cormorant_Garamond_Variable'] text-3xl font-medium">
+                <strong className="block font-sans text-3xl font-medium">
                   {item.name}
                 </strong>
                 <span className="text-xs text-muted-foreground">

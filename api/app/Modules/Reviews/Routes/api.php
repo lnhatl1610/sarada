@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\V1\Storefront\ReviewController as StorefrontReviewC
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function (): void {
+    Route::get('/reviews', [StorefrontReviewController::class, 'recent'])->middleware('throttle:public-api');
     Route::get('/products/{slug}/reviews', [StorefrontReviewController::class, 'index'])->middleware('throttle:public-api');
     Route::get('/products/{slug}/questions', [StorefrontProductQuestionController::class, 'index'])->middleware('throttle:public-api');
     Route::post('/products/{slug}/questions', [StorefrontProductQuestionController::class, 'store'])->middleware(['auth:api', 'audience:storefront', 'throttle:5,1']);

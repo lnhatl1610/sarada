@@ -25,8 +25,40 @@ class SubscribeToNewsletterAction
         ]);
 
         if ($inserted !== 1) {
+            $reactivated = DB::table('newsletter_subscriptions')
+                ->where('email', $email)
+                ->whereNotNull('unsubscribed_at')
+                ->update([
+                    'consented_at' => $now,
+                    'unsubscribed_at' => null,
+                    'unsubscribe_reason' => null,
+                    'unsubscribe_token_hash' => null,
+                    'unsubscribe_token_expires_at' => null,
+                    'pending_unsubscribe_reason' => null,
+                    'updated_at' => $now,
+                ]);
+
+            if ($reactivated === 1) {
+                $this->setPromotionEmailPreference($user, true);
+
+                return false;
+            }
+
+            DB::table('newsletter_subscriptions')
+                ->where('email', $email)
+                ->whereNull('unsubscribed_at')
+                ->whereNotNull('unsubscribe_token_hash')
+                ->update([
+                    'unsubscribe_token_hash' => null,
+                    'unsubscribe_token_expires_at' => null,
+                    'pending_unsubscribe_reason' => null,
+                    'updated_at' => $now,
+                ]);
+
             return false;
         }
+
+        $this->setPromotionEmailPreference($user, true);
 
         $code = trim((string) Setting::query()->where('key', 'newsletter_welcome_coupon_code')->value('value'));
         if ($code === '') {
@@ -44,16 +76,6 @@ class SubscribeToNewsletterAction
         if ($coupon) {
             $notification = new NewsletterWelcomeNotification($coupon->code);
             if ($user) {
-                $preferences = StorefrontNotificationPreferences::forUser($user);
-                $preferences['promotions']['email'] = true;
-                DB::table('user_preferences')->upsert([[
-                    'user_id' => $user->id,
-                    'key' => 'storefront_notifications',
-                    'value' => json_encode($preferences, JSON_THROW_ON_ERROR),
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ]], ['user_id', 'key'], ['value', 'updated_at']);
-
                 $user->notify($notification);
                 if (StorefrontNotificationPreferences::wants($user, 'promotions', 'sms')) {
                     SendStorefrontNotificationSms::dispatch(
@@ -71,5 +93,22 @@ class SubscribeToNewsletterAction
         }
 
         return false;
+    }
+
+    private function setPromotionEmailPreference(?User $user, bool $enabled): void
+    {
+        if (! $user) {
+            return;
+        }
+
+        $preferences = StorefrontNotificationPreferences::forUser($user);
+        $preferences['promotions']['email'] = $enabled;
+        DB::table('user_preferences')->upsert([[
+            'user_id' => $user->id,
+            'key' => 'storefront_notifications',
+            'value' => json_encode($preferences, JSON_THROW_ON_ERROR),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]], ['user_id', 'key'], ['value', 'updated_at']);
     }
 }

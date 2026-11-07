@@ -24,6 +24,22 @@ export function formatOrderStatus(status: string | null | undefined): string {
   return ORDER_STATUS_LABELS[status as CustomerOrderSummary['status']] ?? status.replaceAll('_', ' ')
 }
 
+const SHIPMENT_STATUS_LABELS: Record<string, string> = {
+  pending: 'Chờ lấy hàng',
+  waiting: 'Chờ lấy hàng',
+  picked_up: 'Đã lấy hàng',
+  in_transit: 'Đang vận chuyển',
+  delivered: 'Đã giao',
+  failed: 'Giao hàng chưa thành công',
+  returned: 'Đã hoàn hàng',
+}
+
+export function formatShipmentStatus(status: string | null | undefined): string {
+  if (!status) return 'Đang cập nhật'
+
+  return SHIPMENT_STATUS_LABELS[status] ?? status.replaceAll('_', ' ')
+}
+
 export function formatPaymentStatus(status: TrackedOrder['payment_status']): string {
   return PAYMENT_STATUS_LABELS[status]
 }

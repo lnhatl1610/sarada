@@ -67,7 +67,7 @@ export function TestimonialsSection() {
     >
       <div className="mx-auto mb-10 flex max-w-md items-center justify-center gap-8">
         <div className="text-center">
-          <p className="font-['Cormorant_Garamond_Variable'] text-6xl">
+          <p className="font-sans text-6xl">
             4.9<span className="text-xl"> / 5</span>
           </p>
           <p className="mt-2 text-xs text-muted-foreground">

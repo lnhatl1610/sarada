@@ -8,8 +8,10 @@ use App\Support\StoreEmailTemplates;
 use App\Support\StorefrontNotificationPreferences;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\AnonymousNotifiable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\Facades\DB;
 use NotificationChannels\WebPush\WebPushChannel;
 use NotificationChannels\WebPush\WebPushMessage;
 
@@ -24,8 +26,16 @@ class NewsletterWelcomeNotification extends Notification implements ShouldQueue
 
     public function via(object $notifiable): array
     {
+        if ($notifiable instanceof AnonymousNotifiable) {
+            $email = (string) $notifiable->routeNotificationFor('mail');
+
+            return DB::table('newsletter_subscriptions')
+                ->whereRaw('LOWER(email) = LOWER(?)', [$email])
+                ->whereNull('unsubscribed_at')
+                ->exists() ? ['mail'] : [];
+        }
         if (! $notifiable instanceof User) {
-            return ['mail'];
+            return [];
         }
 
         $channels = [];

@@ -51,7 +51,13 @@ Browser->>API: POST login (email or phone for Storefront; optional remember_me; 
     API-->>Browser: signed JWT + rotated httpOnly cookie preserving the original session/persistent choice
   end
   Browser->>API: retry each failed request once with new token
-  alt Refresh fails or retried request is unauthorized
+  alt Storefront refresh rejected with 401/419
+    Browser->>Browser: clear in-memory access token
+    Browser->>Browser: navigate to login with expired notice and safe returnTo
+    Browser->>API: POST storefront login credentials
+    API->>DB: create new storefront session and rotate refresh cookie
+    API-->>Browser: restore access token and resume returnTo route
+  else Admin refresh fails or retried request is unauthorized
     API-->>Browser: keep route mounted and require password
     Browser->>API: POST admin login credentials
     alt Admin has 2FA enabled

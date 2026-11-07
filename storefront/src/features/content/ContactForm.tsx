@@ -13,7 +13,7 @@ const contactSchema = z.object({
   name: z.string().trim().min(2, 'Nhập họ tên từ 2 ký tự.').max(120, 'Họ tên không được vượt quá 120 ký tự.'),
   phone: z.string().trim().regex(/^(0|\+84)\d{9}$/, 'Nhập số điện thoại Việt Nam hợp lệ, ví dụ 0912345678.'),
   email: z.email('Nhập địa chỉ email hợp lệ.').max(254, 'Email không được vượt quá 254 ký tự.'),
-  topic: z.enum(['product', 'order', 'return', 'other']),
+  topic: z.enum(['product', 'order', 'return', 'cooperation', 'other']),
   order_code: z.string().trim().max(32, 'Mã đơn không được vượt quá 32 ký tự.'),
   message: z.string().trim().min(10, 'Nội dung cần ít nhất 10 ký tự.').max(5000, 'Nội dung không được vượt quá 5.000 ký tự.'),
 })
@@ -73,7 +73,7 @@ export function ContactForm({ customer }: { customer: ContactCustomer }) {
       <label>Họ và tên<input autoComplete="name" maxLength={120} aria-invalid={Boolean(form.formState.errors.name)} aria-describedby={form.formState.errors.name ? 'contact-name-error' : undefined} {...form.register('name')} />{form.formState.errors.name && <small id="contact-name-error" role="alert">{form.formState.errors.name.message}</small>}</label>
       <label>Số điện thoại<input type="tel" autoComplete="tel" maxLength={13} inputMode="tel" aria-invalid={Boolean(form.formState.errors.phone)} aria-describedby={form.formState.errors.phone ? 'contact-phone-error' : undefined} {...form.register('phone')} />{form.formState.errors.phone && <small id="contact-phone-error" role="alert">{form.formState.errors.phone.message}</small>}</label>
       <label>Email<input type="email" autoComplete="email" maxLength={254} aria-invalid={Boolean(form.formState.errors.email)} aria-describedby={form.formState.errors.email ? 'contact-email-error' : undefined} {...form.register('email')} />{form.formState.errors.email && <small id="contact-email-error" role="alert">{form.formState.errors.email.message}</small>}</label>
-      <label>Chủ đề<select {...form.register('topic')}><option value="product">Tư vấn sản phẩm</option><option value="order">Đơn hàng</option><option value="return">Đổi trả và bảo hành</option><option value="other">Nội dung khác</option></select></label>
+      <label>Chủ đề<select {...form.register('topic')}><option value="product">Tư vấn sản phẩm</option><option value="order">Đơn hàng</option><option value="return">Đổi trả và bảo hành</option><option value="cooperation">Hợp tác</option><option value="other">Nội dung khác</option></select></label>
       <label>Mã đơn hàng (nếu có)<input maxLength={32} autoComplete="off" aria-invalid={Boolean(form.formState.errors.order_code)} aria-describedby={form.formState.errors.order_code ? 'contact-order-code-error' : undefined} {...form.register('order_code')} />{form.formState.errors.order_code && <small id="contact-order-code-error" role="alert">{form.formState.errors.order_code.message}</small>}</label>
       <label className="store-contact-form-message">Nội dung<textarea rows={6} maxLength={5000} aria-invalid={Boolean(form.formState.errors.message)} aria-describedby={form.formState.errors.message ? 'contact-message-error' : undefined} {...form.register('message')} />{form.formState.errors.message && <small id="contact-message-error" role="alert">{form.formState.errors.message.message}</small>}</label>
       <label className="store-contact-form-attachment">Ảnh đính kèm (không bắt buộc)<input ref={fileInput} type="file" accept="image/jpeg,image/png,image/webp" onChange={(event) => {

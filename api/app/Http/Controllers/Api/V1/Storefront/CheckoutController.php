@@ -639,13 +639,15 @@ class CheckoutController extends Controller
     private function orderPayload(object $order): array
     {
         $items = DB::table('order_items')
-            ->where('order_id', $order->id)
-            ->orderBy('id')
-            ->get(['product_name', 'variant_name', 'image', 'quantity', 'unit_price', 'line_total'])
+            ->leftJoin('products', 'products.id', '=', 'order_items.product_id')
+            ->where('order_items.order_id', $order->id)
+            ->orderBy('order_items.id')
+            ->get(['order_items.product_name', 'order_items.variant_name', 'order_items.image', 'order_items.quantity', 'order_items.unit_price', 'order_items.line_total', 'products.slug as product_slug'])
             ->map(fn (object $item): array => [
                 'product_name' => (string) $item->product_name,
                 'variant_name' => $item->variant_name === null ? null : (string) $item->variant_name,
                 'image' => $item->image === null ? null : (string) $item->image,
+                'product_slug' => $item->product_slug === null ? null : (string) $item->product_slug,
                 'quantity' => (int) $item->quantity,
                 'unit_price' => (int) $item->unit_price,
                 'line_total' => (int) $item->line_total,

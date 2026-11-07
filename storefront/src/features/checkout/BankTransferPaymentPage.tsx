@@ -16,7 +16,7 @@ function qrImageUrl(instructions: PaymentInstructions): string {
   return image.toString()
 }
 
-export function BankTransferPaymentPage({ code, formatMoney }: { code: string; formatMoney: (amount: number) => string }) {
+export function BankTransferPaymentPage({ code, formatMoney, newsletterMessage }: { code: string; formatMoney: (amount: number) => string; newsletterMessage?: string }) {
   const [copied, setCopied] = useState('')
   const accessToken = window.location.hash.slice(1)
   const query = useQuery({
@@ -47,12 +47,15 @@ export function BankTransferPaymentPage({ code, formatMoney }: { code: string; f
   return <div className="container subpage bank-transfer-page">
     <p className="eyebrow">THANH TOÁN</p>
     <h1>Chuyển khoản ngân hàng</h1>
+    {newsletterMessage && <p className="bank-transfer-status" role="status">{newsletterMessage}</p>}
     {query.isLoading ? <p role="status">Đang tải hướng dẫn thanh toán…</p>
       : !/^[a-f0-9]{64}$/.test(accessToken) ? <section className="bank-transfer-state" role="alert"><h2>Liên kết thanh toán không hợp lệ</h2><p>Mở lại liên kết trên trang đặt hàng thành công để xem hướng dẫn thanh toán.</p><Link className="button dark" to="/track-order">Tra cứu đơn hàng</Link></section>
         : query.isError ? <section className="bank-transfer-state" role="alert"><h2>Chưa tải được hướng dẫn</h2><p>{query.error instanceof Error ? query.error.message : 'Kiểm tra kết nối rồi thử lại.'}</p><button className="button dark" type="button" onClick={() => void query.refetch()}>Thử lại</button></section>
           : instructions ? <>
             {instructions.payment_status === 'paid' ? <p className="bank-transfer-status is-paid" role="status">Cửa hàng đã xác nhận thanh toán đơn {instructions.code}.</p>
-              : instructions.payment_status === 'unpaid' ? <p className="bank-transfer-status" role="status">Đơn {instructions.code} đang chờ thanh toán. Đơn sẽ được tự hủy sau thời hạn hiển thị trong email xác nhận nếu cửa hàng chưa nhận được tiền.</p>
+              : instructions.payment_status === 'unpaid' ? <p className="bank-transfer-status" role="status">{instructions.expires_at
+                ? `Đơn ${instructions.code} đang chờ thanh toán. Hãy chuyển khoản trước hạn hiển thị bên dưới để tránh đơn bị tự hủy.`
+                : `Đơn ${instructions.code} đang chờ thanh toán. Cửa hàng chưa đặt hạn tự hủy cho đơn này; liên hệ cửa hàng nếu bạn cần xác nhận thời hạn chuyển khoản.`}</p>
                 : <p className="bank-transfer-status" role="status">Đơn hàng đang ở trạng thái {instructions.payment_status}. Hãy tra cứu hoặc liên hệ cửa hàng nếu cần hỗ trợ.</p>}
             <div className="bank-transfer-layout">
               <section className="bank-transfer-qr" aria-label="Mã QR chuyển khoản">

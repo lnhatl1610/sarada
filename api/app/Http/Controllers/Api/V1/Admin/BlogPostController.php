@@ -18,6 +18,7 @@ class BlogPostController extends Controller
     {
         $filters = $request->validated();
         $posts = BlogPost::query()
+            ->with('tags')
             ->when($filters['q'] ?? null, fn (Builder $query, string $term) => $query->where(fn (Builder $where) => $where->where('title', 'like', '%'.$term.'%')->orWhere('slug', 'like', '%'.$term.'%')))
             ->when(($filters['status'] ?? null) === 'published', fn (Builder $query) => $query->where('is_published', true))
             ->when(($filters['status'] ?? null) === 'draft', fn (Builder $query) => $query->where('is_published', false))
@@ -30,7 +31,7 @@ class BlogPostController extends Controller
 
     public function show(int $post): BlogPostResource
     {
-        return new BlogPostResource(BlogPost::query()->with('products')->findOrFail($post));
+        return new BlogPostResource(BlogPost::query()->with(['products', 'tags'])->findOrFail($post));
     }
 
     public function store(SaveBlogPostRequest $request, ManageBlogPostAction $action): JsonResponse

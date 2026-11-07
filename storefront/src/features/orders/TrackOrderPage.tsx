@@ -5,7 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { api, getApiErrorMessage } from '../../lib/http'
 import type { components } from '../../types/api'
-import { formatOrderStatus, formatPaymentStatus } from './order-status'
+import { formatOrderStatus, formatPaymentStatus, formatShipmentStatus } from './order-status'
 import './TrackOrderPage.css'
 import '../../Auth.css'
 
@@ -66,8 +66,9 @@ export function TrackOrderPage({ initialCode, formatMoney }: TrackOrderPageProps
       {lookup.data.shipments?.length > 0 && <section className="track-shipments" aria-labelledby="track-shipments-title">
         <h3 id="track-shipments-title">Thông tin vận chuyển</h3>
         {lookup.data.shipments.map((shipment) => <div className="track-shipment" key={shipment.id}>
-          <span>{shipment.carrier || 'Đơn vị vận chuyển'} · {formatOrderStatus(shipment.status)}</span>
+          <span>{shipment.carrier || 'Đơn vị vận chuyển'} · {formatShipmentStatus(shipment.status)}</span>
           <b>{shipment.tracking_code ? `Mã vận đơn: ${shipment.tracking_code}` : 'Mã vận đơn đang được cập nhật'}</b>
+          {shipment.tracking_url && /^https:\/\//i.test(shipment.tracking_url) && <a className="track-shipment-link" href={shipment.tracking_url} target="_blank" rel="noopener noreferrer">Tra cứu vận đơn</a>}
           {shipment.shipped_at && <time dateTime={shipment.shipped_at}>Gửi lúc {new Date(shipment.shipped_at).toLocaleString('vi-VN', { dateStyle: 'medium', timeStyle: 'short' })}</time>}
         </div>)}
       </section>}

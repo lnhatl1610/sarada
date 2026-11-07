@@ -77,7 +77,7 @@ class OperationsController extends Controller
                 ->select('payments.id', 'payments.order_id', 'orders.code as order_code', 'orders.customer_name', 'orders.customer_email', 'orders.customer_phone', 'payments.method', 'payments.amount', 'payments.status', 'payments.transaction_ref', 'payments.raw_payload', 'payments.paid_at', 'payments.created_at')
                 ->selectSub(DB::table('payment_refunds')->selectRaw('COALESCE(SUM(amount), 0)')->whereColumn('payment_refunds.payment_id', 'payments.id'), 'refunded_amount'),
             'shipments' => DB::table('shipments')->join('orders', 'orders.id', '=', 'shipments.order_id')
-                ->select('shipments.id', 'shipments.order_id', 'orders.code as order_code', 'orders.customer_name', 'orders.customer_phone', 'orders.shipping_address', 'shipments.carrier', 'shipments.tracking_code', 'shipments.status', 'shipments.shipped_at', 'shipments.delivered_at', 'shipments.created_at'),
+                ->select('shipments.id', 'shipments.order_id', 'orders.code as order_code', 'orders.customer_name', 'orders.customer_phone', 'orders.shipping_address', 'shipments.carrier', 'shipments.tracking_code', 'shipments.tracking_url', 'shipments.status', 'shipments.shipped_at', 'shipments.delivered_at', 'shipments.created_at'),
             'movements' => DB::table('inventory_movements')->join('product_variants', 'product_variants.id', '=', 'inventory_movements.variant_id')
                 ->join('products', 'products.id', '=', 'product_variants.product_id')
                 ->leftJoin('users', 'users.id', '=', 'inventory_movements.created_by')

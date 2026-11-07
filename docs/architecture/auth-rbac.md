@@ -51,6 +51,8 @@ The login UI keeps the challenge token in memory. It is not a session credential
 
 When a protected direct URL is opened without a session, admin login carries that same-origin path, query, and hash as `returnTo`. Session expiry also preserves the current route. Login and password-recovery routes are rejected as return destinations to prevent redirect loops.
 
+Storefront authenticated requests share one refresh attempt after a 401 and retry once with the rotated access token. If refresh is rejected with 401/419, the client clears its in-memory access token and navigates to login with `session=expired` plus the current same-origin route, query, and hash as `returnTo`. A network or server error during refresh remains a request failure and is not presented as an expired session. Access tokens are never included in the URL or browser storage.
+
 Admin account preference `admin_session_security.idle_timeout_minutes` supports 15, 30, 60, 120, or 0 (disabled). The browser displays a one-minute warning before the configured idle timeout and logs out through the normal admin session revocation endpoint when the countdown expires. User activity is synchronized across tabs with `BroadcastChannel`; no authentication token is persisted for this feature.
 
 

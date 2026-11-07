@@ -1,0 +1,18 @@
+.admin-career-openings { display: grid; gap: 14px; }
+.admin-career-openings .panel { min-width: 0; }
+.admin-career-opening-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-bottom: 12px; }
+.admin-career-opening-wide { grid-column: 1 / -1; }
+.admin-career-opening-publish { display: flex; align-items: center; gap: 8px; margin: 12px 0; }
+.admin-career-opening-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.admin-career-opening-list { display: grid; }
+.admin-career-opening-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 18px; padding: 16px 0; border-bottom: 1px solid var(--shell-border, #e8e8e3); }
+.admin-career-opening-row h3 { margin: 7px 0; }
+.admin-career-opening-row p { margin: 0; color: var(--shell-muted, #737373); white-space: pre-line; }
+.admin-career-opening-row-heading { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 12px; }
+.admin-career-opening-filters { display: flex; flex-wrap: wrap; gap: 8px; }
+.admin-career-opening-pagination { display: flex; align-items: center; justify-content: flex-end; gap: 12px; margin-top: 16px; }
+@media (max-width: 680px) {
+  .admin-career-opening-grid { grid-template-columns: 1fr; }
+  .admin-career-opening-wide { grid-column: auto; }
+  .admin-career-opening-row { display: grid; }
+}

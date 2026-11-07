@@ -7438,7 +7438,42 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get?: never;
+        /**
+         * List recent approved reviews for published products
+         * @description Public, paginated review excerpts for storefront editorial sections. The public Storefront review resource never returns customer email.
+         */
+        get: {
+            parameters: {
+                query?: {
+                    page?: number;
+                    /** @description Page size */
+                    per_page?: number;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Recent approved reviews attached to published products. */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["StorefrontReviewPage"];
+                    };
+                };
+                422: components["responses"]["ValidationError"];
+                /** @description Public API rate limit exceeded */
+                429: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
         put?: never;
         /** Submit a review for an item from a delivered order */
         post: {
@@ -9350,6 +9385,11 @@ export interface paths {
                                     id?: number;
                                     carrier?: string | null;
                                     tracking_code?: string | null;
+                                    /**
+                                     * Format: uri
+                                     * @description Optional HTTPS tracking page configured by staff
+                                     */
+                                    tracking_url?: string | null;
                                     status?: string;
                                     /** Format: date-time */
                                     shipped_at?: string | null;
@@ -9668,6 +9708,11 @@ export interface paths {
                     "application/json": {
                         carrier?: string | null;
                         tracking_code?: string | null;
+                        /**
+                         * Format: uri
+                         * @description Optional HTTPS tracking page from the carrier
+                         */
+                        tracking_url?: string | null;
                         /** @enum {string} */
                         status: "pending" | "picked_up" | "in_transit" | "delivered" | "failed" | "returned";
                     };
@@ -12912,11 +12957,15 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** List published blog posts and categories */
+        /** List published blog posts, categories, and tags */
         get: {
             parameters: {
                 query?: {
                     category?: string;
+                    /** @description Filter by a published blog tag slug */
+                    tag?: string;
+                    /** @description Search published post titles */
+                    q?: string;
                     page?: number;
                     per_page?: number;
                 };
@@ -12952,7 +13001,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Get a published blog post, related posts, and tagged products */
+        /** Get a published blog post, related posts, and tagged products; records an aggregate detail view */
         get: {
             parameters: {
                 query?: never;
@@ -12988,6 +13037,146 @@ export interface paths {
         options?: never;
         head?: never;
         patch?: never;
+        trace?: never;
+    };
+    "/admin/career-openings": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List career openings; requires content.manage */
+        get: {
+            parameters: {
+                query?: {
+                    q?: string;
+                    status?: "published" | "draft";
+                    page?: number;
+                    per_page?: number;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Paginated job openings */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["CareerOpeningAdminList"];
+                    };
+                };
+                /** @description Missing content.manage permission */
+                403: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        put?: never;
+        /** Create a career opening; requires content.manage */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["CareerOpeningInput"];
+                };
+            };
+            responses: {
+                /** @description Career opening created */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["CareerOpeningEnvelope"];
+                    };
+                };
+                422: components["responses"]["ValidationError"];
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/career-openings/{opening}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                opening: number;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Delete a career opening; requires content.manage */
+        delete: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    opening: number;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Career opening deleted */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+                404: components["responses"]["NotFound"];
+            };
+        };
+        options?: never;
+        head?: never;
+        /** Update a career opening; requires content.manage */
+        patch: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    opening: number;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["CareerOpeningInput"];
+                };
+            };
+            responses: {
+                /** @description Career opening updated */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["CareerOpeningEnvelope"];
+                    };
+                };
+                404: components["responses"]["NotFound"];
+                422: components["responses"]["ValidationError"];
+            };
+        };
         trace?: never;
     };
     "/admin/pages": {
@@ -13225,6 +13414,114 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/newsletter/unsubscribe-requests": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Request a newsletter unsubscribe confirmation link
+         * @description Accepts a normalized email and reason. Always returns the same response; an email is queued only when the address has an active subscription. The one-time token is stored as a SHA-256 hash and expires after 30 minutes. Limited to five attempts per minute per client IP.
+         */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["NewsletterUnsubscribeRequest"];
+                };
+            };
+            responses: {
+                /** @description Neutral response that does not disclose subscription status */
+                202: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["NewsletterSubscriptionAccepted"];
+                    };
+                };
+                422: components["responses"]["ValidationError"];
+                /** @description Rate limit exceeded */
+                429: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/newsletter/unsubscribe-confirmations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Confirm newsletter unsubscribe
+         * @description Consumes the single-use token from the subscriber's email. Expired, unknown, or used tokens return NEWSLETTER_UNSUBSCRIBE_LINK_INVALID.
+         */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["NewsletterUnsubscribeConfirmation"];
+                };
+            };
+            responses: {
+                /** @description Subscription disabled and marketing eligibility withdrawn */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["NewsletterSubscriptionAccepted"];
+                    };
+                };
+                /** @description Invalid token or request body; invalid tokens use NEWSLETTER_UNSUBSCRIBE_LINK_INVALID */
+                422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+                /** @description Rate limit exceeded */
+                429: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/contact/messages": {
         parameters: {
             query?: never;
@@ -13295,6 +13592,8 @@ export interface paths {
             parameters: {
                 query?: {
                     province_code?: string;
+                    /** @description Filter within province_code using the current Vietnam address catalog. */
+                    ward_code?: string;
                     page?: number;
                     per_page?: number;
                 };
@@ -13357,6 +13656,116 @@ export interface paths {
                     };
                     content: {
                         "application/json": components["schemas"]["StorefrontFaqGroupsEnvelope"];
+                    };
+                };
+                422: components["responses"]["ValidationError"];
+                /** @description Public API rate limit exceeded */
+                429: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/faqs/{faq}/helpful-votes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Record whether an active FAQ answer helped the visitor
+         * @description A visitor can submit one idempotent yes/no vote per active FAQ using the browser's random visitor UUID. The endpoint is rate limited and stores no contact information.
+         */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    faq: number;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": {
+                        /** Format: uuid */
+                        visitor_id: string;
+                        helpful: boolean;
+                    };
+                };
+            };
+            responses: {
+                /** @description Idempotent vote result; `accepted` is false when this visitor already voted. */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["StoreFaqHelpfulVoteEnvelope"];
+                    };
+                };
+                404: components["responses"]["NotFound"];
+                422: components["responses"]["ValidationError"];
+                /** @description FAQ vote rate limit exceeded */
+                429: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/careers": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List active career openings
+         * @description Returns active openings only and filter options derived from active records. No applicant data is returned or collected.
+         */
+        get: {
+            parameters: {
+                query?: {
+                    department?: string;
+                    location?: string;
+                    page?: number;
+                    per_page?: number;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Active openings */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["CareerOpeningPublicList"];
                     };
                 };
                 422: components["responses"]["ValidationError"];
@@ -16798,6 +17207,8 @@ export interface components {
             placed_at: string;
             items: {
                 product_name: string;
+                /** @description Current catalog slug when the product still exists; used for post-purchase recommendations. */
+                product_slug: string | null;
                 variant_name?: string | null;
                 image?: string | null;
                 quantity: number;
@@ -17371,11 +17782,19 @@ export interface components {
             address: string;
             province_code: string;
             province_name: string;
+            /** @description Optional current ward code from the selected province. */
+            ward_code?: string | null;
             ward_name?: string | null;
             phone: string;
             /** Format: email */
             email?: string | null;
             opening_hours: string;
+            /** @description Optional weekly schedule in Vietnam local time. Day uses 0 for Sunday through 6 for Saturday; a missing day is closed. Each day supports one same-day opening interval. */
+            opening_schedule?: {
+                day: number;
+                opens_at: string;
+                closes_at: string;
+            }[] | null;
             latitude: number;
             longitude: number;
             /** @default 0 */
@@ -17384,6 +17803,8 @@ export interface components {
         };
         StoreLocation: components["schemas"]["StoreLocationInput"] & {
             id: number;
+            /** @description Current open state in Asia/Ho_Chi_Minh; null when no structured weekly schedule is configured. */
+            is_open_now: boolean | null;
             /** Format: date-time */
             created_at: string | null;
             /** Format: date-time */
@@ -17444,6 +17865,58 @@ export interface components {
             meta: {
                 query: string;
                 total: number;
+            };
+        };
+        StoreFaqHelpfulVoteEnvelope: {
+            data: {
+                /** @description The vote already recorded for this visitor and FAQ */
+                helpful: boolean;
+                /** @description True only when this request recorded the vote */
+                accepted: boolean;
+            };
+        };
+        CareerOpeningInput: {
+            title: string;
+            department: string;
+            location: string;
+            /** @enum {string} */
+            employment_type: "full_time" | "part_time";
+            summary?: string | null;
+            description: string;
+            requirements?: string | null;
+            benefits?: string | null;
+            is_active: boolean;
+            /** @default 0 */
+            sort_order: number;
+        };
+        CareerOpening: components["schemas"]["CareerOpeningInput"] & {
+            id: number;
+            /** Format: date-time */
+            updated_at: string;
+        };
+        CareerOpeningEnvelope: {
+            data: components["schemas"]["CareerOpening"];
+        };
+        CareerOpeningAdminList: {
+            data: components["schemas"]["CareerOpening"][];
+            meta: {
+                current_page?: number;
+                last_page?: number;
+                per_page?: number;
+                total?: number;
+            };
+        };
+        CareerOpeningPublicList: {
+            data: components["schemas"]["CareerOpening"][];
+            filter_options: {
+                departments: string[];
+                locations: string[];
+            };
+            meta: {
+                current_page?: number;
+                last_page?: number;
+                per_page?: number;
+                total?: number;
             };
         };
         ContentPageInput: {
@@ -17630,28 +18103,67 @@ export interface components {
             category_name: string;
             category_slug: string;
             excerpt: string;
+            author_name: string | null;
             cover_image: string | null;
             cover_alt: string | null;
             /** Format: date-time */
             published_at: string | null;
+            /** @description Estimated reading time calculated from sanitized article text */
+            reading_minutes: number;
+            /** @description Aggregate number of public detail API requests; no visitor identifiers are stored */
+            view_count: number;
+            tags: components["schemas"]["BlogTag"][];
+        };
+        BlogTag: {
+            name: string;
+            slug: string;
         };
         BlogProduct: {
             id: number;
             name: string;
             slug: string;
-            images: {
+            short_description: string | null;
+            /** @description Current effective starting price in integer VND. */
+            price: number;
+            /** @description Comparison price for the lowest priced active sale variant */
+            compare_at_price: number | null;
+            /** @description Current non-360 product images, included when the product image relation is loaded. */
+            images?: {
                 url: string;
                 alt: string | null;
+                color_value_id: number | null;
+                sort_order: number;
+                primary: boolean;
+                /** @constant */
+                is_360_frame: false;
+            }[];
+            /** @description Current active variants with effective prices and live available inventory; included when variant data is loaded. */
+            variants?: {
+                id: number;
+                sku: string;
+                price: number;
+                compare_at_price: number | null;
+                color: string | null;
+                color_hex: string | null;
+                color_value_id: number | null;
+                size: string | null;
+                available_quantity: number;
+                is_low_stock: boolean;
             }[];
         };
         BlogPost: components["schemas"]["BlogPostCard"] & {
             /** @description Sanitized HTML */
             content: string;
+            author_bio: string | null;
             meta_title: string | null;
             meta_description: string | null;
             is_published: boolean;
             products: components["schemas"]["BlogProduct"][];
             related_posts: components["schemas"]["BlogPostCard"][];
+            /** @description Nearest published post newer than the current article */
+            newer_post: components["schemas"]["BlogPostCard"] | null;
+            /** @description Nearest published post older than the current article */
+            older_post: components["schemas"]["BlogPostCard"] | null;
             /** Format: date-time */
             created_at?: string | null;
             /** Format: date-time */
@@ -17665,6 +18177,8 @@ export interface components {
             slug: string;
             category_name: string;
             excerpt: string;
+            author_name?: string | null;
+            author_bio?: string | null;
             cover_image?: string | null;
             cover_alt?: string | null;
             content: string;
@@ -17674,6 +18188,7 @@ export interface components {
             /** Format: date-time */
             published_at?: string | null;
             product_ids?: number[];
+            tags?: string[];
         };
         AdminBlogPostListEnvelope: {
             data: components["schemas"]["AdminBlogPostSummary"][];
@@ -17691,6 +18206,7 @@ export interface components {
             category_name: string;
             category_slug: string;
             excerpt: string;
+            author_name: string | null;
             cover_image: string | null;
             cover_alt: string | null;
             is_published: boolean;
@@ -17698,6 +18214,7 @@ export interface components {
             published_at: string | null;
             /** Format: date-time */
             updated_at: string | null;
+            tags: components["schemas"]["BlogTag"][];
         };
         StorefrontBlogListEnvelope: {
             data: components["schemas"]["BlogPostCard"][];
@@ -17711,6 +18228,9 @@ export interface components {
                 category_name: string;
                 category_slug: string;
             }[];
+            tags: components["schemas"]["BlogTag"][];
+            /** @description Published posts with at least one recorded public detail view, ordered by aggregate view_count */
+            popular_posts: components["schemas"]["BlogPostCard"][];
         };
         StorefrontPublicPage: {
             id: number;
@@ -17783,6 +18303,15 @@ export interface components {
                 message: string;
             };
         };
+        NewsletterUnsubscribeRequest: {
+            /** Format: email */
+            email: string;
+            /** @enum {string} */
+            reason: "too_many_emails" | "not_relevant" | "signed_up_by_mistake" | "other";
+        };
+        NewsletterUnsubscribeConfirmation: {
+            token: string;
+        };
         StoreContactMessageInput: {
             name: string;
             /** @description Vietnamese phone number in 0xxxxxxxxx or +84xxxxxxxxx format */
@@ -17790,7 +18319,7 @@ export interface components {
             /** Format: email */
             email: string;
             /** @enum {string} */
-            topic: "product" | "order" | "return" | "other";
+            topic: "product" | "order" | "return" | "cooperation" | "other";
             order_code?: string;
             message: string;
             /**
@@ -19081,6 +19610,11 @@ export interface components {
             id: number;
             carrier: string | null;
             tracking_code: string | null;
+            /**
+             * Format: uri
+             * @description Optional HTTPS tracking page configured by staff
+             */
+            tracking_url: string | null;
             status: string;
             /** Format: date-time */
             shipped_at: string | null;

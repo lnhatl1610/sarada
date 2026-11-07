@@ -60,6 +60,11 @@ export async function fetchCatalogReviews(slug: string, page = 1, sort: CatalogR
   return response.data
 }
 
+export async function fetchRecentStorefrontReviews(signal?: AbortSignal): Promise<components['schemas']['StorefrontReviewPage']> {
+  const response = await api.get<components['schemas']['StorefrontReviewPage']>('/reviews', { params: { per_page: 3 }, signal })
+  return response.data
+}
+
 export async function fetchProductQuestions(slug: string, page = 1, signal?: AbortSignal): Promise<components['schemas']['StorefrontProductQuestionPage']> {
   const response = await api.get<components['schemas']['StorefrontProductQuestionPage']>(`/products/${encodeURIComponent(slug)}/questions`, { params: { page }, signal })
   return response.data

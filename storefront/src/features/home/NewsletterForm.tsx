@@ -4,7 +4,7 @@ import { z } from 'zod'
 import { useMutation } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
 import './NewsletterForm.css'
-import { subscribeToNewsletter } from './home-api'
+import { subscribeToNewsletter } from '../marketing/newsletter-api'
 import type { components } from '../../types/api'
 
 type NewsletterErrorResponse = components['schemas']['ApiError']
@@ -61,13 +61,13 @@ export function NewsletterForm({ storeName, idPrefix = 'newsletter', onSuccess }
           autoComplete="email"
           maxLength={254}
           required
-          placeholder="Địa chỉ email của bạn"
+          placeholder="Nhập email của bạn"
           aria-invalid={Boolean(errors.email)}
           aria-describedby={errors.email ? emailErrorId : undefined}
           {...register('email', { onChange: () => { clearErrors(); mutation.reset() } })}
         />
         <button type="submit" disabled={mutation.isPending}>
-          {mutation.isPending ? 'Đang gửi…' : 'Đăng ký　↗'}
+          {mutation.isPending ? 'Đang gửi…' : 'Đăng ký'}
         </button>
       </div>
       <label className="newsletter-consent" id={consentId}>

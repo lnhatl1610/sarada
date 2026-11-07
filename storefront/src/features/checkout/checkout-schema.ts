@@ -7,6 +7,7 @@ export const checkoutSchema = z.object({
   customer_name: z.string().trim().min(1, 'Nhập họ tên người nhận.').max(160, 'Họ tên không được vượt quá 160 ký tự.'),
   customer_phone: z.string().trim().regex(/^(0|\+84)\d{9}$/, 'Nhập số điện thoại Việt Nam gồm 10 chữ số hoặc bắt đầu bằng +84.'),
   customer_email: z.union([z.literal(''), z.string().trim().email('Email không đúng định dạng.')]),
+  newsletter_consent: z.boolean().default(false),
   province_code: z.string(),
   district_code: z.string(),
   ward_code: z.string(),
@@ -20,6 +21,9 @@ export const checkoutSchema = z.object({
   invoice_company_name: z.string(),
   invoice_address: z.string(),
 }).superRefine((values, context) => {
+  if (values.newsletter_consent && !values.customer_email.trim()) {
+    context.addIssue({ code: 'custom', path: ['customer_email'], message: 'Nhập email để đăng ký nhận bản tin.' })
+  }
   if (values.fulfillment_type === 'delivery') {
     if (!values.province_code) context.addIssue({ code: 'custom', path: ['province_code'], message: 'Chọn tỉnh / thành.' })
     if (!values.ward_code) context.addIssue({ code: 'custom', path: ['ward_code'], message: 'Chọn xã / phường.' })
@@ -33,4 +37,5 @@ export const checkoutSchema = z.object({
   if (values.invoice_address.trim().length > 500) context.addIssue({ code: 'custom', path: ['invoice_address'], message: 'Địa chỉ hóa đơn không được vượt quá 500 ký tự.' })
 })
 
-export type CheckoutFormValues = z.infer<typeof checkoutSchema>
+export type CheckoutFormInput = z.input<typeof checkoutSchema>
+export type CheckoutFormValues = z.output<typeof checkoutSchema>

@@ -4,6 +4,7 @@ import { useSearchParams } from 'react-router'
 import { serializeStorefrontJsonLd } from '../seo/useStorefrontSeo'
 import type { components } from '../../types/api'
 import { ContactForm } from './ContactForm'
+import { FaqHelpfulVote } from './FaqHelpfulVote'
 import { fetchStorefrontFaqs } from './faq-api'
 import './FaqPage.css'
 import './FaqPageHelp.css'
@@ -43,7 +44,7 @@ export function FaqPage({ customer, contactFormEnabled }: { customer: components
     {!faqs.isPending && !faqs.isError && faqs.data && faqs.data.length > 0 && <nav className="faq-topic-grid" aria-label="Chủ đề trợ giúp">{faqs.data.slice(0, 6).map((group, index) => <a className="faq-topic-card" href={`#faq-category-${index}`} key={group.category}><span className="faq-topic-number">0{index + 1}</span><span className="faq-topic-copy"><strong>{group.category}</strong><small>{group.items.length} câu trả lời</small></span><span aria-hidden="true" className="faq-topic-arrow">↗</span></a>)}</nav>}
     {faqs.isPending ? <p className="faq-state" role="status">Đang tải câu trả lời…</p>
       : faqs.isError ? <section className="faq-state faq-state-error" role="alert"><p>Chưa tải được câu hỏi thường gặp.</p><button className="button dark" type="button" onClick={() => void faqs.refetch()}>Thử lại</button></section>
-        : faqs.data?.length ? <div className="faq-groups">{faqs.data.map((group, index) => <section className="faq-group" key={group.category} aria-labelledby={`faq-category-${index}`}><h2 id={`faq-category-${index}`}>{group.category}</h2><div>{group.items.map((item) => <details className="faq-item" key={item.id}><summary>{item.question}</summary><div className="faq-answer">{item.answer}</div></details>)}</div></section>)}</div>
+        : faqs.data?.length ? <div className="faq-groups">{faqs.data.map((group, index) => <section className="faq-group" key={group.category} aria-labelledby={`faq-category-${index}`}><h2 id={`faq-category-${index}`}>{group.category}</h2><div>{group.items.map((item) => <details className="faq-item" key={item.id}><summary>{item.question}</summary><div className="faq-answer">{item.answer}<FaqHelpfulVote faqId={item.id} /></div></details>)}</div></section>)}</div>
           : <section className="faq-state"><h2>{query ? 'Không tìm thấy câu trả lời phù hợp' : 'Cửa hàng đang cập nhật câu hỏi'}</h2><p>{query ? 'Thử từ khóa khác hoặc liên hệ cửa hàng nếu bạn cần hỗ trợ thêm.' : 'Hiện chưa có câu hỏi thường gặp được xuất bản.'}</p>{query && <button className="link-button" type="button" onClick={() => updateQuery('')}>Xóa từ khóa tìm kiếm</button>}</section>}
     <p className="faq-contact-hint">Chưa tìm thấy thông tin? <a href="/contact">Liên hệ cửa hàng</a>.</p>
     <section className="faq-help-request" aria-labelledby="faq-help-request-title">

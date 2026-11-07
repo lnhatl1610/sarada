@@ -21,4 +21,5 @@ To keep implementation moving, this pass uses the working choices below. They ar
 | Account menu system group | Keep the system group in the account menu as the plan specifies and hide entries without permission | Move to sidebar only if the admin navigation is redesigned later |
 | Account menu language | Keep the current Vietnamese-only interface through P2; treat P3 English as a later localization phase from the plan | Full translation requires localization infrastructure and string review |
 | Account menu workspace | Keep private tasks and reminders; optional notes and bookmarks were removed in migration `2026_11_04_000002` | Tasks remain in `user_tasks`; no schema/API/UI for private notes or bookmarks |
+| Career application intake | Publish and filter job openings only. Do not collect CVs or applicant contact data until the store chooses the submission channel, authorized reviewers, and retention/deletion period. | Adding an application form would create sensitive personal data and requires an approved access and retention workflow. |
 

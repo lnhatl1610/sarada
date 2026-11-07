@@ -82,6 +82,7 @@ export function StorefrontHeader({
   onAddRecommended,
 }: StorefrontHeaderProps) {
   const locale = useStorefrontLocale()
+  const wishlistPath = customerName ? '/account/wishlist' : '/wishlist'
   const [cartOpen, setCartOpen] = useState(false)
   const lastOpenCartSignal = useRef(openCartSignal)
   const [announcementVisible, setAnnouncementVisible] = useState(() => readBrowserStorage('fashion-store-announcement-dismissed') !== '1')
@@ -204,7 +205,7 @@ export function StorefrontHeader({
             <button type="button" aria-pressed={locale === 'vi'} onClick={() => setStorefrontLocale('vi')}>VI</button>
           </div>
           <button className="appearance-trigger" type="button" onClick={onOpenAppearance} aria-haspopup="dialog">◐ {locale === 'en' ? 'Appearance' : 'Giao diện'}</button>
-          <Link className="storefront-wishlist-trigger" to="/account/wishlist" aria-label={locale === 'en' ? `Wishlist, ${wishlistCount} items` : `Yêu thích, ${wishlistCount} sản phẩm`}><Heart aria-hidden="true" size={17} /><span>{locale === 'en' ? 'Wishlist' : 'Yêu thích'}</span><b>{wishlistCount > 99 ? '99+' : wishlistCount}</b></Link>
+          <Link className="storefront-wishlist-trigger" to={wishlistPath} aria-label={locale === 'en' ? `Wishlist, ${wishlistCount} items` : `Yêu thích, ${wishlistCount} sản phẩm`}><Heart aria-hidden="true" size={17} /><span>{locale === 'en' ? 'Wishlist' : 'Yêu thích'}</span><b>{wishlistCount > 99 ? '99+' : wishlistCount}</b></Link>
           <details className="storefront-account-menu" onKeyDown={(event) => {
             if (event.key === 'Escape') {
               event.currentTarget.removeAttribute('open')
@@ -216,11 +217,12 @@ export function StorefrontHeader({
               {customerName ? <>
                 <p>{locale === 'en' ? 'Hello, ' : 'Xin chào, '}<strong>{customerName}</strong></p>
                 <Link to="/account/orders" onClick={closeAccountMenu}>{locale === 'en' ? 'Orders' : 'Đơn hàng'}</Link>
-                <Link to="/account/wishlist" onClick={closeAccountMenu}>{locale === 'en' ? 'Wishlist' : 'Yêu thích'}</Link>
+                <Link to={wishlistPath} onClick={closeAccountMenu}>{locale === 'en' ? 'Wishlist' : 'Yêu thích'}</Link>
                 <Link to="/account/settings" onClick={closeAccountMenu}>{locale === 'en' ? 'Profile' : 'Hồ sơ'}</Link>
                 <button type="button" onClick={(event) => { event.currentTarget.closest('details')?.removeAttribute('open'); onLogout() }}>{locale === 'en' ? 'Sign out' : 'Đăng xuất'}</button>
               </> : <>
-                <p>{locale === 'en' ? 'Sign in to track orders and save your favourites.' : 'Đăng nhập để theo dõi đơn hàng và lưu sản phẩm yêu thích.'}</p>
+                <p>{locale === 'en' ? 'Sign in to track orders; favourites stay on this device until you sign in.' : 'Bạn có thể lưu sản phẩm yêu thích trên thiết bị này; đăng nhập để đồng bộ với tài khoản.'}</p>
+                <Link to={wishlistPath} onClick={closeAccountMenu}>{locale === 'en' ? 'View wishlist' : 'Xem sản phẩm yêu thích'}</Link>
                 <Link to="/login" onClick={closeAccountMenu}>{locale === 'en' ? 'Sign in' : 'Đăng nhập'}</Link>
                 <Link to="/register" onClick={closeAccountMenu}>{locale === 'en' ? 'Create account' : 'Tạo tài khoản'}</Link>
               </>}
@@ -232,6 +234,6 @@ export function StorefrontHeader({
     </div>
     <MobileNavigationSheet open={mobileMenuOpen} categories={categories} collections={collections} storeName={storeName} onClose={onCloseMobileMenu} />
     <CartDrawer open={cartOpen} cart={cart} syncStatus={cartSyncStatus} syncError={cartSyncError} cartExpired={cartExpired} busyItemIds={cartBusyItemIds} total={cartTotal} freeShippingThreshold={freeShippingThreshold} addBusy={cartAddBusy} addError={cartAddError} formatMoney={formatMoney} onClose={() => setCartOpen(false)} onRetry={onRetryCart} onChangeQuantity={onChangeCartQuantity} onRemoveLine={onRemoveCartLine} onAddRecommended={onAddRecommended} />
-    <MobileBottomNavigation categoriesOpen={mobileMenuOpen} onOpenCategories={onOpenMobileMenu} />
+    <MobileBottomNavigation categoriesOpen={mobileMenuOpen} onOpenCategories={onOpenMobileMenu} wishlistPath={wishlistPath} />
   </>
 }

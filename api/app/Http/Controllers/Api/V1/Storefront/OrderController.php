@@ -171,11 +171,12 @@ class OrderController extends Controller
             'items' => $this->orderItems($order, $includeChangeRequests),
             'shipments' => DB::table('shipments')->where('order_id', $order->id)
                 ->orderByDesc('created_at')->orderByDesc('id')->get([
-                    'id', 'carrier', 'tracking_code', 'status', 'shipped_at', 'delivered_at',
+                    'id', 'carrier', 'tracking_code', 'tracking_url', 'status', 'shipped_at', 'delivered_at',
                 ])->map(fn (object $shipment): array => [
                     'id' => (int) $shipment->id,
                     'carrier' => $shipment->carrier,
                     'tracking_code' => $shipment->tracking_code,
+                    'tracking_url' => $shipment->tracking_url,
                     'status' => $shipment->status,
                     'shipped_at' => $shipment->shipped_at,
                     'delivered_at' => $shipment->delivered_at,

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1\Storefront;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\Storefront\ListProductReviewsRequest;
+use App\Http\Requests\Api\V1\Storefront\ListRecentStorefrontReviewsRequest;
 use App\Http\Requests\Api\V1\Storefront\StoreReviewHelpfulVoteRequest;
 use App\Http\Requests\Api\V1\Storefront\StoreReviewRequest;
 use App\Http\Resources\StorefrontReviewResource;
@@ -18,6 +19,19 @@ use Illuminate\Support\Facades\DB;
 
 class ReviewController extends Controller
 {
+    public function recent(ListRecentStorefrontReviewsRequest $request): AnonymousResourceCollection
+    {
+        $reviews = Review::query()
+            ->where('status', 'approved')
+            ->whereHas('product', fn ($product) => $product->published())
+            ->with(['user:id,name', 'product:id,name,slug', 'images'])
+            ->withCount(['images' => fn ($images) => $images->where('media_type', 'image'), 'helpfulVotes'])
+            ->orderByDesc('created_at')
+            ->orderByDesc('id');
+
+        return StorefrontReviewResource::collection($reviews->paginate($request->integer('per_page', 3)));
+    }
+
     public function index(ListProductReviewsRequest $request, string $slug): AnonymousResourceCollection
     {
         $product = Product::query()->published()->where('slug', $slug)->firstOrFail();

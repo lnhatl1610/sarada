@@ -23,3 +23,9 @@ export async function fetchStorefrontFaqs(query: string, signal?: AbortSignal): 
     throw error
   }
 }
+
+export async function markFaqHelpful(faqId: number, visitorId: string, helpful: boolean): Promise<components['schemas']['StoreFaqHelpfulVoteEnvelope']['data']> {
+  const response = await api.post<components['schemas']['StoreFaqHelpfulVoteEnvelope']>(`/faqs/${faqId}/helpful-votes`, { visitor_id: visitorId, helpful })
+  if (!response.data.data) throw new Error('Chưa nhận được phản hồi từ máy chủ. Hãy thử lại.')
+  return response.data.data
+}

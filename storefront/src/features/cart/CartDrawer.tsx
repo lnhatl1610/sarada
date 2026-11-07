@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query'
 import { Link } from 'react-router'
 import { CartLineItem } from './CartLineItem'
 import type { CartLine, CartProduct } from './cart-types'
-import { fetchRelatedCatalogProducts, type CatalogProduct } from '../catalog/catalog-api'
+import { fetchCatalogProducts, fetchRelatedCatalogProducts, type CatalogProduct } from '../catalog/catalog-api'
 import { ResponsiveImage } from '../../components/shared/ResponsiveImage'
 import { DemoConceptBadge } from '../../components/shared/DemoConceptBadge'
 import { getMediaDisclosureLabel } from '../../components/shared/getMediaDisclosure'
@@ -34,14 +34,18 @@ export function CartDrawer<TProduct extends CartProduct>({ open, cart, syncStatu
   const itemCount = cart.reduce((count, line) => count + line.quantity, 0)
   const hasUnavailableItems = cart.some((line) => line.availableQuantity !== undefined && line.quantity > line.availableQuantity)
   const recommendationSlug = cart[0]?.product.slug ?? ''
+  const cartIsEmpty = cart.length === 0
   const recommendationsQuery = useQuery({
-    queryKey: ['cart', 'drawer-recommendations', recommendationSlug],
-    queryFn: ({ signal }) => fetchRelatedCatalogProducts(recommendationSlug, signal),
-    enabled: open && Boolean(recommendationSlug),
+    queryKey: cartIsEmpty ? ['cart', 'drawer-empty-bestsellers'] : ['cart', 'drawer-recommendations', recommendationSlug],
+    queryFn: ({ signal }) => recommendationSlug
+      ? fetchRelatedCatalogProducts(recommendationSlug, signal)
+      : fetchCatalogProducts('?sort=bestseller&best_seller=1&per_page=6', signal),
+    enabled: open && (cartIsEmpty ? syncStatus === 'ready' : Boolean(recommendationSlug)),
     staleTime: 60_000,
     retry: 1,
   })
   const recommendedProducts = (recommendationsQuery.data ?? [])
+    .filter((product) => (product.variants ?? []).some((variant) => variant.available_quantity > 0))
     .filter((product) => !cart.some((line) => (line.productId ?? line.product.id) === product.id))
     .slice(0, 2)
 
@@ -70,11 +74,11 @@ export function CartDrawer<TProduct extends CartProduct>({ open, cart, syncStatu
         {cart.length > 0 ? <div className="cart-drawer-lines">
           {cart.map((line) => <CartLineItem key={`${line.product.id}-${line.variantId}`} idPrefix="cart-drawer" line={line} busy={syncStatus !== 'ready' || (line.serverItemId ? busyItemIds.includes(line.serverItemId) : false)} formatMoney={formatMoney} onChangeQuantity={onChangeQuantity} onRemove={onRemoveLine} />)}
         </div> : syncStatus === 'ready' && <div className="cart-drawer-empty"><span aria-hidden="true">N</span><h3>Túi hàng đang chờ món đầu tiên</h3><p>Khám phá những thiết kế mới từ Sarada.</p><Link className="button dark" to="/products" onClick={close}>Khám phá sản phẩm</Link></div>}
-        {cart.length > 0 && <section className="cart-drawer-recommendations" aria-labelledby="cart-drawer-recommendations-title" aria-busy={recommendationsQuery.isFetching}>
-          <h3 id="cart-drawer-recommendations-title">Mua kèm</h3>
+        {(cart.length > 0 || syncStatus === 'ready') && <section className="cart-drawer-recommendations" aria-labelledby="cart-drawer-recommendations-title" aria-busy={recommendationsQuery.isFetching}>
+          <h3 id="cart-drawer-recommendations-title">{cartIsEmpty ? 'Có thể bạn sẽ thích' : 'Mua kèm'}</h3>
           {recommendationsQuery.isPending && <p className="cart-drawer-state" role="status">Đang tìm sản phẩm phù hợp…</p>}
           {recommendationsQuery.isError && <p className="cart-drawer-recommendation-error" role="alert">Chưa tải được gợi ý. <button type="button" onClick={() => void recommendationsQuery.refetch()}>Thử lại</button></p>}
-          {recommendationsQuery.isSuccess && recommendedProducts.length === 0 && <p className="cart-drawer-state">Chưa có sản phẩm liên quan để gợi ý.</p>}
+          {recommendationsQuery.isSuccess && recommendedProducts.length === 0 && <p className="cart-drawer-state">{cartIsEmpty ? 'Chưa có sản phẩm bán chạy còn hàng để gợi ý.' : 'Chưa có sản phẩm liên quan còn hàng để gợi ý.'}</p>}
           {addError && <p className="cart-drawer-recommendation-error" role="alert">{addError}</p>}
           {recommendedProducts.map((product) => <CartDrawerRecommendation key={product.id} product={product} busy={addBusy || syncStatus !== 'ready'} formatMoney={formatMoney} onAdd={onAddRecommended} />)}
         </section>}

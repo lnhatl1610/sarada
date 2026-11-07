@@ -12,6 +12,7 @@ import { useTranslation } from 'react-i18next'
 const schemaFor = (t: (key: string) => string) => z.object({
   carrier: z.string().trim().max(50, t('Đơn vị vận chuyển tối đa 50 ký tự.')),
   tracking_code: z.string().trim().max(100, t('Mã vận đơn tối đa 100 ký tự.')),
+  tracking_url: z.string().trim().max(2048, t('Liên kết tra cứu tối đa 2048 ký tự.')).refine((value) => !value || /^https:\/\//i.test(value), t('Liên kết tra cứu phải bắt đầu bằng https://.')),
   status: z.enum(['pending', 'picked_up', 'in_transit', 'delivered', 'failed', 'returned']),
 })
 
@@ -20,6 +21,7 @@ type Props = {
   orderId: number
   carrier: string
   trackingCode: string
+  trackingUrl: string
   status: string
   apiUrl: string
   accessToken: string
@@ -36,14 +38,14 @@ const statusLabels: Record<Values['status'], string> = {
   returned: 'Hoàn hàng',
 }
 
-export function ShipmentEditorDialog({ orderId, carrier, trackingCode, status, apiUrl, accessToken, onClose, onSaved }: Props) {
+export function ShipmentEditorDialog({ orderId, carrier, trackingCode, trackingUrl, status, apiUrl, accessToken, onClose, onSaved }: Props) {
   const { t } = useTranslation()
   const dialogRef = useRef<HTMLDialogElement>(null)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
   const form = useForm<Values>({
     resolver: zodResolver(schemaFor(t)),
-    defaultValues: { carrier, tracking_code: trackingCode, status: (status in statusLabels ? status : 'pending') as Values['status'] },
+    defaultValues: { carrier, tracking_code: trackingCode, tracking_url: trackingUrl, status: (status in statusLabels ? status : 'pending') as Values['status'] },
   })
   const confirmDiscard = useUnsavedFormGuard(form.formState.isDirty)
 
@@ -93,6 +95,7 @@ export function ShipmentEditorDialog({ orderId, carrier, trackingCode, status, a
     <form className="account-password-form" onSubmit={submit} noValidate>
       <FormField id="shipment-carrier" label={t('Đơn vị vận chuyển')} error={form.formState.errors.carrier?.message}><input autoComplete="organization" {...form.register('carrier')} /></FormField>
       <FormField id="shipment-tracking-code" label={t('Mã vận đơn')} error={form.formState.errors.tracking_code?.message}><input autoComplete="off" {...form.register('tracking_code')} /></FormField>
+      <FormField id="shipment-tracking-url" label={t('Liên kết tra cứu')} hint={t('Dán URL HTTPS từ đơn vị vận chuyển.')} error={form.formState.errors.tracking_url?.message}><input type="url" inputMode="url" autoComplete="url" placeholder="https://…" {...form.register('tracking_url')} /></FormField>
       <FormField id="shipment-status" label={t('Trạng thái')} required error={form.formState.errors.status?.message}><select {...form.register('status')}>{Object.entries(statusLabels).map(([value, label]) => <option key={value} value={value}>{t(label)}</option>)}</select></FormField>
       {error && <p className="account-form-error" role="alert">{error}</p>}
       <div className="account-dialog-actions"><button className="secondary" type="button" onClick={close} disabled={busy}>{t('Hủy')}</button><button className="primary" type="submit" disabled={busy || !form.formState.isDirty}>{busy ? t('Đang lưu…') : t('Lưu vận đơn')}</button></div>

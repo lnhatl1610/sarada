@@ -19,7 +19,7 @@ export function SharedWishlistPage({ token }: { token: string }) {
     <main className="container subpage account-page">
       <p className="eyebrow">DANH SÁCH ĐƯỢC CHIA SẺ</p>
       <h1>{name}</h1>
-      {products.data.length ? <div className="grid">
+      {products.data.length ? <div className="product-grid">
         {products.data.map((product) => {
           const image = product.images?.[0]
           return <article className="card" key={product.id}>

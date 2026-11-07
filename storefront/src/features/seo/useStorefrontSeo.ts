@@ -9,6 +9,25 @@ import { mediaUrl } from '../../lib/media-url'
 
 type Product = components['schemas']['Product']
 type Brand = components['schemas']['CatalogFilterOptionsEnvelope']['data']['brands'][number]
+const canonicalCmsPaths: Record<string, string> = {
+  contact: '/contact',
+  about: '/about',
+  careers: '/careers',
+  'size-guide': '/size-guide',
+  returns: '/policies/returns',
+  shipping: '/policies/shipping',
+  payment: '/policies/payment',
+  privacy: '/policies/privacy',
+  terms: '/policies/terms',
+  cookies: '/policies/cookies',
+}
+
+function getCmsCanonicalPath(path: string, slug?: string): string {
+  if (path.startsWith('/policies/')) return path
+  const pageSlug = slug ?? (path.startsWith('/pages/') ? path.split('/').filter(Boolean).at(-1) : undefined)
+  return pageSlug ? canonicalCmsPaths[pageSlug] ?? path : path
+}
+
 type SeoOptions = {
   path: string
   search: string
@@ -39,7 +58,7 @@ export function serializeStorefrontJsonLd(value: unknown): string {
 }
 
 function isPrivateOrTransactionalRoute(path: string): boolean {
-  return /^\/(?:account(?:\/|$)|cart(?:\/|$)|checkout(?:\/|$)|track-order(?:\/|$)|login$|register$|forgot-password(?:\/|$)|reset-password(?:\/|$)|verify-email$)/.test(path)
+  return /^\/(?:account(?:\/|$)|wishlist(?:\/|$)|cart(?:\/|$)|checkout(?:\/|$)|track-order(?:\/|$)|login$|register$|forgot-password(?:\/|$)|reset-password(?:\/|$)|verify-email$|newsletter\/unsubscribe(?:\/|$))/.test(path)
 }
 
 function setMeta(selector: string, attribute: 'name' | 'property', key: string, content: string): void {
@@ -80,10 +99,20 @@ export function useStorefrontSeo({ path, search, detailSlug, product, collection
       ? page.meta_title || page.title
       : path === '/contact'
         ? `Liên hệ | ${storeName}`
+      : path === '/about'
+        ? `Về chúng tôi | ${storeName}`
+      : path === '/careers'
+        ? `Cơ hội nghề nghiệp | ${storeName}`
       : path === '/stores'
         ? `Hệ thống cửa hàng | ${storeName}`
       : path === '/faq'
         ? `Trung tâm trợ giúp | ${storeName}`
+      : path === '/how-to-order'
+        ? `Hướng dẫn mua hàng | ${storeName}`
+      : path === '/care-guide'
+        ? `Chăm sóc trang phục | ${storeName}`
+      : path === '/size-guide'
+        ? `Hướng dẫn chọn kích cỡ | ${storeName}`
       : path === '/sitemap'
         ? `Sơ đồ website | ${storeName}`
       : path === '/style-guide'
@@ -124,6 +153,8 @@ export function useStorefrontSeo({ path, search, detailSlug, product, collection
       || (path === '/contact' ? `Liên hệ ${storeName} để được hỗ trợ về sản phẩm và đơn hàng.` : undefined)
       || (path === '/stores' ? `Tìm địa chỉ, giờ mở cửa và đường đi đến các cửa hàng ${storeName}.` : undefined)
       || (path === '/faq' ? `Tìm câu trả lời theo chủ đề hoặc liên hệ cửa hàng ${storeName} để được hỗ trợ.` : undefined)
+      || (path === '/how-to-order' ? `Hướng dẫn chọn sản phẩm, hoàn tất thanh toán và theo dõi đơn hàng tại ${storeName}.` : undefined)
+      || (path === '/care-guide' ? `Tham khảo cách chăm sóc trang phục theo chất liệu và nhãn hướng dẫn của từng sản phẩm tại ${storeName}.` : undefined)
       || (path === '/sitemap' ? `Tìm nhanh danh mục, sản phẩm, thương hiệu và thông tin tại ${storeName}.` : undefined)
       || (path === '/style-guide' ? `Khám phá các gợi ý phối đồ và lookbook do ${storeName} tuyển chọn.` : undefined)
       || (path === '/membership' ? `Tìm hiểu các hạng, cách tích điểm và quyền lợi thành viên tại ${storeName}.` : undefined)
@@ -168,7 +199,7 @@ export function useStorefrontSeo({ path, search, detailSlug, product, collection
       canonical.rel = 'canonical'
       document.head.append(canonical)
     }
-    const canonicalUrl = new URL(path || '/', origin)
+    const canonicalUrl = new URL(getCmsCanonicalPath(path, page?.slug) || '/', origin)
     const categorySlug = path.startsWith('/categories/') ? path.split('/').filter(Boolean).at(-1) : path === '/products' ? new URLSearchParams(search).get('category') : null
     if (categorySlug && path === '/products') canonicalUrl.searchParams.set('category', categorySlug)
     canonical.href = canonicalUrl.toString()
@@ -213,7 +244,7 @@ export function useStorefrontSeo({ path, search, detailSlug, product, collection
           url: new URL(`/blog/${encodeURIComponent(blogPost.slug)}`, origin).toString(),
           ...(blogPost.cover_image ? { image: new URL(blogPost.cover_image, origin).toString() } : {}),
           ...(blogPost.published_at ? { datePublished: blogPost.published_at } : {}),
-          author: { '@type': 'Organization', name: storeName },
+          author: blogPost.author_name ? { '@type': 'Person', name: blogPost.author_name, ...(blogPost.author_bio ? { description: blogPost.author_bio } : {}) } : { '@type': 'Organization', name: storeName },
           publisher: { '@type': 'Organization', name: storeName },
           mainEntityOfPage: new URL(`/blog/${encodeURIComponent(blogPost.slug)}`, origin).toString(),
         }
@@ -268,7 +299,7 @@ export function useStorefrontSeo({ path, search, detailSlug, product, collection
             '@type': 'WebPage',
             name: page.meta_title || page.title,
             description: page.meta_description || undefined,
-            url: new URL(path === '/contact' ? '/contact' : `/pages/${encodeURIComponent(page.slug)}`, origin).toString(),
+            url: new URL(getCmsCanonicalPath(path, page.slug), origin).toString(),
             isPartOf: { '@id': `${origin}/#website` },
             ...(page.created_at ? { datePublished: page.created_at } : {}),
             ...(page.updated_at ? { dateModified: page.updated_at } : {}),

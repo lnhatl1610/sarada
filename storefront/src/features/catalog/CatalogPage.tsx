@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type PointerEventHandler, type ReactNode } from 'react'
+import { lazy, Suspense, useEffect, useRef, useState, type PointerEventHandler, type ReactNode } from 'react'
 import { motion, useReducedMotion } from 'motion/react'
 import { useQuery } from '@tanstack/react-query'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -8,7 +8,7 @@ import { formatVnd } from '../../lib/money'
 import { catalogFilterSchema, type CatalogFilterValues } from './catalog-schemas'
 import { productSearchQuerySchema } from '../../lib/product-search'
 import { Link } from 'react-router'
-import { ArrowLeftRight, Heart, Mic, MicOff } from 'lucide-react'
+import { ArrowLeftRight, Heart, List, Mic, MicOff } from 'lucide-react'
 import '../../Catalog.css'
 import '../../CatalogFilters.css'
 import type { components } from '../../types/api'
@@ -23,6 +23,8 @@ import { fetchCatalogProducts } from './catalog-api'
 import { fetchSearchPages, fetchTrendingSearchTerms, type StorefrontSearchPageResults } from '../search/search-api'
 import '../search/SearchContentResults.css'
 import { CatalogQuickView } from './CatalogQuickView'
+
+const ProductSuggestions = lazy(() => import('./NotFoundProductSuggestions').then((module) => ({ default: module.NotFoundProductSuggestions })))
 
 export type CatalogPageProduct = Pick<components['schemas']['Product'], 'id' | 'name' | 'slug' | 'price' | 'compare_at_price' | 'short_description' | 'images' | 'variants' | 'rating' | 'is_new' | 'sold_count'>
 type LookbookPin = components['schemas']['LookbookProductPin']
@@ -413,6 +415,7 @@ export function CatalogPage({
   const prefersReducedMotion = useReducedMotion()
   const [filtersOpen, setFiltersOpen] = useState(false)
   const [gridColumns, setGridColumns] = useState<2 | 3 | 4>(4)
+  const [listView, setListView] = useState(false)
   const [selectedColorValueIds, setSelectedColorValueIds] = useState<Record<number, number>>({})
   const [searchResultState, setSearchResultState] = useState<{ searchKey: string; tab: 'products' | 'pages'; page: number }>({ searchKey, tab: 'products', page: 1 })
   const searchResultsTab = searchResultState.searchKey === searchKey ? searchResultState.tab : 'products'
@@ -511,16 +514,17 @@ export function CatalogPage({
       </dialog>
       {filterChips}
       <CatalogFacetSummary options={filterOptions} categories={categoryOptions} />
-      <div className="catalog-grid-view" role="group" aria-label="Số cột sản phẩm">
+      <div className="catalog-grid-view" role="group" aria-label="Chế độ hiển thị sản phẩm">
         <span>Hiển thị</span>
-        {([2, 3, 4] as const).map((columns) => <button key={columns} type="button" aria-pressed={gridColumns === columns} aria-label={`${columns} cột sản phẩm`} onClick={() => setGridColumns(columns)}>{columns}</button>)}
+        {([2, 3, 4] as const).map((columns) => <button key={columns} type="button" aria-pressed={!listView && gridColumns === columns} aria-label={`${columns} cột sản phẩm`} onClick={() => { setListView(false); setGridColumns(columns) }}>{columns}</button>)}
+        <button type="button" aria-pressed={listView} aria-label="Hiển thị dạng danh sách" title="Dạng danh sách" onClick={() => setListView(true)}><List aria-hidden="true" size={16} /></button>
       </div>
       {fetching && !loading && <p className="sr-only" role="status">Đang cập nhật kết quả…</p>}
       {apiUnavailable && products.length > 0 && <div className="catalog-stale-error" role="alert"><span>Không tải được kết quả mới. Đang giữ danh sách trước đó.</span><button type="button" onClick={onRetryProducts}>Thử lại</button></div>}
       {loading ? (
-        <><div className="grid" aria-hidden="true">{Array.from({ length: 8 }, (_, index) => <div className="catalog-skeleton-card" key={index}><div className="catalog-skeleton-image" /><div className="catalog-skeleton-line" /><div className="catalog-skeleton-line short" /></div>)}</div><p className="sr-only" role="status">Đang tải sản phẩm…</p></>
+        <><div className="product-grid" aria-hidden="true">{Array.from({ length: 8 }, (_, index) => <div className="catalog-skeleton-card" key={index}><div className="catalog-skeleton-image" /><div className="catalog-skeleton-line" /><div className="catalog-skeleton-line short" /></div>)}</div><p className="sr-only" role="status">Đang tải sản phẩm…</p></>
       ) : products.length ? (
-        <div id="catalog-results" className={`grid catalog-grid-columns-${gridColumns}`} aria-busy={fetching}>
+        <div id="catalog-results" className={`product-grid catalog-grid-columns-${gridColumns}${listView ? ' catalog-list-view' : ''}`} aria-busy={fetching}>
           {products.map((item, index) => {
             const images = item.images ?? []
             const colorOptions = [...new Map((item.variants ?? [])
@@ -559,6 +563,7 @@ export function CatalogPage({
         <div className="empty"><h2>{hasFilters ? 'Không tìm thấy sản phẩm phù hợp' : 'Chưa có sản phẩm'}</h2><p>Thử xóa bớt bộ lọc hoặc quay lại xem tất cả thiết kế.</p><Link className="button dark" to={basePath}>Xem tất cả sản phẩm</Link></div>
       )}
       {searchRoute && !loading && !apiUnavailable && products.length === 0 && <SearchRecovery query={filterValues.q} formatMoney={formatMoney} />}
+      {!searchRoute && !loading && !fetching && !apiUnavailable && products.length === 0 && <Suspense fallback={<p className="mt-10 text-sm text-muted-foreground" role="status">Đang tải gợi ý sản phẩm…</p>}><ProductSuggestions title="Sản phẩm bán chạy có thể bạn quan tâm" /></Suspense>}
       {pagination}
       </>}
     </div>

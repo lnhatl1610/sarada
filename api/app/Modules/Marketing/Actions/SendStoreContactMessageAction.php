@@ -14,6 +14,7 @@ class SendStoreContactMessageAction
         'product' => 'Tư vấn sản phẩm',
         'order' => 'Đơn hàng',
         'return' => 'Đổi trả và bảo hành',
+        'cooperation' => 'Hợp tác',
         'other' => 'Nội dung khác',
     ];
 

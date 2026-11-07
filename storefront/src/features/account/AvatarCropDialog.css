@@ -11,7 +11,7 @@
 .avatar-crop-controls { display: grid; gap: 8px; }
 .avatar-crop-controls label { display: flex; justify-content: space-between; gap: 10px; color: var(--ink, #252522); font-size: 12px; }
 .avatar-crop-controls output { color: var(--muted, #6b6963); font-variant-numeric: tabular-nums; }
-.avatar-crop-controls input[type='range'] { width: 100%; margin: 0 0 10px; accent-color: var(--wine, #78433f); }
+.avatar-crop-controls input[type='range'] { width: 100%; margin: 0 0 10px; accent-color: var(--wine, #7f2638); }
 .avatar-crop-error { margin: 0 0 12px; }
 .avatar-crop-actions { margin-top: 18px; }
 .avatar-crop-actions button { min-height: 44px; }

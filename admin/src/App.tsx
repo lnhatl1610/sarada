@@ -12,7 +12,7 @@ import { changeAdminLanguage } from './lib/i18n'
 import type { FormEvent } from 'react'
 import { Activity, Boxes, CalendarClock, ChartNoAxesCombined, ChevronDown, Download, Eye, EyeOff, Heart, LayoutDashboard, LoaderCircle, Package, Plus, Send, Settings2, ShoppingBag, ShoppingCart, Star, Tags, Palette, Ruler, Layers3, CreditCard, Truck, History, Users, UserCog, BadgePercent, Image, ShieldCheck, MessageSquareText } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
-import { ADMIN_TOAST_EVENT, type AdminToastNotice, type AdminToastTone } from './lib/admin-toast'
+import { publishAdminToast } from './lib/admin-toast'
 import { getStatusLabel } from './components/shared/status-badge'
 import { publishAdminPageSize } from './components/shared/admin-page-size'
 import { ConfirmDialog } from './components/shared/confirm-dialog'
@@ -106,6 +106,7 @@ const ContentPagesPage = lazy(() => import('./features/content/ContentPagesPage'
 const BlogPostsPage = lazy(() => import('./features/content/BlogPostsPage').then((module) => ({ default: module.BlogPostsPage })))
 const FaqsPage = lazy(() => import('./features/content/FaqsPage').then((module) => ({ default: module.FaqsPage })))
 const StoreLocationsPage = lazy(() => import('./features/content/StoreLocationsPage').then((module) => ({ default: module.StoreLocationsPage })))
+const CareerOpeningsPage = lazy(() => import('./features/content/CareerOpeningsPage').then((module) => ({ default: module.CareerOpeningsPage })))
 const StoreSettingsPage = lazy(() => import('./features/settings/StoreSettingsPage').then((module) => ({ default: module.StoreSettingsPage })))
 const ShippingMethodsPage = lazy(() => import('./features/shipping/ShippingMethodsPage').then((module) => ({ default: module.ShippingMethodsPage })))
 const ReportsPage = lazy(() => import('./features/reports/ReportsPage').then((module) => ({ default: module.ReportsPage })))
@@ -212,6 +213,7 @@ const adminPages = {
   blogPosts: { title: 'Bài viết', permission: 'content.manage' },
   faqs: { title: 'Câu hỏi thường gặp', permission: 'content.manage' },
   storeLocations: { title: 'Cửa hàng', permission: 'content.manage' },
+  careerOpenings: { title: 'Vị trí tuyển dụng', permission: 'content.manage' },
   settings: { title: 'Cài đặt cửa hàng', permission: 'settings.manage' },
   settingsPayments: { title: 'Cài đặt thanh toán', permission: 'settings.manage' },
   settingsSecurity: { title: 'Bảo mật và đăng ký', permission: 'settings.manage' },
@@ -275,6 +277,7 @@ const directPathMap: Record<string, AdminPage> = {
   '/blog': 'blogPosts',
   '/faqs': 'faqs',
   '/stores': 'storeLocations',
+  '/career-openings': 'careerOpenings',
   '/settings/payments': 'settingsPayments', '/settings/email': 'settingsEmail', '/settings/seo': 'settingsSeo', '/settings/maintenance': 'settingsMaintenance', '/settings/account': 'account', '/settings/account/security': 'account',
   '/settings/account/sessions': 'account', '/settings/account/privacy': 'accountPrivacy', '/settings/account/tokens': 'accountTokens', '/account/tokens': 'accountTokens', '/account': 'account', '/account/profile': 'account',
   '/account/security': 'account', '/account/sessions': 'account', '/account/notifications': 'accountNotifications', '/notifications': 'notificationsCenter',
@@ -333,6 +336,7 @@ const adminNavGroups: NavGroup[] = [
     { page: 'blogPosts', label: 'Bài viết', permission: 'content.manage', icon: Image, href: '/blog' },
     { page: 'faqs', label: 'Câu hỏi thường gặp', permission: 'content.manage', icon: MessageSquareText, href: '/faqs' },
     { page: 'storeLocations', label: 'Cửa hàng', permission: 'content.manage', icon: Image, href: '/stores' },
+    { page: 'careerOpenings', label: 'Vị trí tuyển dụng', permission: 'content.manage', icon: Image, href: '/career-openings' },
   ] },
   { label: 'Báo cáo', icon: ChartNoAxesCombined, items: [
     { page: 'reportRevenue', label: 'Doanh thu', permission: 'reports.view', icon: ChartNoAxesCombined, href: '/reports/revenue' },
@@ -407,7 +411,7 @@ function AdminSidebarNavLink({ item, href, active, collapsed, count, sub = false
     onNavigate(href)
     if (isMobile) setOpenMobile(false)
   }
-  const link = <a href={href} onClick={handleClick} aria-label={count ? `${label}, ${count} cảnh báo` : label} aria-current={active ? 'page' : undefined}>
+  const link = <a href={href} onClick={handleClick} aria-label={count ? `${label}, ${count} cảnh báo` : label} aria-current={active ? 'page' : undefined} data-tour-href={href}>
     <item.icon size={17} aria-hidden="true" />
     <span>{label}</span>
     {count ? <b className="nav-count">{count}</b> : null}
@@ -703,9 +707,6 @@ function App() {
   const [twoFactorCode, setTwoFactorCode] = useState('')
   const [recoveryCode, setRecoveryCode] = useState('')
   const [useRecoveryCode, setUseRecoveryCode] = useState(false)
-  const [notice, setNotice] = useState('')
-  const [noticeTone, setNoticeTone] = useState<AdminToastTone>('success')
-  const noticeTimeoutRef = useRef<number | null>(null)
   useEffect(() => {
     const resetPrintMode = () => setOrderPrintMode(null)
     window.addEventListener('afterprint', resetPrintMode)
@@ -926,10 +927,10 @@ function App() {
       }
       void adminApiFetch(`${API}/account/preferences`, { method: 'PUT', headers: { Authorization: `Bearer ${accessToken}`, Accept: 'application/json', 'Content-Type': 'application/json' }, body: JSON.stringify({ key: 'admin_appearance', value }) })
         .then((response) => {
-          if (!response.ok) setNotice('Không đồng bộ được giao diện lên tài khoản. Tùy chọn vẫn còn trên trình duyệt này.')
+          if (!response.ok) publishAdminToast({ message: 'Không đồng bộ được giao diện lên tài khoản. Tùy chọn vẫn còn trên trình duyệt này.', tone: 'error' })
           else if (localStorage.getItem(themeLightDefaultMigrationKey) === 'pending') localStorage.setItem(themeLightDefaultMigrationKey, 'done')
         })
-        .catch(() => setNotice('Không đồng bộ được giao diện lên tài khoản. Tùy chọn vẫn còn trên trình duyệt này.'))
+        .catch(() => publishAdminToast({ message: 'Không đồng bộ được giao diện lên tài khoản. Tùy chọn vẫn còn trên trình duyệt này.', tone: 'error' }))
     }, 500)
     return () => window.clearTimeout(timeout)
   }, [adminPreferences, sidebarCollapsed, accessToken, adminUser?.id])
@@ -1067,24 +1068,10 @@ function App() {
     if (activeDashboard) setDashboardVisited(true)
   }, [activeDashboard])
   const fallbackPage = visibleAdminNavGroups.flatMap((group) => group.items).find((item) => item.permission === 'authenticated' || permissions.includes(item.permission))?.page
-  const notify = useCallback((message: string, tone: AdminToastTone = 'success') => {
-    setNotice(message)
-    setNoticeTone(tone)
-    if (noticeTimeoutRef.current !== null) window.clearTimeout(noticeTimeoutRef.current)
-    noticeTimeoutRef.current = window.setTimeout(() => { setNotice(''); noticeTimeoutRef.current = null }, 2600)
+  const notify = useCallback((message: string, tone: 'success' | 'error' = 'success') => {
+    publishAdminToast({ message, tone })
   }, [])
   const notifyError = (message: string) => notify(message, 'error')
-  useEffect(() => {
-    const receiveToast = (event: Event) => {
-      const detail = (event as CustomEvent<AdminToastNotice>).detail
-      if (detail?.message) notify(detail.message, detail.tone)
-    }
-    window.addEventListener(ADMIN_TOAST_EVENT, receiveToast)
-    return () => {
-      window.removeEventListener(ADMIN_TOAST_EVENT, receiveToast)
-      if (noticeTimeoutRef.current !== null) window.clearTimeout(noticeTimeoutRef.current)
-    }
-  }, [notify])
   const updateAdminPreference = <Key extends keyof AdminPreferences>(key: Key, value: AdminPreferences[Key]) => {
     setAdminPreferences((current) => ({ ...current, [key]: value } as AdminPreferences))
     if (key === 'sidebarCollapsed') setSidebarCollapsed(value as boolean)
@@ -1881,7 +1868,6 @@ function App() {
       onActionNotice={notify}
     />
     {focusMode && <button className="admin-focus-exit" type="button" onClick={() => setFocusMode(false)}>{t('Thoát chế độ tập trung')} <kbd>Esc</kbd></button>}
-      {notice && <div className="admin-toast" data-tone={noticeTone} role={noticeTone === 'error' ? 'alert' : 'status'} aria-live={noticeTone === 'error' ? 'assertive' : 'polite'}>{t(notice)}</div>}
       <div className="content-wrap"><Suspense fallback={<p className="shared-loading" role="status">{t('Đang tải trang quản trị…')}</p>}>{page === "products" && productFilterOptionsQuery.isError && <p className="reference-error" role="alert">{productFilterOptionsQuery.error instanceof Error ? t(productFilterOptionsQuery.error.message) : t("Không tải được danh mục và thương hiệu.")} <button className="secondary" type="button" onClick={() => void productFilterOptionsQuery.refetch()}>{t("Thử lại")}</button></p>}{!showProductForm && page !== 'productDetail' && <PageHeader title={page === 'dashboard' ? t('Chào bạn, {{name}} 👋', { name: userGreetingName }) : title} description={page === 'dashboard' ? t('Đây là những gì đang diễn ra tại cửa hàng của bạn.') : currentPage ? t('Quản lý {{title}} của cửa hàng.', { title: t(title).toLocaleLowerCase() }) : t("Đường dẫn này không tồn tại trong khu vực quản trị.")} actions={page === 'products' && permissions.includes('products.create') ? <button className="primary" onClick={() => setShowProductForm(true)}>{t("Thêm sản phẩm")}</button> : null} />}
       {accessDenied ? <section className="panel admin-state-card" role="alert"><span className="admin-state-code">403</span><h2>{t("Không có quyền truy cập")}</h2><p>{t('Tài khoản {{name}} chưa được cấp quyền xem mục “{{section}}”. Nếu cần truy cập, hãy liên hệ quản trị viên.', { name: adminUser?.name ?? userName, section: t(title) })}</p>{fallbackPage && <a className="primary" href={`/?page=${fallbackPage}`}>{t("Quay lại")}{' '}{pageTitles[fallbackPage]}</a>}</section> : !currentPage ? <section className="panel admin-state-card"><span className="admin-state-code">404</span><h2>{t("Không tìm thấy trang")}</h2><p>{t("Trang quản trị này chưa tồn tại hoặc đường dẫn đã thay đổi.")}</p>{fallbackPage && <a className="primary" href={`/?page=${fallbackPage}`}>{t("Về")}{' '}{pageTitles[fallbackPage]}</a>}</section> : <>
       {adminUser && <Suspense fallback={null}><AccountOnboardingTour userId={adminUser.id} roles={adminRoles} permissions={permissions} forceOpen={page === 'helpTour'} /></Suspense>}
@@ -1937,6 +1923,7 @@ function App() {
       {page === 'blogPosts' && <BlogPostsPage apiUrl={API} accessToken={accessToken} />}
       {page === 'faqs' && <FaqsPage apiUrl={API} accessToken={accessToken} />}
       {page === 'storeLocations' && <StoreLocationsPage apiUrl={API} accessToken={accessToken} permissions={permissions} />}
+      {page === 'careerOpenings' && <CareerOpeningsPage apiUrl={API} accessToken={accessToken} />}
       {page === 'settings' && <StoreSettingsPage apiUrl={API} accessToken={accessToken} isOwner={adminRoles.includes('super_admin')} section="general" />}
       {page === 'settingsPayments' && <StoreSettingsPage apiUrl={API} accessToken={accessToken} isOwner={adminRoles.includes('super_admin')} section="payments" />}
       {page === 'settingsSecurity' && <StoreSettingsPage apiUrl={API} accessToken={accessToken} isOwner={adminRoles.includes('super_admin')} section="security" />}
@@ -2036,7 +2023,7 @@ function App() {
     {adjustingInventory && <InventoryAdjustmentDialog apiUrl={API} accessToken={accessToken} item={adjustingInventory} onClose={() => setAdjustingInventory(null)} onAdjusted={(item, updated) => { setInventory((rows) => rows.map((row) => row.variant_id === item.variant_id ? { ...row, ...updated } : row)) }} onViewMovement={(variantId) => setMovementVariantId(variantId)} />}
     {thresholdEditingInventory && <InventoryThresholdDialog apiUrl={API} accessToken={accessToken} variantId={thresholdEditingInventory.variant_id} sku={thresholdEditingInventory.sku} threshold={thresholdEditingInventory.low_stock_threshold} onClose={() => setThresholdEditingInventory(null)} onSaved={(low_stock_threshold) => { setInventory((rows) => rows.map((row) => row.variant_id === thresholdEditingInventory.variant_id ? { ...row, low_stock_threshold } : row)); setThresholdEditingInventory(null); notify(`Đã cập nhật ngưỡng cho SKU ${thresholdEditingInventory.sku}.`) }} />}
     {orderAction && <OrderActionDialog key={'order' in orderAction ? `${orderAction.mode}-${orderAction.order.id}` : `${orderAction.mode}-${orderAction.orderIds.join('-')}`} mode={orderAction.mode} orderCode={'order' in orderAction ? orderAction.order.code : undefined} selectionCount={'orderIds' in orderAction ? orderAction.orderIds.length : undefined} statusLabel={'status' in orderAction ? getStatusLabel('order', orderAction.status) : undefined} refundLimit={orderAction.mode === 'refund' ? latestRefundableAmount(orderAction.order) : undefined} address={orderAction.mode === 'address' ? { customer_name: orderAction.order.customer_name, customer_phone: orderAction.order.customer_phone, province: orderAction.order.shipping_address?.province, province_code: orderAction.order.shipping_address?.province_code, district: orderAction.order.shipping_address?.district, ward: orderAction.order.shipping_address?.ward, ward_code: orderAction.order.shipping_address?.ward_code, street: orderAction.order.shipping_address?.street ?? '' } : undefined} onClose={() => setOrderAction(null)} onSubmit={submitOrderAction} />}
-    {shipmentOrder && (() => { const latest = shipmentOrder.shipments[0]; return <ShipmentEditorDialog orderId={shipmentOrder.id} carrier={latest?.carrier ?? ''} trackingCode={latest?.tracking_code ?? ''} status={latest?.status ?? 'pending'} apiUrl={API} accessToken={accessToken} onClose={() => setShipmentOrder(null)} onSaved={(updated) => { setShipmentOrder(null); if (updated && typeof updated === 'object' && 'id' in updated) setSelectedOrder(updated as OrderDetail) }} /> })()}
+    {shipmentOrder && (() => { const latest = shipmentOrder.shipments[0]; return <ShipmentEditorDialog orderId={shipmentOrder.id} carrier={latest?.carrier ?? ''} trackingCode={latest?.tracking_code ?? ''} trackingUrl={latest?.tracking_url ?? ''} status={latest?.status ?? 'pending'} apiUrl={API} accessToken={accessToken} onClose={() => setShipmentOrder(null)} onSaved={(updated) => { setShipmentOrder(null); if (updated && typeof updated === 'object' && 'id' in updated) setSelectedOrder(updated as OrderDetail) }} /> })()}
     {deliveryConfirmation && <OrderDeliveryDialog orderCode={deliveryConfirmation.code} busy={deliveryUpdateBusy} onChoose={(paymentCollected, note) => confirmOrderDelivery(paymentCollected, note)} onClose={() => setDeliveryConfirmation(null)} />}
     {reviewModerationTarget && <ReviewModerationDialog title={reviewModerationTarget.reviewIds.length > 1 ? t("Ẩn nhiều đánh giá") : t("Ẩn đánh giá")} subject={reviewModerationTarget.subject} onClose={() => setReviewModerationTarget(null)} onSubmit={async (reason) => { if (reviewModerationTarget.reviewIds.length === 1) await moderateReview({ id: reviewModerationTarget.reviewIds[0] } as Review, 'rejected', reason); else { await bulkModerateReviews(reviewModerationTarget.reviewIds, 'rejected', reason); setSelectedReviewIds([]) } }} />}
     <ConfirmDialog open={Boolean(reviewToDelete)} title={t('Xóa đánh giá?')} description={reviewToDelete ? t('Đánh giá #{{id}} của {{customer}} và ảnh đính kèm sẽ bị xóa.', { id: reviewToDelete.id, customer: reviewToDelete.customer?.name ?? t('khách hàng') }) : ''} confirmLabel={t('Xóa đánh giá')} onConfirm={() => void deleteReview()} onOpenChange={(open) => { if (!open) setReviewToDelete(null) }} />

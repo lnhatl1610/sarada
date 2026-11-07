@@ -20,5 +20,6 @@
 .store .track-shipment{display:grid;gap:5px;padding:10px 0;border-bottom:1px solid var(--line);font-size:11px}
 .store .track-shipment span,.store .track-shipment time{color:var(--muted)}
 .store .track-shipment b{font-weight:600;overflow-wrap:anywhere}
+.store .track-shipment-link{width:fit-content;color:var(--ink);font-size:11px;text-decoration:underline;text-underline-offset:3px}
 .store .track-shipment time{font-size:10px}
 @media(max-width:380px){.store .track-result{padding:16px}}

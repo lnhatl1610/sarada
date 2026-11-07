@@ -1,5 +1,7 @@
 .product-compare-page { padding-block: 2.5rem 5rem; }
 .product-compare-heading { display: flex; align-items: end; justify-content: space-between; gap: 1.5rem; margin-bottom: 2rem; }
+.product-compare-actions { display: flex; flex-wrap: wrap; align-items: center; gap: .65rem 1rem; }
+.product-compare-actions :is(button, a) { color: inherit; font: inherit; text-underline-offset: 3px; }
 .product-compare-heading h1 { margin: 0; font-size: clamp(2rem, 5vw, 3.4rem); letter-spacing: -.045em; }
 .product-compare-heading p:not(.eyebrow) { max-width: 40rem; color: var(--muted-foreground, #626262); }
 .product-compare-table-wrap { max-width: 100%; overflow: auto; border: 1px solid var(--border, #dedede); border-radius: .75rem; }
@@ -14,7 +16,14 @@
 .product-compare-product img { width: 100%; max-height: 280px; aspect-ratio: 3 / 4; object-fit: cover; border-radius: .35rem; background: var(--muted, #f5f5f5); }
 .product-compare-product strong { line-height: 1.4; }
 .product-compare-remove { position: absolute; z-index: 1; top: 0; right: 0; width: 2rem; height: 2rem; border: 1px solid var(--border, #dedede); border-radius: 50%; background: var(--background, white); cursor: pointer; font-size: 1.25rem; }
-.product-compare-state { padding: .85rem 1rem; border-radius: .5rem; background: var(--muted, #f5f5f5); }
+.product-compare-state { padding: .85rem 1rem; border: 1px solid var(--ui-border, var(--border, #dedbd5)); border-radius: .5rem; background: var(--ui-surface-soft, #f3f1ec); color: var(--ink, #252522); }
+.product-compare-failures > p { margin: 0; }
+.product-compare-failures ul { display: grid; gap: .65rem; padding: 0; margin: .75rem 0 0; list-style: none; }
+.product-compare-failures li { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .5rem 1rem; padding-top: .65rem; border-top: 1px solid var(--ui-border, var(--border, #dedbd5)); }
+.product-compare-failures li > div { display: flex; flex-wrap: wrap; gap: .5rem 1rem; }
+.product-compare-failures button { padding: 0; border: 0; background: transparent; color: inherit; font: inherit; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.product-compare-failures button:disabled { opacity: .55; cursor: wait; }
+.product-compare-failures :is(button, a):focus-visible { outline: 2px solid var(--ui-primary, #7f2638); outline-offset: 3px; }
 .product-compare-add-more { margin-top: 1.25rem; }
 .product-compare-add-more a { color: inherit; }
 @media (max-width: 640px) {

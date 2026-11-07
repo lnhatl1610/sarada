@@ -16,6 +16,7 @@ class StoreLocationController extends Controller
         $locations = StoreLocation::query()
             ->where('is_active', true)
             ->when($filters['province_code'] ?? null, fn ($query, $value) => $query->where('province_code', $value))
+            ->when($filters['ward_code'] ?? null, fn ($query, $value) => $query->where('ward_code', $value))
             ->orderBy('province_name')->orderBy('sort_order')->orderBy('name')
             ->paginate($filters['per_page'] ?? 30);
 

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Shipment extends Model
 {
-    protected $fillable = ['order_id', 'carrier', 'tracking_code', 'status', 'shipped_at', 'delivered_at'];
+    protected $fillable = ['order_id', 'carrier', 'tracking_code', 'tracking_url', 'status', 'shipped_at', 'delivered_at'];
 
     protected function casts(): array
     {

@@ -36,7 +36,7 @@ class StorefrontPromotionCampaignNotification extends Notification implements Sh
             $channels[] = 'database';
         }
         if (StorefrontNotificationPreferences::wants($notifiable, 'promotions', 'email')
-            && DB::table('newsletter_subscriptions')->whereRaw('LOWER(email) = LOWER(?)', [$notifiable->email])->exists()) {
+            && DB::table('newsletter_subscriptions')->whereRaw('LOWER(email) = LOWER(?)', [$notifiable->email])->whereNull('unsubscribed_at')->exists()) {
             $channels[] = 'mail';
         }
         if (StorefrontNotificationPreferences::wants($notifiable, 'promotions', 'push')

@@ -119,6 +119,19 @@ CREATE TABLE `blog_post_product` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+DROP TABLE IF EXISTS `blog_post_tag`;
+/*!40101 SET @saved_cs_client = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `blog_post_tag` (
+  `blog_post_id` bigint unsigned NOT NULL,
+  `blog_tag_id` bigint unsigned NOT NULL,
+  PRIMARY KEY (`blog_post_id`,`blog_tag_id`),
+  KEY `blog_post_tag_blog_tag_id_blog_post_id_index` (`blog_tag_id`,`blog_post_id`),
+  CONSTRAINT `blog_post_tag_blog_post_id_foreign` FOREIGN KEY (`blog_post_id`) REFERENCES `blog_posts` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `blog_post_tag_blog_tag_id_foreign` FOREIGN KEY (`blog_tag_id`) REFERENCES `blog_tags` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
 DROP TABLE IF EXISTS `blog_posts`;
 /*!40101 SET @saved_cs_client = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
@@ -129,6 +142,8 @@ CREATE TABLE `blog_posts` (
   `category_name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `category_slug` varchar(120) COLLATE utf8mb4_unicode_ci NOT NULL,
   `excerpt` varchar(500) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `author_name` varchar(120) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `author_bio` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `cover_image` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `cover_alt` varchar(180) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `content` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -136,12 +151,28 @@ CREATE TABLE `blog_posts` (
   `meta_description` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `is_published` tinyint(1) NOT NULL DEFAULT '0',
   `published_at` timestamp NULL DEFAULT NULL,
+  `view_count` bigint unsigned NOT NULL DEFAULT '0',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `blog_posts_slug_unique` (`slug`),
   KEY `blog_posts_is_published_published_at_index` (`is_published`,`published_at`),
-  KEY `blog_posts_category_slug_is_published_published_at_index` (`category_slug`,`is_published`,`published_at`)
+  KEY `blog_posts_category_slug_is_published_published_at_index` (`category_slug`,`is_published`,`published_at`),
+  KEY `blog_posts_public_views_idx` (`is_published`,`view_count`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+DROP TABLE IF EXISTS `blog_tags`;
+/*!40101 SET @saved_cs_client = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `blog_tags` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `slug` varchar(60) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `blog_tags_slug_unique` (`slug`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -186,6 +217,28 @@ CREATE TABLE `cache_locks` (
   `expiration` bigint NOT NULL,
   PRIMARY KEY (`key`),
   KEY `cache_locks_expiration_index` (`expiration`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+DROP TABLE IF EXISTS `career_openings`;
+/*!40101 SET @saved_cs_client = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `career_openings` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `title` varchar(180) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `department` varchar(120) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `location` varchar(150) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `employment_type` varchar(24) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `summary` varchar(800) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `description` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `requirements` text COLLATE utf8mb4_unicode_ci,
+  `benefits` text COLLATE utf8mb4_unicode_ci,
+  `is_active` tinyint(1) NOT NULL DEFAULT '0',
+  `sort_order` smallint unsigned NOT NULL DEFAULT '0',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `career_openings_public_filter_idx` (`is_active`,`department`,`location`,`sort_order`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -406,6 +459,21 @@ CREATE TABLE `failed_jobs` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+DROP TABLE IF EXISTS `faq_helpful_votes`;
+/*!40101 SET @saved_cs_client = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `faq_helpful_votes` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `faq_id` bigint unsigned NOT NULL,
+  `visitor_id` char(36) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `helpful` tinyint(1) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `faq_helpful_votes_faq_id_visitor_id_unique` (`faq_id`,`visitor_id`),
+  CONSTRAINT `faq_helpful_votes_faq_id_foreign` FOREIGN KEY (`faq_id`) REFERENCES `faqs` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
 DROP TABLE IF EXISTS `faqs`;
 /*!40101 SET @saved_cs_client = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
@@ -611,8 +679,14 @@ CREATE TABLE `newsletter_subscriptions` (
   `consented_at` timestamp NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
+  `unsubscribed_at` timestamp NULL DEFAULT NULL,
+  `unsubscribe_reason` varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `unsubscribe_token_hash` char(64) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `unsubscribe_token_expires_at` timestamp NULL DEFAULT NULL,
+  `pending_unsubscribe_reason` varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `newsletter_subscriptions_email_unique` (`email`)
+  UNIQUE KEY `newsletter_subscriptions_email_unique` (`email`),
+  UNIQUE KEY `newsletter_subscriptions_unsubscribe_token_hash_unique` (`unsubscribe_token_hash`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1348,6 +1422,7 @@ CREATE TABLE `shipments` (
   `order_id` bigint unsigned NOT NULL,
   `carrier` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `tracking_code` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `tracking_url` varchar(2048) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `status` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'pending',
   `shipped_at` timestamp NULL DEFAULT NULL,
   `delivered_at` timestamp NULL DEFAULT NULL,
@@ -1434,11 +1509,13 @@ CREATE TABLE `store_locations` (
   `name` varchar(150) COLLATE utf8mb4_unicode_ci NOT NULL,
   `address` varchar(500) COLLATE utf8mb4_unicode_ci NOT NULL,
   `province_code` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `ward_code` varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `province_name` varchar(150) COLLATE utf8mb4_unicode_ci NOT NULL,
   `ward_name` varchar(150) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `phone` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL,
   `email` varchar(254) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `opening_hours` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `opening_schedule` json DEFAULT NULL,
   `latitude` decimal(10,7) NOT NULL,
   `longitude` decimal(10,7) NOT NULL,
   `sort_order` smallint unsigned NOT NULL DEFAULT '0',
@@ -1447,7 +1524,8 @@ CREATE TABLE `store_locations` (
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `store_locations_public_order_idx` (`is_active`,`province_code`,`sort_order`),
-  KEY `store_locations_province_code_index` (`province_code`)
+  KEY `store_locations_province_code_index` (`province_code`),
+  KEY `store_locations_public_ward_idx` (`is_active`,`province_code`,`ward_code`,`sort_order`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

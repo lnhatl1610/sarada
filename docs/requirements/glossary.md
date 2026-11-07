@@ -1,5 +1,7 @@
 # Glossary
 
+- **Career opening**: A published job listing with a role, department, location, employment type, and store-authored description; it does not represent an application or applicant record.
+
 - **FAQ**: A store-maintained question and answer shown publicly when active, grouped under a topic such as ordering or delivery.
 
 - **SKU**: unique stock-keeping identifier for one sellable product variant.

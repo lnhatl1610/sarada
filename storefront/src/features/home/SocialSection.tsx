@@ -44,7 +44,7 @@ export function SocialSection() {
         <motion.div
           animate={reduced ? {} : { x: ["0%", "-50%"] }}
           transition={{ duration: 35, repeat: Infinity, ease: "linear" }}
-          className="flex w-max gap-10 whitespace-nowrap font-['Cormorant_Garamond_Variable'] text-3xl italic text-muted-foreground"
+          className="flex w-max gap-10 whitespace-nowrap font-sans text-3xl italic text-muted-foreground"
         >
           {[0, 1].map((i) => (
             <span key={i}>

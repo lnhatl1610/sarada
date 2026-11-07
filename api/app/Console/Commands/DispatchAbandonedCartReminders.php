@@ -27,7 +27,8 @@ class DispatchAbandonedCartReminders extends Command
                         $user->where('status', 'active')->whereExists(function ($subscriptions): void {
                             $subscriptions->selectRaw('1')
                                 ->from('newsletter_subscriptions')
-                                ->whereRaw('LOWER(newsletter_subscriptions.email) = LOWER(users.email)');
+                                ->whereRaw('LOWER(newsletter_subscriptions.email) = LOWER(users.email)')
+                                ->whereNull('newsletter_subscriptions.unsubscribed_at');
                         });
                     });
                 })->orWhere(function ($guest): void {
@@ -73,7 +74,7 @@ class DispatchAbandonedCartReminders extends Command
 
             if ($cart->user_id !== null) {
                 $user = $cart->user;
-                if (! $user || $user->status !== 'active' || ! DB::table('newsletter_subscriptions')->whereRaw('LOWER(email) = LOWER(?)', [$user->email])->exists()) {
+                if (! $user || $user->status !== 'active' || ! DB::table('newsletter_subscriptions')->whereRaw('LOWER(email) = LOWER(?)', [$user->email])->whereNull('unsubscribed_at')->exists()) {
                     return null;
                 }
 

@@ -275,7 +275,7 @@
 }
 
 .address-delete-dialog button:focus-visible {
-  outline: 3px solid var(--ui-primary, var(--wine, #78433f));
+  outline: 3px solid var(--ui-primary, var(--wine, #7f2638));
   outline-offset: 3px;
 }
 

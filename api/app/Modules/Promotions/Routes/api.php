@@ -2,12 +2,14 @@
 
 use App\Http\Controllers\Api\V1\Admin\BlogPostController as AdminBlogPostController;
 use App\Http\Controllers\Api\V1\Admin\CampaignController;
+use App\Http\Controllers\Api\V1\Admin\CareerOpeningController as AdminCareerOpeningController;
 use App\Http\Controllers\Api\V1\Admin\FaqController as AdminFaqController;
 use App\Http\Controllers\Api\V1\Admin\PageController;
 use App\Http\Controllers\Api\V1\Admin\StorefrontPromotionCampaignController;
 use App\Http\Controllers\Api\V1\Admin\StoreLocationController as AdminStoreLocationController;
 use App\Http\Controllers\Api\V1\PageController as PublicPageController;
 use App\Http\Controllers\Api\V1\Storefront\BlogPostController as StorefrontBlogPostController;
+use App\Http\Controllers\Api\V1\Storefront\CareerOpeningController as StorefrontCareerOpeningController;
 use App\Http\Controllers\Api\V1\Storefront\FaqController as StorefrontFaqController;
 use App\Http\Controllers\Api\V1\Storefront\StoreLocationController as StorefrontStoreLocationController;
 use Illuminate\Support\Facades\Route;
@@ -16,8 +18,10 @@ Route::get('v1/pages', [PublicPageController::class, 'index'])->middleware('thro
 Route::get('v1/pages/{slug}', [PublicPageController::class, 'show'])->where('slug', '[A-Za-z0-9_-]+')->middleware('throttle:public-api');
 Route::get('v1/stores', [StorefrontStoreLocationController::class, 'index'])->middleware('throttle:public-api');
 Route::get('v1/faqs', [StorefrontFaqController::class, 'index'])->middleware('throttle:public-api');
+Route::post('v1/faqs/{faq}/helpful-votes', [StorefrontFaqController::class, 'helpful'])->whereNumber('faq')->middleware('throttle:10,1');
 Route::get('v1/blog/posts', [StorefrontBlogPostController::class, 'index'])->middleware('throttle:public-api');
 Route::get('v1/blog/posts/{slug}', [StorefrontBlogPostController::class, 'show'])->where('slug', '[A-Za-z0-9_-]+')->middleware('throttle:public-api');
+Route::get('v1/careers', [StorefrontCareerOpeningController::class, 'index'])->middleware('throttle:public-api');
 
 Route::prefix('v1/admin/campaigns')->middleware(['auth:sanctum,api', 'audience:admin'])->group(function (): void {
     Route::get('/coupons/{campaign}/usages', [CampaignController::class, 'usages'])->middleware('permission:coupons.view');
@@ -54,6 +58,10 @@ Route::prefix('v1/admin')->middleware(['auth:sanctum,api', 'audience:admin'])->g
     Route::post('/pages', [PageController::class, 'store'])->middleware('permission:content.manage');
     Route::patch('/pages/{page}', [PageController::class, 'update'])->whereNumber('page')->middleware('permission:content.manage');
     Route::delete('/pages/{page}', [PageController::class, 'destroy'])->whereNumber('page')->middleware('permission:content.manage');
+    Route::get('/career-openings', [AdminCareerOpeningController::class, 'index'])->middleware('permission:content.manage');
+    Route::post('/career-openings', [AdminCareerOpeningController::class, 'store'])->middleware('permission:content.manage');
+    Route::patch('/career-openings/{opening}', [AdminCareerOpeningController::class, 'update'])->whereNumber('opening')->middleware('permission:content.manage');
+    Route::delete('/career-openings/{opening}', [AdminCareerOpeningController::class, 'destroy'])->whereNumber('opening')->middleware('permission:content.manage');
     Route::patch('/banners/reorder', [CampaignController::class, 'reorder'])->defaults('kind', 'banners')->middleware('permission:content.manage');
     Route::get('/coupons/{campaign}/usages', [CampaignController::class, 'usages'])->defaults('kind', 'coupons')->middleware('permission:coupons.view');
     Route::get('/coupons', [CampaignController::class, 'index'])->defaults('kind', 'coupons')->middleware('permission:coupons.view');

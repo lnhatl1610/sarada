@@ -44,7 +44,7 @@ function Stat({
   }, [visible, reduced, value]);
   return (
     <div ref={ref}>
-      <p className="font-['Cormorant_Garamond_Variable'] text-4xl md:text-5xl">
+      <p className="font-sans text-4xl md:text-5xl">
         {new Intl.NumberFormat("vi-VN", {
           maximumFractionDigits: value < 10 ? 1 : 0,
         }).format(reduced ? value : count)}

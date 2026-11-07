@@ -48,4 +48,24 @@
   --radius-xl: calc(var(--radius) + 4px);
 }
 
-:root{font-family:var(--font-body,Inter),system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:16px;color:#252522;background:#fbfaf8;font-synthesis:none;text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;font-weight:400}*{box-sizing:border-box}body{margin:0;min-width:0}button,input,select,textarea{font:inherit}a{color:inherit;text-decoration:none}
+:root {
+  --font-body: "Inter Variable", Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-display: var(--font-body);
+  font-family: var(--font-body);
+  font-size: 16px;
+  color: #252522;
+  background: #fbfaf8;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-weight: 400;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; min-width: 0; }
+body .store :not(svg):not(svg *):not(code):not(code *):not(pre):not(pre *):not(kbd):not(kbd *):not(samp):not(samp *) {
+  font-family: var(--font-body) !important;
+}
+button, input, select, textarea { font: inherit; }
+a { color: inherit; text-decoration: none; }

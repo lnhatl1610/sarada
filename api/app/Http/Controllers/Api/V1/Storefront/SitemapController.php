@@ -19,7 +19,7 @@ class SitemapController extends Controller
     public function __invoke()
     {
         $storefrontUrl = rtrim((string) config('app.frontend_url'), '/');
-        $cacheKey = 'storefront.sitemap.urls.v11.'.hash('sha256', $storefrontUrl);
+        $cacheKey = 'storefront.sitemap.urls.v13.'.hash('sha256', $storefrontUrl);
         $urls = Cache::remember($cacheKey, now()->addMinutes(15), function () use ($storefrontUrl): array {
             $urls = [['loc' => $storefrontUrl.'/', 'lastmod' => null]];
             $urls[] = ['loc' => $storefrontUrl.'/sitemap', 'lastmod' => null];
@@ -62,7 +62,13 @@ class SitemapController extends Controller
             }
 
             foreach (Page::query()->where('is_published', true)->orderBy('id')->get(['slug', 'updated_at']) as $page) {
-                $urls[] = ['loc' => $storefrontUrl.'/pages/'.$page->slug, 'lastmod' => $page->updated_at?->toAtomString()];
+                $policySlugs = ['returns', 'shipping', 'payment', 'privacy', 'terms', 'cookies'];
+                $path = in_array($page->slug, $policySlugs, true)
+                    ? '/policies/'.$page->slug
+                    : (in_array($page->slug, ['about', 'careers', 'contact', 'size-guide'], true)
+                        ? '/'.$page->slug
+                        : '/pages/'.$page->slug);
+                $urls[] = ['loc' => $storefrontUrl.$path, 'lastmod' => $page->updated_at?->toAtomString()];
             }
 
             $lastStoreUpdate = StoreLocation::query()->where('is_active', true)->max('updated_at');

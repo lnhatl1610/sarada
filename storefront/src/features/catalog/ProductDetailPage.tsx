@@ -1,11 +1,13 @@
 import { lazy, Suspense, useEffect, useRef, useState, type KeyboardEvent as ReactKeyboardEvent, type PointerEvent as ReactPointerEvent, type TouchEvent } from 'react'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { motion, useReducedMotion } from 'motion/react'
-import { Link } from 'react-router'
+import { Link, useSearchParams } from 'react-router'
+import { FacebookShareButton } from 'react-share'
 import { Minus, Plus } from 'lucide-react'
 import '../../ProductDetail.css'
 import type { components } from '../../types/api'
 import { ResponsiveImage } from '../../components/shared/ResponsiveImage'
+import { StorefrontVideoPlayer } from '../../components/shared/StorefrontVideoPlayer'
 import { DemoConceptBadge } from '../../components/shared/DemoConceptBadge'
 import { getMediaDisclosureLabel } from '../../components/shared/getMediaDisclosure'
 import { getProductImageAlt } from '../../components/shared/product-image-alt'
@@ -161,9 +163,9 @@ export function ProductDetailPage({
   onBuyNow,
 }: ProductDetailPageProps) {
   const prefersReducedMotion = useReducedMotion()
-  const [selectedVariantId, setSelectedVariantId] = useState<number | null>(null)
-  const [selectedColor, setSelectedColor] = useState('')
+  const [searchParams, setSearchParams] = useSearchParams()
   const [selectedImage, setSelectedImage] = useState(0)
+  const [galleryZoom, setGalleryZoom] = useState(1)
   const [selected360Frame, setSelected360Frame] = useState(0)
   const [is360Open, setIs360Open] = useState(false)
   const [is360Dragging, setIs360Dragging] = useState(false)
@@ -174,6 +176,7 @@ export function ProductDetailPage({
   const [restockChannel, setRestockChannel] = useState<'email' | 'phone'>('email')
   const [activeProductTab, setActiveProductTab] = useState<ProductTab>('description')
   const [sizeGuideOpen, setSizeGuideOpen] = useState(false)
+  const [sizeHeightUnit, setSizeHeightUnit] = useState<'cm' | 'inch'>('cm')
   const [sizeHeight, setSizeHeight] = useState<string | null>(null)
   const [sizeWeight, setSizeWeight] = useState<string | null>(null)
   const [galleryOpen, setGalleryOpen] = useState(false)
@@ -191,10 +194,29 @@ export function ProductDetailPage({
   const frameDrag = useRef<{ pointerId: number; lastX: number; remainder: number } | null>(null)
   const productId = product?.id
   const viewTrackedProductId = useRef<number | null>(null)
+
+  const updateVariantUrl = (color: string, size: string) => {
+    const nextParams = new URLSearchParams(searchParams)
+    if (color) nextParams.set('color', color)
+    else nextParams.delete('color')
+    if (size) nextParams.set('size', size)
+    else nextParams.delete('size')
+    setSearchParams(nextParams)
+  }
+
   const sizeGuideQuery = useStorefrontContentPage('size-guide', Boolean(product) && sizeGuideOpen)
   const bodyMeasurements = useQuery({ queryKey: ['account', 'size-profile', accountId], queryFn: () => getAccountProfile(accessToken), enabled: Boolean(accessToken && accountId), staleTime: 60_000 })
   const sizeHeightValue = sizeHeight ?? bodyMeasurements.data?.height_cm?.toString() ?? ''
   const sizeWeightValue = sizeWeight ?? bodyMeasurements.data?.weight_kg?.toString() ?? ''
+  const changeSizeHeightUnit = (nextUnit: 'cm' | 'inch') => {
+    if (nextUnit === sizeHeightUnit) return
+    const currentHeight = Number(sizeHeightValue)
+    if (sizeHeightValue && Number.isFinite(currentHeight)) {
+      const convertedHeight = nextUnit === 'inch' ? currentHeight / 2.54 : currentHeight * 2.54
+      setSizeHeight(String(Number(convertedHeight.toFixed(1))))
+    }
+    setSizeHeightUnit(nextUnit)
+  }
   const shippingPolicyQuery = useStorefrontContentPage('shipping', Boolean(product) && activeProductTab === 'shipping')
   const shippingEstimate = useAddressLocations({
     enabled: shippingEstimateOpen,
@@ -202,6 +224,17 @@ export function ProductDetailPage({
     wardCode: shippingWardCode,
     shippingFeeEnabled: true,
   })
+
+  const requestedColor = searchParams.get('color')?.trim() ?? ''
+  const requestedSize = searchParams.get('size')?.trim() ?? ''
+  const normalizeVariantValue = (value: string) => value.toLocaleLowerCase('vi-VN')
+  const requestedColorMatch = product?.variants?.find((variant) => variant.color && normalizeVariantValue(variant.color) === normalizeVariantValue(requestedColor))?.color ?? ''
+  const matchingVariants = requestedSize
+    ? product?.variants?.filter((variant) => normalizeVariantValue(variant.size ?? '') === normalizeVariantValue(requestedSize) && (!variant.color || (requestedColorMatch && normalizeVariantValue(variant.color) === normalizeVariantValue(requestedColorMatch)))) ?? []
+    : []
+  const selectedVariantFromUrl = matchingVariants.length === 1 ? matchingVariants[0] : undefined
+  const selectedColor = requestedColorMatch || selectedVariantFromUrl?.color || ''
+  const selectedVariantId = selectedVariantFromUrl?.id ?? null
 
   useEffect(() => {
     if (!product || viewTrackedProductId.current === product.id) return
@@ -302,12 +335,14 @@ export function ProductDetailPage({
     }
   }
   const shareProduct = async () => {
+    setShareMessage('')
     if (!navigator.share) {
       await copyProductLink()
       return
     }
     try {
       await navigator.share({ title: product.name, text: product.short_description ?? undefined, url: window.location.href })
+      setShareMessage('Đã mở bảng chia sẻ.')
     } catch (error) {
       if (error instanceof DOMException && error.name === 'AbortError') return
       setShareMessage('Không thể mở bảng chia sẻ. Hãy sao chép liên kết sản phẩm.')
@@ -320,19 +355,31 @@ export function ProductDetailPage({
     const startX = galleryTouchStartX.current
     galleryTouchStartX.current = null
     const endX = event.changedTouches[0]?.clientX
-    if (startX === null || endX === undefined || detailImages.length < 2) return
+    if (galleryZoom > 1 || startX === null || endX === undefined || detailImages.length < 2) return
     const delta = endX - startX
     if (Math.abs(delta) < 44) return
-    setSelectedImage((index) => (index + (delta < 0 ? 1 : -1) + detailImages.length) % detailImages.length)
+    changeGalleryImage(delta < 0 ? 1 : -1)
+  }
+  const changeGalleryImage = (direction: -1 | 1) => {
+    setGalleryZoom(1)
+    setSelectedImage((index) => (index + direction + detailImages.length) % detailImages.length)
   }
   const onGalleryLightboxKeyDown = (event: ReactKeyboardEvent<HTMLDialogElement>) => {
-    if (detailImages.length < 2) return
-    if (event.key === 'ArrowLeft') {
+    if (event.key === '+' || event.key === '=') {
       event.preventDefault()
-      setSelectedImage((index) => (index - 1 + detailImages.length) % detailImages.length)
-    } else if (event.key === 'ArrowRight') {
+      setGalleryZoom((zoom) => Math.min(3, Number((zoom + 0.5).toFixed(1))))
+    } else if (event.key === '-') {
       event.preventDefault()
-      setSelectedImage((index) => (index + 1) % detailImages.length)
+      setGalleryZoom((zoom) => Math.max(1, Number((zoom - 0.5).toFixed(1))))
+    } else if (event.key === '0') {
+      event.preventDefault()
+      setGalleryZoom(1)
+    } else if (detailImages.length > 1 && event.key === 'ArrowLeft') {
+      event.preventDefault()
+      changeGalleryImage(-1)
+    } else if (detailImages.length > 1 && event.key === 'ArrowRight') {
+      event.preventDefault()
+      changeGalleryImage(1)
     }
   }
   const on360PointerDown = (event: ReactPointerEvent<HTMLDivElement>) => {
@@ -376,24 +423,30 @@ export function ProductDetailPage({
                   </motion.div>
                   <button className="gallery-open-button" type="button" onClick={() => setGalleryOpen(true)}>Phóng to ảnh</button>
                   {detailImageLabel && <DemoConceptBadge label={detailImageLabel} />}
-                  {detailImages.length > 1 && <div className="gallery-navigation"><button type="button" aria-label="Ảnh trước" onClick={() => setSelectedImage((index) => (index - 1 + detailImages.length) % detailImages.length)}>‹</button><span>{selectedImage + 1} / {detailImages.length}</span><button type="button" aria-label="Ảnh tiếp theo" onClick={() => setSelectedImage((index) => (index + 1) % detailImages.length)}>›</button></div>}
+                  {detailImages.length > 1 && <div className="gallery-navigation"><button type="button" aria-label="Ảnh trước" onClick={() => changeGalleryImage(-1)}>‹</button><span>{selectedImage + 1} / {detailImages.length}</span><button type="button" aria-label="Ảnh tiếp theo" onClick={() => changeGalleryImage(1)}>›</button></div>}
                 </div>
                 <div className="gallery-thumbnails" role="group" aria-label="Ảnh sản phẩm">
-                  {detailImages.map((image, index) => <button type="button" key={image.url} aria-label={`Xem ảnh ${index + 1}`} aria-pressed={selectedImage === index} onClick={() => setSelectedImage(index)}><ResponsiveImage src={image.url} alt="" width={120} height={160} /></button>)}
+                  {detailImages.map((image, index) => <button type="button" key={image.url} aria-label={`Xem ảnh ${index + 1}`} aria-pressed={selectedImage === index} onClick={() => { setGalleryZoom(1); setSelectedImage(index) }}><ResponsiveImage src={image.url} alt="" width={120} height={160} /></button>)}
                 </div>
                 <dialog ref={galleryDialogRef} className="gallery-lightbox" aria-labelledby="gallery-lightbox-title" onCancel={(event) => { event.preventDefault(); setGalleryOpen(false) }} onClose={() => setGalleryOpen(false)} onClick={(event) => { if (event.target === galleryDialogRef.current) setGalleryOpen(false) }} onKeyDown={onGalleryLightboxKeyDown}>
                   <header className="gallery-lightbox-header"><h2 id="gallery-lightbox-title">{product.name} · Ảnh {selectedImage + 1} / {detailImages.length}</h2><button type="button" aria-label="Đóng ảnh toàn màn hình" onClick={() => setGalleryOpen(false)}>×</button></header>
                   <div className="gallery-lightbox-media" onTouchStart={onGalleryTouchStart} onTouchEnd={onGalleryTouchEnd}>
-                    <ResponsiveImage src={detailImages[selectedImage]?.url ?? detailImages[0].url} srcSet={detailImages[selectedImage]?.srcset ?? detailImages[0].srcset ?? undefined} alt={getProductImageAlt(detailImages[selectedImage]?.url ?? detailImages[0].url, detailImages[selectedImage]?.alt, product.name)} width={1200} height={1600} loading="eager" sizes="100vw" />
+                    <ResponsiveImage src={detailImages[selectedImage]?.url ?? detailImages[0].url} srcSet={detailImages[selectedImage]?.srcset ?? detailImages[0].srcset ?? undefined} alt={getProductImageAlt(detailImages[selectedImage]?.url ?? detailImages[0].url, detailImages[selectedImage]?.alt, product.name)} width={1200} height={1600} loading="eager" sizes="100vw" style={{ transform: `scale(${galleryZoom})` }} />
                     {detailImageLabel && <DemoConceptBadge label={detailImageLabel} />}
+                    <div className="gallery-lightbox-zoom" role="group" aria-label="Điều khiển thu phóng ảnh">
+                      <button type="button" aria-label="Thu nhỏ ảnh" disabled={galleryZoom <= 1} onClick={() => setGalleryZoom((zoom) => Math.max(1, Number((zoom - 0.5).toFixed(1))))}><Minus aria-hidden="true" size={16} /></button>
+                      <span aria-live="polite">{Math.round(galleryZoom * 100)}%</span>
+                      <button type="button" aria-label="Phóng to ảnh" disabled={galleryZoom >= 3} onClick={() => setGalleryZoom((zoom) => Math.min(3, Number((zoom + 0.5).toFixed(1))))}><Plus aria-hidden="true" size={16} /></button>
+                      <button type="button" onClick={() => setGalleryZoom(1)} disabled={galleryZoom === 1}>Đặt lại</button>
+                    </div>
                   </div>
-                  {detailImages.length > 1 && <nav className="gallery-lightbox-navigation" aria-label="Điều hướng ảnh sản phẩm"><button type="button" onClick={() => setSelectedImage((index) => (index - 1 + detailImages.length) % detailImages.length)}>Ảnh trước</button><button type="button" onClick={() => setSelectedImage((index) => (index + 1) % detailImages.length)}>Ảnh tiếp theo</button></nav>}
+                  {detailImages.length > 1 && <nav className="gallery-lightbox-navigation" aria-label="Điều hướng ảnh sản phẩm"><button type="button" onClick={() => changeGalleryImage(-1)}>Ảnh trước</button><button type="button" onClick={() => changeGalleryImage(1)}>Ảnh tiếp theo</button></nav>}
                 </dialog>
               </>
             ) : (
               <div className="gallery-placeholder" role="img" aria-label={`Ảnh ${product.name} chưa được cập nhật cho màu ${selectedColor}`}><span>{selectedColor ? `ẢNH MÀU ${selectedColor.toLocaleUpperCase('vi-VN')} ĐANG ĐƯỢC CẬP NHẬT` : 'ẢNH SẢN PHẨM ĐANG ĐƯỢC CẬP NHẬT'}</span></div>
             )}
-            {detailVideos.map((video) => <figure className="product-detail-video" key={video.id}><video controls preload="metadata" src={video.url} aria-label={video.caption || `Video ${product.name}`} /><figcaption>{video.caption || `Video sản phẩm ${product.name}`}</figcaption></figure>)}
+            {detailVideos.map((video) => <figure className="product-detail-video" key={video.id}><StorefrontVideoPlayer src={video.url} label={video.caption || `Video ${product.name}`} /><figcaption>{video.caption || `Video sản phẩm ${product.name}`}</figcaption></figure>)}
             {canView360 && <section className="product-360-viewer" aria-label={`Xem ${product.name} ở góc 360 độ`}>
               {!is360Open ? <button type="button" className="secondary" onClick={() => { setSelected360Frame(0); setIs360Open(true) }}>Xem 360°</button> : <>
                 <h3>{product.name} · Xem 360°</h3>
@@ -419,12 +472,12 @@ export function ProductDetailPage({
             {product.rating && product.rating.count > 0 && <button className="product-rating product-rating-link" type="button" aria-label={`Đánh giá trung bình ${product.rating.average} trên 5, ${product.rating.count} lượt. Xem đánh giá`} onClick={() => { setActiveProductTab('reviews'); document.getElementById('product-tab-panel')?.scrollIntoView({ behavior: 'smooth', block: 'start' }) }}>★ {product.rating.average.toFixed(1)} · {product.rating.count} đánh giá</button>}
             <p className="price">{formatMoney(displayedPrice)} {displayedCompareAtPrice && displayedCompareAtPrice > displayedPrice && <><del>{formatMoney(displayedCompareAtPrice)}</del><span className="product-savings">Tiết kiệm {formatMoney(displayedCompareAtPrice - displayedPrice)}</span></>}</p>
             {(product.short_description || product.description) ? <p className="description">{product.short_description || product.description}</p> : <p className="description">Mô tả sản phẩm chưa được cửa hàng cập nhật.</p>}
-            {productColors.length > 0 && <fieldset className="color-options"><legend>Màu sắc{selectedColor && <span> · {selectedColor}</span>}</legend><div>{productColors.map((color) => <button type="button" key={color.name} className="color-swatch" aria-label={`Chọn màu ${color.name}`} aria-pressed={selectedColor === color.name} onClick={() => { setSelectedColor(color.name); setSelectedVariantId(null); setSelectedImage(0); setSelected360Frame(0); setIs360Open(false); frameDrag.current = null; setIs360Dragging(false); setQuantity(1) }}><span style={color.hex ? { backgroundColor: color.hex } : undefined} aria-hidden="true" />{color.name}</button>)}</div></fieldset>}
+            {productColors.length > 0 && <fieldset className="color-options"><legend>Màu sắc{selectedColor && <span> · {selectedColor}</span>}</legend><div>{productColors.map((color) => <button type="button" key={color.name} className="color-swatch" aria-label={`Chọn màu ${color.name}`} aria-pressed={selectedColor === color.name} onClick={() => { updateVariantUrl(color.name, ''); setGalleryZoom(1); setSelectedImage(0); setSelected360Frame(0); setIs360Open(false); frameDrag.current = null; setIs360Dragging(false); setQuantity(1) }}><span style={color.hex ? { backgroundColor: color.hex } : undefined} aria-hidden="true" />{color.name}</button>)}</div></fieldset>}
             {productColors.length > 0 && !selectedColor && <p className="stock-status" role="status">Chọn màu để xem các kích cỡ còn hàng.</p>}
             {product.variants?.length ? <fieldset className="size-options" disabled={productColors.length > 0 && !selectedColor}><legend>Kích cỡ</legend><div>{colorFilteredVariants.map((variant) => {
               const soldOut = variant.available_quantity < 1
               const label = variant.size ?? `SKU ${variant.id}`
-              return <button key={variant.id} type="button" className={`size-option${soldOut ? ' is-sold-out' : ''}`} aria-label={soldOut ? `${label}, hết hàng. Báo khi có hàng` : label} aria-pressed={soldOut ? undefined : selectedVariantId === variant.id} aria-expanded={soldOut && !accountId ? restockVariantId === variant.id : undefined} aria-controls={soldOut && !accountId ? 'restock-alert-form' : undefined} onClick={() => { if (soldOut) { if (accountId) { onNotifyWhenRestocked(variant.id); return }; restockMutation.reset(); setRestockVariantId(variant.id); return }; setRestockVariantId(null); setSelectedVariantId(variant.id); setQuantity(1) }}><span>{label}</span>{soldOut && <small>{restockBusyVariantId === variant.id ? 'Đang đăng ký…' : restockVariantId === variant.id ? 'Đang chọn báo hàng' : 'Hết hàng · Báo khi có hàng'}</small>}</button>
+              return <button key={variant.id} type="button" className={`size-option${soldOut ? ' is-sold-out' : ''}`} aria-label={soldOut ? `${label}, hết hàng. Báo khi có hàng` : label} aria-pressed={soldOut ? undefined : selectedVariantId === variant.id} aria-expanded={soldOut && !accountId ? restockVariantId === variant.id : undefined} aria-controls={soldOut && !accountId ? 'restock-alert-form' : undefined} onClick={() => { if (soldOut) { if (accountId) { onNotifyWhenRestocked(variant.id); return }; restockMutation.reset(); setRestockVariantId(variant.id); return }; setRestockVariantId(null); updateVariantUrl(variant.color ?? selectedColor, variant.size ?? ''); setQuantity(1) }}><span>{label}</span>{soldOut && <small>{restockBusyVariantId === variant.id ? 'Đang đăng ký…' : restockVariantId === variant.id ? 'Đang chọn báo hàng' : 'Hết hàng · Báo khi có hàng'}</small>}</button>
             })}</div>{productColors.length > 0 && !selectedColor && <small>Chọn màu trước để xem kích cỡ có sẵn.</small>}</fieldset> : <p className="stock-status">Liên hệ cửa hàng để kiểm tra phiên bản sản phẩm.</p>}
             {restockVariantId !== null && <form id="restock-alert-form" className="restock-alert-form" onSubmit={(event) => { event.preventDefault(); if (!product || restockVariantId === null) return; const contact = restockChannel === 'email' ? { email: restockEmail.trim() } : { phone: restockPhone.trim() }; restockMutation.mutate({ slug: product.slug, variantId: restockVariantId, contact }) }}>
               {smsStockAlertsEnabled && <fieldset className="restock-alert-channel"><legend>Nhận thông báo qua</legend><label><input type="radio" name="restock-alert-channel" value="email" checked={restockChannel === 'email'} onChange={() => setRestockChannel('email')} />Email</label><label><input type="radio" name="restock-alert-channel" value="phone" checked={restockChannel === 'phone'} onChange={() => setRestockChannel('phone')} />SMS</label></fieldset>}
@@ -441,13 +494,13 @@ export function ProductDetailPage({
             <div className="product-share-actions" aria-label="Chia sẻ sản phẩm">
               <button type="button" onClick={() => void copyProductLink()}>Sao chép liên kết</button>
               <button type="button" onClick={() => void shareProduct()}>Chia sẻ qua ứng dụng</button>
-              <a href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`} target="_blank" rel="noreferrer">Facebook</a>
+              <FacebookShareButton url={window.location.href} aria-label="Chia sẻ sản phẩm trên Facebook">Facebook</FacebookShareButton>
               {socialZaloOaId && <button type="button" aria-expanded={zaloShareOpen} onClick={() => setZaloShareOpen((open) => !open)}>Chia sẻ qua Zalo</button>}
             </div>
             {zaloShareOpen && socialZaloOaId && <ZaloShareWidget href={window.location.href} oaId={socialZaloOaId} />}
-            {shareMessage && <p className="sr-only" role="status">{shareMessage}</p>}
+            {shareMessage && <p className="product-share-status" role="status" aria-live="polite">{shareMessage}</p>}
             <button className="size-guide-link" type="button" onClick={() => setSizeGuideOpen(true)}>Hướng dẫn chọn kích cỡ</button>
-            <dialog ref={sizeGuideDialogRef} className="size-guide-dialog" aria-labelledby="size-guide-title" onCancel={(event) => { event.preventDefault(); setSizeGuideOpen(false) }}><div className="size-guide-dialog-header"><h2 id="size-guide-title">Hướng dẫn chọn kích cỡ</h2><button type="button" aria-label="Đóng hướng dẫn" onClick={() => setSizeGuideOpen(false)}>×</button></div><section className="size-recommendation-tool"><h3>Gợi ý size theo chiều cao và cân nặng</h3><div><label>Chiều cao (cm)<input type="number" min="50" max="250" value={sizeHeightValue} onChange={(event) => setSizeHeight(event.target.value)} /></label><label>Cân nặng (kg)<input type="number" min="10" max="300" value={sizeWeightValue} onChange={(event) => setSizeWeight(event.target.value)} /></label></div>{sizeHeightValue && sizeWeightValue ? (() => { const height = Number(sizeHeightValue); const weight = Number(sizeWeightValue); const matches = (product.size_recommendations ?? []).filter((item) => height >= item.height_min_cm && height <= item.height_max_cm && weight >= item.weight_min_kg && weight <= item.weight_max_kg); return matches.length ? <p role="status">Size gợi ý: <strong>{matches.map((item) => item.size).filter(Boolean).join(String.fromCharCode(44,32))}</strong></p> : <p role="status">Chưa có gợi ý phù hợp. Vui lòng tham khảo bảng size bên dưới hoặc liên hệ cửa hàng.</p> })() : <p>Nhập chiều cao và cân nặng để xem gợi ý đã được cửa hàng cấu hình.</p>}</section>{sizeGuideQuery.isPending ? <p role="status">Đang tải bảng hướng dẫn…</p> : sizeGuideQuery.isError ? sizeGuideQuery.error instanceof StorefrontContentPageError && sizeGuideQuery.error.status === 404 ? <p>Hướng dẫn chọn kích cỡ chưa được cửa hàng công khai.</p> : <div role="alert"><p>Chưa tải được hướng dẫn chọn kích cỡ.</p><button className="button dark" type="button" onClick={() => void sizeGuideQuery.refetch()}>Thử lại</button></div> : sizeGuideQuery.data ? <article className="content-page-body" dangerouslySetInnerHTML={{ __html: sanitizePageContent(sizeGuideQuery.data.content) }} /> : null}</dialog>
+            <dialog ref={sizeGuideDialogRef} className="size-guide-dialog" aria-labelledby="size-guide-title" onCancel={(event) => { event.preventDefault(); setSizeGuideOpen(false) }}><div className="size-guide-dialog-header"><h2 id="size-guide-title">Hướng dẫn chọn kích cỡ</h2><button type="button" aria-label="Đóng hướng dẫn" onClick={() => setSizeGuideOpen(false)}>×</button></div><section className="size-recommendation-tool"><h3>Gợi ý size theo chiều cao và cân nặng</h3><div><label>Chiều cao<div className="flex min-w-0 gap-2"><input aria-label={`Chiều cao (${sizeHeightUnit})`} type="number" min={sizeHeightUnit === 'cm' ? 50 : 20} max={sizeHeightUnit === 'cm' ? 250 : 98} step="0.1" value={sizeHeightValue} onChange={(event) => setSizeHeight(event.target.value)} /><select className="min-w-16 border border-border bg-background px-2 text-foreground" aria-label="Đơn vị chiều cao" value={sizeHeightUnit} onChange={(event) => changeSizeHeightUnit(event.target.value as 'cm' | 'inch')}><option value="cm">cm</option><option value="inch">inch</option></select></div></label><label>Cân nặng (kg)<input type="number" min="10" max="300" step="0.1" value={sizeWeightValue} onChange={(event) => setSizeWeight(event.target.value)} /></label></div><p>Đơn vị chiều cao chỉ đổi cách nhập; gợi ý được so với khoảng cm do cửa hàng cấu hình và chỉ mang tính tham khảo.</p>{sizeHeightValue && sizeWeightValue ? (() => { const enteredHeight = Number(sizeHeightValue); const height = sizeHeightUnit === 'inch' ? enteredHeight * 2.54 : enteredHeight; const weight = Number(sizeWeightValue); const matches = (product.size_recommendations ?? []).filter((item) => height >= item.height_min_cm && height <= item.height_max_cm && weight >= item.weight_min_kg && weight <= item.weight_max_kg); return matches.length ? <p role="status">Size gợi ý: <strong>{matches.map((item) => item.size).filter(Boolean).join(String.fromCharCode(44,32))}</strong></p> : <p role="status">Chưa có gợi ý phù hợp. Vui lòng tham khảo bảng size bên dưới hoặc liên hệ cửa hàng.</p> })() : <p>Nhập chiều cao và cân nặng để xem gợi ý đã được cửa hàng cấu hình.</p>}</section>{sizeGuideQuery.isPending ? <p role="status">Đang tải bảng hướng dẫn…</p> : sizeGuideQuery.isError ? sizeGuideQuery.error instanceof StorefrontContentPageError && sizeGuideQuery.error.status === 404 ? <p>Hướng dẫn chọn kích cỡ chưa được cửa hàng công khai.</p> : <div role="alert"><p>Chưa tải được hướng dẫn chọn kích cỡ.</p><button className="button dark" type="button" onClick={() => void sizeGuideQuery.refetch()}>Thử lại</button></div> : sizeGuideQuery.data ? <article className="content-page-body" dangerouslySetInnerHTML={{ __html: sanitizePageContent(sizeGuideQuery.data.content) }} /> : null}</dialog>
             <div className="perks"><p>✓ Phí giao hàng hiển thị trước khi đặt hàng</p><p>✓ Theo dõi trạng thái đơn sau khi đặt</p>{codEnabled && <p>✓ Thanh toán khi nhận hàng (COD)</p>}{bankTransferEnabled && <p>✓ Chuyển khoản ngân hàng / VietQR</p>}</div>
             <details className="product-delivery-estimator" onToggle={(event) => setShippingEstimateOpen(event.currentTarget.open)}>
               <summary>Kiểm tra phí và thời gian giao hàng</summary>

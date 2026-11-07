@@ -6,12 +6,14 @@ import { getProductImageAlt } from '../../components/shared/product-image-alt'
 import { formatVnd } from '../../lib/money'
 import type { CatalogPageProduct } from './CatalogPage'
 
-export function CatalogQuickView({ product, busy, cartSyncLoading, error, onAdd }: {
-  product: CatalogPageProduct
+type CatalogQuickViewProduct = Pick<CatalogPageProduct, 'id' | 'name' | 'slug' | 'price' | 'short_description' | 'images' | 'variants'>
+
+export function CatalogQuickView<TProduct extends CatalogQuickViewProduct>({ product, busy, cartSyncLoading, error, onAdd }: {
+  product: TProduct
   busy: boolean
   cartSyncLoading: boolean
   error: string
-  onAdd: (product: CatalogPageProduct, variantId: number) => Promise<boolean>
+  onAdd: (product: TProduct, variantId: number) => Promise<boolean>
 }) {
   const dialogRef = useRef<HTMLDialogElement>(null)
   const closeRef = useRef<HTMLButtonElement>(null)

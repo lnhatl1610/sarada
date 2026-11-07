@@ -4,6 +4,8 @@
 - [x] Implement checkout preview and idempotent COD order placement transaction.
 - [x] Implement order state machine, cancellation, history, COD collection.
 - [x] Implement customer order/track APIs and checkout/order-tracking UI.
+- [x] Add same-category product recommendations to order success using current catalog data, while retaining immutable order item snapshots and filtering products already in the order.
+- [x] Add an optional HTTPS carrier tracking URL to shipments, Admin editing, and customer order tracking; apply the additive migration before deploying the API.
 - [x] Add admin manual COD order creation with customer/variant lookup, locked inventory reservation, server-side totals, coupon use, payment, history, and idempotency.
 - [x] Add `/orders/create`, navigation, OpenAPI contract, and manual-order business-flow documentation.
 - [x] Implement admin order queue/detail/status actions.

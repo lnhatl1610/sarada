@@ -19,10 +19,12 @@ FR-CHK-001..004, FR-ORD-001..003, BR-CHK-001..003, BR-ORD-001..003.
 - [ ] Insufficient stock, invalid coupon, or invalid address creates no partial order.
 - [ ] Order snapshots remain unchanged when product data later changes.
 - [ ] Guest tracking requires the order code and exactly one matching customer phone number or email; unknown orders and mismatched contact details return the same not-found response.
+- [x] Staff can save an optional HTTPS carrier tracking URL with a shipment; guest order tracking displays that configured link without deriving a URL from the carrier name or tracking code. Apply the additive migration before deploying the API.
 - [ ] Status transitions validate state machine and append history.
 - [ ] Staff can create a manual COD order by selecting/entering a customer, adding active variants, entering delivery details, and selecting shipping/coupon options; amounts are recalculated and stock is reserved atomically.
 - [x] Current variant pricing honors the product sale window in preview, checkout, and manual order creation; order items retain the charged unit price snapshot.
 - [x] Account order detail can add saved variant IDs and quantities back to the cart through the normal server-priced cart endpoint.
+- [x] The successful order response includes a nullable current product slug for each remaining catalog item; the confirmation page uses it only to request up to four related published products, excludes purchased products, and keeps recommendations independent from order pricing.
 
 ## Data
 Orders, order_items, histories, payments, shipments, inventory and coupon usage.

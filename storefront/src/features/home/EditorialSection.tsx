@@ -35,7 +35,7 @@ export function EditorialSection({
           )}
           <h2
             id={id}
-            className="font-['Cormorant_Garamond_Variable'] text-4xl font-medium md:text-6xl"
+            className="font-sans text-4xl font-medium md:text-6xl"
           >
             {title}
           </h2>

@@ -60,6 +60,9 @@ erDiagram
         varchar category_name
         varchar category_slug
         varchar excerpt
+        varchar author_name "nullable"
+        varchar author_bio "nullable, max 500"
+        bigint view_count "unsigned, default 0"
         varchar cover_image
         varchar cover_alt
         longtext content
@@ -77,6 +80,19 @@ erDiagram
     }
     blog_posts ||--o{ blog_post_product : features
     products ||--o{ blog_post_product : appears_in
+    blog_tags {
+        bigint id PK
+        varchar name
+        varchar slug UK
+        timestamp created_at
+        timestamp updated_at
+    }
+    blog_post_tag {
+        bigint blog_post_id PK,FK
+        bigint blog_tag_id PK,FK
+    }
+    blog_posts ||--o{ blog_post_tag : tagged
+    blog_tags ||--o{ blog_post_tag : applied_to
 NEWSLETTER_SUBSCRIPTIONS {
   bigint id PK
   varchar email UK
@@ -108,10 +124,12 @@ STORE_LOCATIONS {
   string address
   string province_code
   string province_name
+  string ward_code "nullable; current address catalog"
   string ward_name "nullable"
   string phone
   string email "nullable"
   text opening_hours
+  json opening_schedule "nullable; weekdays in Asia/Ho_Chi_Minh"
   decimal latitude
   decimal longitude
   smallint sort_order
@@ -146,6 +164,15 @@ FAQS {
   smallint category_order
   smallint sort_order
   boolean is_active
+}
+FAQS ||--o{ FAQ_HELPFUL_VOTES : receives
+FAQ_HELPFUL_VOTES {
+  bigint id PK
+  bigint faq_id FK
+  uuid visitor_id "random browser identifier"
+  boolean helpful
+  timestamp created_at
+  "unique faq_id, visitor_id"
 }
 PRODUCT_STOCK_ALERTS {
   bigint id PK
@@ -659,3 +686,18 @@ USERS {
   USERS ||--o{ SUPPORT_TICKETS : assigned_to
   SUPPORT_TICKETS ||--o{ SUPPORT_TICKET_MESSAGES : contains
   USERS ||--o{ SUPPORT_TICKET_MESSAGES : writes
+
+  CAREER_OPENINGS {
+    bigint id PK
+    varchar title
+    varchar department
+    varchar location
+    varchar employment_type
+    varchar summary
+    text description
+    text requirements
+    text benefits
+    boolean is_active
+    unsigned_smallint sort_order
+    timestamps created_at_updated_at
+  }

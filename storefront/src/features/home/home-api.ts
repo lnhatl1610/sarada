@@ -65,7 +65,3 @@ export async function fetchStorefrontPageLinks(signal?: AbortSignal): Promise<St
   return response.data.data ?? []
 }
 
-export async function subscribeToNewsletter(email: string, consent: boolean): Promise<string> {
-  const response = await api.post<components['schemas']['NewsletterSubscriptionAccepted']>('/newsletter/subscriptions', { email, consent })
-  return response.data.data.message
-}

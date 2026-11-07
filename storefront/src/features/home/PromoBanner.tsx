@@ -78,7 +78,7 @@ export function PromoBanner() {
         </span>
         <h2
           id="sale-title"
-          className="font-['Cormorant_Garamond_Variable'] text-5xl md:text-7xl"
+          className="font-sans text-5xl md:text-7xl"
         >
           Giảm đến 50%
           <br />

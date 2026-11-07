@@ -18,12 +18,13 @@ As a shopper, I want accurate product and variant information so I can choose an
 - [x] Customers can register a restock alert from a wishlist for a selected sold-out variant using their account email; guest PDP email/SMS subscriptions remain supported.
 - [x] Shoppers can read paginated answered product questions; signed-in customers can submit questions, and staff with `reviews.moderate` can answer or hide them without exposing customer contact details.
 - [x] Eligible customers can attach up to five validated photos and one size-limited MP4/WebM video to a delivered-order review; media stays private until moderation approves the review and renders appropriately in Storefront and Admin.
+- [x] The PDP size calculator accepts height in centimetres or inches, converts to centimetres before matching only store-configured product size ranges, and labels the result as a suggestion.
 
 ## Data
 Categories, brands, products, images, attributes/values, variants, inventories, tags, size guides, customer-owned `product_price_alerts`, and moderated `product_questions`.
 
 ## API contract
-Public `GET /api/v1/categories`, `/products`, `/products/{slug}`, `/products/{slug}/related`, and `/products/{slug}/questions`; signed-in question submission; staff CRUD under `/api/v1/admin/products` and moderated questions.
+Public `GET /api/v1/categories`, `/products`, `/products/{slug}`, `/products/{slug}/related`, `/products/{slug}/questions`, `/products/{slug}/reviews`, and `/reviews` (recent approved review excerpts); signed-in question submission; staff CRUD under `/api/v1/admin/products` and moderated questions.
 
 ## Screens/routes
 Admin product list/form; storefront home, collection/search, product detail.

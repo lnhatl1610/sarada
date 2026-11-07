@@ -7,6 +7,7 @@
 }
 @media (prefers-reduced-motion: reduce) { .checkout-success-confetti { display: none; } }
 .order-success-summary{width:min(100%,440px);margin:6px 0 24px;padding:20px 24px;border:1px solid var(--line);text-align:left}
+.success-page .order-success-date{margin:-3px 0 14px;color:var(--muted);font-size:11px}
 .order-success-summary h2{margin:0 0 10px;font-size:12px;font-weight:600}
 .order-success-summary p{margin:0;color:var(--muted);font-size:11px;line-height:1.7}
 .order-success-summary strong{color:var(--ink)}

@@ -16,11 +16,13 @@ class AdminBlogPostSummaryResource extends JsonResource
             'category_name' => (string) $this->category_name,
             'category_slug' => (string) $this->category_slug,
             'excerpt' => (string) $this->excerpt,
+            'author_name' => $this->author_name,
             'cover_image' => $this->cover_image,
             'cover_alt' => $this->cover_alt,
             'is_published' => (bool) $this->is_published,
             'published_at' => $this->published_at?->toIso8601String(),
             'updated_at' => $this->updated_at?->toIso8601String(),
+            'tags' => BlogTagResource::collection($this->whenLoaded('tags')),
         ];
     }
 }

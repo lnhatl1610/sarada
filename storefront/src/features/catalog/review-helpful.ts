@@ -1,28 +1,11 @@
+import { getStorefrontVisitorId } from '../../lib/storefront-visitor-id'
+
 const visitorStorageKey = 'storefront:review-helpful-visitor'
 const votesStorageKey = 'storefront:review-helpful-votes'
-let fallbackVisitorId: string | null = null
 const fallbackVotes = new Set<number>()
 
-function newVisitorId(): string {
-  if (typeof crypto !== 'undefined' && 'randomUUID' in crypto) return crypto.randomUUID()
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (character) => {
-    const random = Math.floor(Math.random() * 16)
-    return (character === 'x' ? random : (random & 0x3) | 0x8).toString(16)
-  })
-}
-
 export function getReviewHelpfulVisitorId(): string | null {
-  if (typeof window === 'undefined') return null
-  try {
-    const stored = window.localStorage.getItem(visitorStorageKey)
-    if (stored) return stored
-    const visitorId = newVisitorId()
-    window.localStorage.setItem(visitorStorageKey, visitorId)
-    return visitorId
-  } catch {
-    fallbackVisitorId ??= newVisitorId()
-    return fallbackVisitorId
-  }
+  return getStorefrontVisitorId(visitorStorageKey)
 }
 
 export function hasVotedHelpful(reviewId: number): boolean {

@@ -9,8 +9,8 @@ Giúp khách xem tối đa bốn sản phẩm đang công khai trong cùng một
 - Khách chọn hoặc bỏ chọn sản phẩm bằng nút có nhãn rõ ràng trên thẻ sản phẩm hoặc trang chi tiết sản phẩm.
 - Danh sách được giữ trong trình duyệt; nút so sánh xuất hiện trên trang danh sách khi đã chọn ít nhất một sản phẩm.
 - Trang `/compare` tải lại thông tin mới nhất của từng sản phẩm từ API, không dựa vào giá lưu ở trình duyệt.
-- Bảng so sánh có trạng thái rỗng, tải, và cảnh báo khi sản phẩm đã bị ẩn hoặc ngừng công khai.
-- Khách có thể bỏ từng sản phẩm, xóa toàn bộ hoặc sao chép liên kết chia sẻ tối đa bốn slug.
+- Bảng so sánh có trạng thái rỗng, tải và lỗi API. Mỗi sản phẩm lỗi có nút thử lại và nút gỡ riêng, kể cả khi tất cả slug đều không tải được.
+- Khách có thể bỏ từng sản phẩm, xóa toàn bộ, sao chép liên kết hoặc chia sẻ danh sách tối đa bốn slug lên Facebook bằng `react-share`.
 - Liên kết chia sẻ mở cùng danh sách so sánh từ URL; trang mang `noindex` vì nội dung phụ thuộc lựa chọn của từng khách.
 
 ## Nội dung bảng

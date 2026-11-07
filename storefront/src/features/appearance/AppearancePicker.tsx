@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef } from 'react'
 import type { CSSProperties } from 'react'
-import { palettes, uiStyles } from './appearance-options'
+import { defaultAppearance, palettes, uiStyles } from './appearance-options'
 import type { AppearanceChoice } from './appearance-options'
 import './appearance-picker.css'
 
@@ -21,7 +21,7 @@ export function AppearancePicker({ value, resolvedMode, onChange, onClose }: Pro
     })
   }, [onClose])
   const style = uiStyles.find((item) => item.id === value.styleId) ?? uiStyles[0]
-  const palette = palettes.find((item) => item.id === value.paletteId) ?? palettes[8]
+  const palette = palettes.find((item) => item.id === value.paletteId) ?? palettes.find((item) => item.id === defaultAppearance.paletteId) ?? palettes[0]
   const tokens = palette[resolvedMode]
   const previewStyle = {
     '--ui-bg': tokens.bg,
@@ -62,7 +62,7 @@ export function AppearancePicker({ value, resolvedMode, onChange, onClose }: Pro
       </div>
       <fieldset className="appearance-palettes"><legend>Bảng màu</legend><div className="palette-grid">{palettes.map((item) => <button type="button" key={item.id} className="palette-option" aria-pressed={value.paletteId === item.id} onClick={() => onChange({ ...value, paletteId: item.id })}><span className="palette-swatches" aria-hidden="true">{[item[resolvedMode].primary, item[resolvedMode].accent, item[resolvedMode].surface, item[resolvedMode].bg].map((color, index) => <i key={index} style={{ background: color }} />)}</span><span><b>{item.id} · {item.name}</b><small>{item.mood}</small></span>{value.paletteId === item.id && <span className="palette-check" aria-label="Đang chọn">✓</span>}</button>)}</div></fieldset>
       <section className="appearance-preview" aria-label="Xem trước giao diện"><div className="appearance-preview-label">XEM TRƯỚC · {style.name} / {palette.name} / {resolvedMode === 'light' ? 'Sáng' : 'Tối'}{value.mode === 'system' ? ' · Theo thiết bị' : ''}</div><div className="appearance-preview-card" data-ui-style={style.id} data-theme={resolvedMode} style={previewStyle}><p className="appearance-preview-eyebrow">BỘ SƯU TẬP MỚI</p><h3>Thiết kế theo lựa chọn của bạn</h3><p>Tiếng Việt: ắ ằ ẳ ẵ ặ ệ ồ ộ ớ ờ ở ợ ữ ự</p><div><button type="button">Nút chính</button><span>Thẻ xem trước</span></div></div></section>
-      <footer className="appearance-footer"><button type="button" className="appearance-reset" onClick={() => onChange({ styleId: 'S13', paletteId: 'P09', mode: 'system' })}>Khôi phục mặc định</button><button type="button" className="appearance-done" onClick={closeAndRestoreFocus}>Hoàn tất</button></footer>
+      <footer className="appearance-footer"><button type="button" className="appearance-reset" onClick={() => onChange(defaultAppearance)}>Khôi phục mặc định</button><button type="button" className="appearance-done" onClick={closeAndRestoreFocus}>Hoàn tất</button></footer>
     </section>
   </div>
 }

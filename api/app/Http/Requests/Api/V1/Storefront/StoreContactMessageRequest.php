@@ -34,7 +34,7 @@ class StoreContactMessageRequest extends FormRequest
             'name' => ['required', 'string', 'min:2', 'max:120'],
             'phone' => ['required', 'string', 'regex:/^(0|\+84)\d{9}$/'],
             'email' => ['required', 'string', 'email:filter', 'max:254'],
-            'topic' => ['required', 'string', 'in:product,order,return,other'],
+            'topic' => ['required', 'string', 'in:product,order,return,cooperation,other'],
             'order_code' => ['nullable', 'string', 'max:32'],
             'message' => ['required', 'string', 'min:10', 'max:5000'],
             'attachment' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048', 'dimensions:max_width=6000,max_height=6000'],

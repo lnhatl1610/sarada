@@ -2,7 +2,7 @@
 .newsletter-welcome-dialog[open]{animation:newsletter-welcome-enter 220ms ease-out both}
 .newsletter-welcome-dialog::backdrop{background:rgb(20 20 18 / 48%);backdrop-filter:blur(3px)}
 .newsletter-welcome-dialog .eyebrow{padding-right:38px}
-.newsletter-welcome-dialog h2{max-width:13ch;margin:10px 0 12px;font:500 clamp(30px,6vw,42px)/1.05 var(--font-display,Georgia,serif);letter-spacing:-.04em}
+.newsletter-welcome-dialog h2{max-width:13ch;margin:10px 0 12px;font:500 clamp(30px,6vw,42px)/1.05 var(--font-display,var(--font-body));letter-spacing:-.04em}
 .newsletter-welcome-dialog>p:not(.eyebrow){max-width:38ch;color:var(--muted);font-size:12px;line-height:1.7}
 .newsletter-welcome-close{position:absolute;top:10px;right:10px;display:grid;width:42px;height:42px;place-items:center;border:1px solid var(--line);background:transparent;color:inherit;font-size:24px;cursor:pointer}
 .newsletter-welcome-close:focus-visible{outline:2px solid var(--wine);outline-offset:3px}

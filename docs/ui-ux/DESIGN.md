@@ -1,26 +1,36 @@
 # Design Tokens
 
-Use CSS custom properties so both apps can implement the same visual language while retaining separate bundles.
+Admin and Storefront keep separate semantic tokens and themes. Use the values below for the Storefront; its source of truth is `storefront/src/index.css`. Do not copy palette values from `plan1.md` into the running interface.
 
 ```css
 :root {
-  --background: #ffffff;
-  --surface: #ffffff;
-  --foreground: #171717;
-  --muted: #737373;
-  --border: #e5e5e5;
-  --accent: #262626;
-  --accent-foreground: #ffffff;
-  --success: #28734b;
-  --warning: #9a6415;
-  --danger: #b42318;
-  --radius-card: .25rem;
-  --radius-control: .2rem;
-  --shadow-card: none;
+  --radius: .65rem;
+  --background: #f9f8f5;
+  --foreground: #252522;
+  --card: #ffffff;
+  --card-foreground: #252522;
+  --popover: #ffffff;
+  --popover-foreground: #252522;
+  --primary: #7f2638;
+  --primary-foreground: #ffffff;
+  --secondary: #eeeae5;
+  --secondary-foreground: #252522;
+  --muted: #efede8;
+  --muted-foreground: #716e68;
+  --accent: #f1e8e9;
+  --accent-foreground: #682031;
+  --destructive: #b42318;
+  --border: #e5e0da;
+  --input: #e5e0da;
+  --ring: #7f2638;
 }
 ```
 
-Typography: DM Sans with a system sans-serif fallback for both headings and body. Use restrained sizes and weights, concise labels, fine dividers, flat surfaces, and a 4px spacing rhythm. Both apps use a minimal neutral palette; product photography supplies most of the visual color. Verify token contrast before changing colors.
+Storefront uses a warm off-white canvas, charcoal text, burgundy primary actions, white surfaces, and quiet warm borders. Its single self-hosted typeface is Inter Variable, defined in `storefront/src/index.css`; headings use size, weight, and spacing for hierarchy rather than a separate display face. Code and code-like values may use a monospace face. Keep Admin's configurable monochrome/accent theme independent. Verify token contrast before changing colors.
+
+The customer appearance picker defaults to the `Sarada Editorial` palette (`P15`) in `storefront/src/features/appearance/appearance-options.ts`; its light-mode values match the tokens above. Retired stored palette IDs fall back to this default.
+
+`storefront/src/StorefrontEditorial.css` maps its light-mode defaults to this same palette; its dark-mode values and semantic success, warning, and error colors remain mode/status-specific.
 
 ## Admin theme
 

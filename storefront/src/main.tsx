@@ -10,7 +10,6 @@ import './index.css'
 import './Minimal.css'
 import './StorefrontEditorial.css'
 import './features/content/SitemapPage.css'
-import '@fontsource-variable/fraunces'
 import '@fontsource-variable/inter'
 
 if (import.meta.env.PROD && 'serviceWorker' in navigator) {

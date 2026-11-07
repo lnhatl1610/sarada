@@ -296,6 +296,7 @@ class OrderController extends Controller
             $payload = [
                 'carrier' => $data['carrier'] ?? null,
                 'tracking_code' => $data['tracking_code'] ?? null,
+                'tracking_url' => $data['tracking_url'] ?? null,
                 'status' => $data['status'],
                 ...$timestamps,
                 'updated_at' => now(),
@@ -458,11 +459,12 @@ class OrderController extends Controller
             ])->all(),
             'payments' => $payments->all(),
             'shipments' => DB::table('shipments')->where('order_id', $order->id)->orderByDesc('created_at')->orderByDesc('id')->get([
-                'id', 'carrier', 'tracking_code', 'status', 'shipped_at', 'delivered_at', 'created_at',
+                'id', 'carrier', 'tracking_code', 'tracking_url', 'status', 'shipped_at', 'delivered_at', 'created_at',
             ])->map(fn (object $shipment): array => [
                 'id' => (int) $shipment->id,
                 'carrier' => $shipment->carrier,
                 'tracking_code' => $shipment->tracking_code,
+                'tracking_url' => $shipment->tracking_url,
                 'status' => $shipment->status,
                 'shipped_at' => $shipment->shipped_at,
                 'delivered_at' => $shipment->delivered_at,

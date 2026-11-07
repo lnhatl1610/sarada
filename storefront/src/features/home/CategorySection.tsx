@@ -44,7 +44,7 @@ export function CategorySection() {
             <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/10 to-transparent" />
             <div className="absolute inset-x-5 bottom-5 flex items-end justify-between gap-2 text-white">
               <div>
-                <h3 className="font-['Cormorant_Garamond_Variable'] text-3xl md:text-4xl">
+                <h3 className="font-sans text-3xl md:text-4xl">
                   {category.name}
                 </h3>
                 <p className="mt-1 text-xs tracking-wider">

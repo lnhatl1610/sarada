@@ -29,7 +29,8 @@ type WishlistPageProps = {
   restockBusyVariantId: number | null
   onTogglePriceAlert: (productId: number) => void
   onNotifyWhenRestocked: (productId: number, variantId: number) => void
-  onAddToCart: (product: WishlistProduct, variantId: number, quantity: number) => void
+  onAddToCart: (product: WishlistProduct, variantId: number, quantity: number) => Promise<boolean>
+  onAddAllToCart: (items: Array<{ product: WishlistProduct; variantId: number }>) => Promise<{ added: number; failed: number }>
   cartReady: boolean
   cartSyncStatus: 'loading' | 'ready' | 'error'
   cartSyncError: string
@@ -37,9 +38,11 @@ type WishlistPageProps = {
   addingToCart: boolean
   addToCartError: string
   onRetry: () => void
+  guestMode?: boolean
+  guestUnavailableCount?: number
 }
 
-export function WishlistPage({ lists, listsLoading, listsError, activeListId, onSelectList, onCreateList, onRenameList, onDeleteList, onShareList, loading, error, products, formatMoney, onRemove, priceAlertProductIds, priceAlertsError, onRetryPriceAlerts, priceAlertBusyProductId, restockBusyVariantId, onTogglePriceAlert, onNotifyWhenRestocked, onAddToCart, cartReady, cartSyncStatus, cartSyncError, onRetryCart, addingToCart, addToCartError, onRetry }: WishlistPageProps) {
+export function WishlistPage({ lists, listsLoading, listsError, activeListId, onSelectList, onCreateList, onRenameList, onDeleteList, onShareList, loading, error, products, formatMoney, onRemove, priceAlertProductIds, priceAlertsError, onRetryPriceAlerts, priceAlertBusyProductId, restockBusyVariantId, onTogglePriceAlert, onNotifyWhenRestocked, onAddToCart, onAddAllToCart, cartReady, cartSyncStatus, cartSyncError, onRetryCart, addingToCart, addToCartError, onRetry, guestMode = false, guestUnavailableCount = 0 }: WishlistPageProps) {
   const [selectedVariants, setSelectedVariants] = useState<Record<number, number>>({})
   const activeList = lists.find((list) => list.id === activeListId)
   const [newListName, setNewListName] = useState('')
@@ -48,6 +51,33 @@ export function WishlistPage({ lists, listsLoading, listsError, activeListId, on
   const setRenameValue = (value: string) => setRenameDraft({ id: activeList?.id, name: activeList?.name, value })
   const [listActionError, setListActionError] = useState('')
   const [shareLink, setShareLink] = useState('')
+  const [addingAll, setAddingAll] = useState(false)
+  const [bulkAddFeedback, setBulkAddFeedback] = useState('')
+  const bulkAddItems = products.flatMap((product) => {
+    const selectedVariantId = selectedVariants[product.id]
+    const variant = product.variants?.find((item) => item.id === selectedVariantId && item.available_quantity > 0)
+    return variant ? [{ product, variantId: variant.id }] : []
+  })
+  const needsVariantSelection = products.some((product) =>
+    (product.variants ?? []).some((variant) => variant.available_quantity > 0)
+    && !bulkAddItems.some((item) => item.product.id === product.id),
+  )
+
+  const addAllToCart = async () => {
+    if (!cartReady || addingToCart || addingAll || needsVariantSelection || bulkAddItems.length === 0) return
+    setAddingAll(true)
+    setBulkAddFeedback('')
+    try {
+      const result = await onAddAllToCart(bulkAddItems)
+      setBulkAddFeedback(result.failed > 0
+        ? `Đã thêm ${result.added} sản phẩm; ${result.failed} sản phẩm chưa thêm được. Kiểm tra giỏ hàng để thử lại.`
+        : `Đã thêm ${result.added} sản phẩm vào giỏ hàng.`)
+    } catch {
+      setBulkAddFeedback('Không thể thêm danh sách vào giỏ. Kiểm tra kết nối rồi thử lại.')
+    } finally {
+      setAddingAll(false)
+    }
+  }
 
   const runListAction = async (action: () => Promise<unknown>) => {
     setListActionError('')
@@ -60,10 +90,13 @@ export function WishlistPage({ lists, listsLoading, listsError, activeListId, on
 
   return (
     <div className="container subpage account-page">
-      <Link className="back-link" to="/account">← Tài khoản</Link>
-      <p className="eyebrow">ĐÃ LƯU</p>
+      {!guestMode && <Link className="back-link" to="/account">← Tài khoản</Link>}
       <h1>Sản phẩm yêu thích</h1>
-      <section className="wishlist-list-tools" aria-label="Quản lý danh sách yêu thích">
+      {guestMode && <aside className="rounded-sm border border-border bg-card p-4 text-sm text-card-foreground">
+        <p className="m-0">Danh sách được lưu trên thiết bị này, tối đa 24 sản phẩm. <Link className="underline underline-offset-2" to="/login?returnTo=%2Fwishlist">Đăng nhập để đồng bộ và tạo liên kết chia sẻ.</Link></p>
+        {guestUnavailableCount > 0 && <p className="mt-2" role="status">{guestUnavailableCount} sản phẩm hiện không tải được; danh sách vẫn được giữ trên thiết bị.</p>}
+      </aside>}
+      {!guestMode && <section className="wishlist-list-tools" aria-label="Quản lý danh sách yêu thích">
         <label>Danh sách
           <select aria-label="Chọn danh sách yêu thích" value={activeListId ?? ''} disabled={listsLoading || !lists.length} onChange={(event) => onSelectList(Number(event.target.value))}>
             {lists.map((list) => <option key={list.id} value={list.id}>{list.name} ({list.item_count})</option>)}
@@ -86,7 +119,7 @@ export function WishlistPage({ lists, listsLoading, listsError, activeListId, on
         </>}
         {listsError && <p role="alert">{listsError}</p>}
         {listActionError && <p role="alert">{listActionError}</p>}
-      </section>
+      </section>}
       {loading ? (
         <p className="state" aria-live="polite">Đang tải danh sách…</p>
       ) : error ? (
@@ -96,7 +129,14 @@ export function WishlistPage({ lists, listsLoading, listsError, activeListId, on
           <button className="button dark" type="button" onClick={onRetry}>Thử lại</button>
         </div>
       ) : products.length ? (
-        <div className="grid">
+        <>
+        <section className="wishlist-bulk-add" aria-label="Thêm danh sách vào giỏ hàng" aria-busy={addingAll}>
+          <div><strong>Thêm nhanh cả danh sách</strong><p>Chọn màu và kích cỡ còn hàng cho từng sản phẩm. Sản phẩm hết hàng sẽ được bỏ qua.</p></div>
+          <button className="button dark" type="button" disabled={!cartReady || addingToCart || addingAll || needsVariantSelection || bulkAddItems.length === 0} onClick={() => void addAllToCart()}>{addingAll ? 'Đang thêm lần lượt…' : cartSyncStatus === 'error' ? 'Giỏ hàng chưa sẵn sàng' : needsVariantSelection ? 'Chọn phân loại cho từng sản phẩm' : 'Thêm tất cả vào giỏ'}</button>
+          {bulkAddFeedback && <p className="wishlist-bulk-add-feedback" role="status" aria-live="polite">{bulkAddFeedback}</p>}
+          {bulkAddItems.length === 0 && <p className="wishlist-bulk-add-feedback">Chưa có sản phẩm nào được chọn đủ phân loại còn hàng để thêm.</p>}
+        </section>
+        <div className="product-grid">
           {products.map((item) => {
             const variants = item.variants ?? []
             const availableVariants = variants.filter((variant) => variant.available_quantity > 0)
@@ -115,22 +155,25 @@ export function WishlistPage({ lists, listsLoading, listsError, activeListId, on
                   <b>{formatMoney(item.price)}</b>
                 </div>
                 {variants.length > 0 ? <label className="wishlist-variant-picker">Màu và kích cỡ<select aria-label={`Chọn màu và kích cỡ cho ${item.name}`} value={selectedVariantId || ''} onChange={(event) => setSelectedVariants((current) => ({ ...current, [item.id]: Number(event.target.value) }))}><option value="">Chọn phân loại</option>{variants.map((variant) => <option key={variant.id} value={variant.id} disabled={variant.available_quantity <= 0}>{[variant.color, variant.size].filter(Boolean).join(' · ') || variant.sku}{variant.available_quantity <= 0 ? ' · Hết hàng' : ` · Còn ${variant.available_quantity}`}</option>)}</select></label> : <p className="wishlist-unavailable">Chưa có biến thể để đặt hàng.</p>}
-                <button className="link-button" type="button" disabled={priceAlertBusyProductId !== null || Boolean(priceAlertsError)} onClick={() => onTogglePriceAlert(item.id)}>{priceAlertBusyProductId === item.id ? 'Đang cập nhật…' : priceAlertProductIds.includes(item.id) ? 'Tắt báo giảm giá' : 'Báo khi giảm giá'}</button>
-                {priceAlertsError && <div className="wishlist-cart-error" role="alert"><span>{priceAlertsError}</span><button className="link-button" type="button" onClick={onRetryPriceAlerts}>Thử lại</button></div>}
-                {variants.filter((variant) => variant.available_quantity <= 0).map((variant) => <button className="link-button" type="button" key={`restock-${variant.id}`} disabled={restockBusyVariantId === variant.id} onClick={() => onNotifyWhenRestocked(item.id, variant.id)}>{restockBusyVariantId === variant.id ? 'Đang đăng ký…' : `Báo khi có hàng · ${[variant.color, variant.size].filter(Boolean).join(' · ') || variant.sku}`}</button>)}
+                {!guestMode && <button className="link-button" type="button" disabled={priceAlertBusyProductId !== null || Boolean(priceAlertsError)} onClick={() => onTogglePriceAlert(item.id)}>{priceAlertBusyProductId === item.id ? 'Đang cập nhật…' : priceAlertProductIds.includes(item.id) ? 'Tắt báo giảm giá' : 'Báo khi giảm giá'}</button>}
+                {!guestMode && priceAlertsError && <div className="wishlist-cart-error" role="alert"><span>{priceAlertsError}</span><button className="link-button" type="button" onClick={onRetryPriceAlerts}>Thử lại</button></div>}
+                {!guestMode && variants.filter((variant) => variant.available_quantity <= 0).map((variant) => <button className="link-button" type="button" key={`restock-${variant.id}`} disabled={restockBusyVariantId === variant.id} onClick={() => onNotifyWhenRestocked(item.id, variant.id)}>{restockBusyVariantId === variant.id ? 'Đang đăng ký…' : `Báo khi có hàng · ${[variant.color, variant.size].filter(Boolean).join(' · ') || variant.sku}`}</button>)}
                 {addToCartError && <p className="auth-error" role="alert">{addToCartError}</p>}
                 {cartSyncStatus === 'error' && <div className="wishlist-cart-error" role="alert"><span>{cartSyncError || 'Không thể đồng bộ giỏ hàng.'}</span><button className="link-button" type="button" onClick={onRetryCart}>Thử lại</button></div>}
-                <button className="button dark full" type="button" disabled={!selectedVariant || !cartReady || addingToCart} onClick={() => selectedVariant && onAddToCart(item, selectedVariant.id, 1)}>{addingToCart ? 'Đang thêm…' : cartSyncStatus === 'loading' ? 'Đang đồng bộ giỏ…' : cartSyncStatus === 'error' ? 'Giỏ hàng chưa sẵn sàng' : selectedVariant ? 'Thêm vào giỏ' : availableVariants.length ? 'Chọn phân loại' : 'Tạm hết hàng'}</button>
+                <button className="button dark full" type="button" disabled={!selectedVariant || !cartReady || addingToCart || addingAll} onClick={() => selectedVariant && void onAddToCart(item, selectedVariant.id, 1)}>{addingAll ? 'Đang thêm danh sách…' : addingToCart ? 'Đang thêm…' : cartSyncStatus === 'loading' ? 'Đang đồng bộ giỏ…' : cartSyncStatus === 'error' ? 'Giỏ hàng chưa sẵn sàng' : selectedVariant ? 'Thêm vào giỏ' : availableVariants.length ? 'Chọn phân loại' : 'Tạm hết hàng'}</button>
                 <button className="link-button" type="button" onClick={() => onRemove(item)}>Xóa khỏi yêu thích</button>
               </article>
             )
           })}
         </div>
+        </>
       ) : (
         <div className="empty">
           <img className="account-empty-illustration" src="/illustrations/empty-wishlist.svg" alt="" aria-hidden="true" />
-          <h2>Danh sách yêu thích đang trống</h2>
-          <p>Lưu những thiết kế bạn muốn xem lại.</p>
+          <h2>{guestMode && guestUnavailableCount ? 'Chưa tải được sản phẩm đã lưu' : 'Danh sách yêu thích đang trống'}</h2>
+          <p>{guestMode && guestUnavailableCount ? 'Danh sách vẫn được giữ trên thiết bị. Hãy thử tải lại.' : 'Lưu những thiết kế bạn muốn xem lại.'}</p>
+          {guestMode && guestUnavailableCount > 0 && <button className="button secondary" type="button" onClick={onRetry}>Tải lại danh sách</button>}
+          {guestMode && <p>Đăng nhập sau này để đưa các món đã lưu vào wishlist tài khoản.</p>}
           <Link className="button dark" to="/products">Khám phá sản phẩm</Link>
         </div>
       )}

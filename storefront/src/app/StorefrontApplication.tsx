@@ -83,7 +83,7 @@ function ConnectedStorefrontContent() {
   const membershipProgramQuery = useMembershipProgram(path === '/membership' || path === '/')
   const logout = useStorefrontLogout({ accessToken, setAccessToken, setCustomer, resetCartMergeAttempt: cart.resetMergeAttempt, resetAddressDraft: account.addressActions.resetDraft })
   const checkout = useCheckoutActions({ accessToken, cartToken: cart.cartToken, customerId: customer?.id ?? null, cart: cart.cart, setCart: cart.setCart, onToast: setToast })
-  const contentPageQuery = useStorefrontContentPage(path === '/contact' ? 'contact' : path.split('/').filter(Boolean).at(-1) ?? '', path.startsWith('/pages/') || path === '/contact')
+  const contentPageQuery = useStorefrontContentPage(path === '/contact' ? 'contact' : path.split('/').filter(Boolean).at(-1) ?? '', path.startsWith('/pages/') || path.startsWith('/policies/') || path === '/contact' || path === '/about' || path === '/careers' || path === '/size-guide')
   const blogPostQuery = useBlogPost(path.startsWith('/blog/') ? path.split('/').filter(Boolean).at(-1) ?? '' : '', path.startsWith('/blog/'))
   const { data: storefrontConfiguration, isLoading: storefrontConfigurationLoading, isError: storefrontConfigurationError, refetch: retryStorefrontConfiguration } = useQuery({
     queryKey: ['storefront', 'configuration'],

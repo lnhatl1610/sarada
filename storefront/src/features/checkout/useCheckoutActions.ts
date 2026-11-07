@@ -4,6 +4,7 @@ import { isAxiosError } from 'axios'
 import { useNavigate } from 'react-router'
 import { api, getApiErrorMessage } from '../../lib/http'
 import { trackStorefrontEvent } from '../privacy/cookie-consent'
+import { subscribeToNewsletter } from '../marketing/newsletter-api'
 import type { components, paths } from '../../types/api'
 import type { CartLine, CartProduct } from '../cart/cart-types'
 import type { CheckoutFormValues } from './checkout-schema'
@@ -136,12 +137,21 @@ export function useCheckoutActions<TProduct extends CartProduct>({
         })),
       })
 
+      let newsletterMessage: string | undefined
+      if (values.newsletter_consent && values.customer_email.trim()) {
+        try {
+          newsletterMessage = await subscribeToNewsletter(values.customer_email.trim(), true)
+        } catch {
+          newsletterMessage = 'Đơn hàng đã được ghi nhận, nhưng chưa đăng ký nhận tin được. Bạn có thể đăng ký lại ở cuối trang.'
+        }
+      }
+
       checkoutAttempt.current = null
       setCart([])
       if (result.data.payment_method === 'bank_transfer' && result.data.payment_access_token) {
-        navigate(`/checkout/payment/${result.data.code}#${result.data.payment_access_token}`)
+        navigate(`/checkout/payment/${result.data.code}#${result.data.payment_access_token}`, { state: newsletterMessage ? { newsletterMessage } : undefined })
       } else {
-        navigate(`/checkout/success/${result.data.code}`, { state: { order: result.data } })
+        navigate(`/checkout/success/${result.data.code}`, { state: { order: result.data, ...(newsletterMessage ? { newsletterMessage } : {}) } })
       }
       onToast(`Đặt hàng thành công · ${result.data.code}`)
     } catch (error) {

@@ -33,7 +33,7 @@ export function useStorefrontAppearance() {
     writeBrowserStorage('fashion-store-appearance', JSON.stringify(appearance))
   }, [appearance])
 
-  const activePalette = palettes.find((item) => item.id === appearance.paletteId) ?? palettes[8]
+  const activePalette = palettes.find((item) => item.id === appearance.paletteId) ?? palettes.find((item) => item.id === defaultAppearance.paletteId) ?? palettes[0]
   const activeStyle = uiStyles.find((item) => item.id === appearance.styleId) ?? uiStyles[12]
   const resolvedMode = appearance.mode === 'system' ? systemMode : appearance.mode
   const paletteTokens = activePalette[resolvedMode]

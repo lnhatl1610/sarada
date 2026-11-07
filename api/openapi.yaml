@@ -3540,6 +3540,21 @@ paths:
         '422': { $ref: '#/components/responses/ValidationError' }
         '429': { description: Public API rate limit exceeded }
   /reviews:
+    get:
+      tags: [Reviews]
+      summary: List recent approved reviews for published products
+      description: Public, paginated review excerpts for storefront editorial sections. The public Storefront review resource never returns customer email.
+      parameters:
+        - { in: query, name: page, schema: { type: integer, minimum: 1 } }
+        - { in: query, name: per_page, description: Page size, capped at 10; storefront Home requests three reviews., schema: { type: integer, minimum: 1, maximum: 10, default: 3 } }
+      responses:
+        '200':
+          description: Recent approved reviews attached to published products.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/StorefrontReviewPage' }
+        '422': { $ref: '#/components/responses/ValidationError' }
+        '429': { description: Public API rate limit exceeded }
     post:
       tags: [Reviews]
       summary: Submit a review for an item from a delivered order
@@ -4330,6 +4345,7 @@ paths:
                             id: { type: integer }
                             carrier: { type: [string, 'null'] }
                             tracking_code: { type: [string, 'null'] }
+                            tracking_url: { type: [string, 'null'], maxLength: 2048, format: uri, description: Optional HTTPS tracking page configured by staff }
                             status: { type: string }
                             shipped_at: { type: [string, 'null'], format: date-time }
                             delivered_at: { type: [string, 'null'], format: date-time }
@@ -4487,6 +4503,7 @@ paths:
               properties:
                 carrier: { type: [string, 'null'], maxLength: 50 }
                 tracking_code: { type: [string, 'null'], maxLength: 100 }
+                tracking_url: { type: [string, 'null'], maxLength: 2048, format: uri, description: Optional HTTPS tracking page from the carrier }
                 status: { type: string, enum: [pending, picked_up, in_transit, delivered, failed, returned] }
       responses:
         '200': { description: Updated order detail with shipment }
@@ -5965,24 +5982,74 @@ paths:
   /blog/posts:
     get:
       tags: [Catalog]
-      summary: List published blog posts and categories
+      summary: List published blog posts, categories, and tags
       security: []
       parameters:
         - { in: query, name: category, schema: { type: string, maxLength: 120 } }
+        - { in: query, name: tag, description: Filter by a published blog tag slug, schema: { type: string, maxLength: 60, pattern: '^[A-Za-z0-9_-]+$' } }
+        - { in: query, name: q, description: Search published post titles, excerpts, content, categories, and tags, schema: { type: string, maxLength: 120 } }
         - { in: query, name: page, schema: { type: integer, minimum: 1 } }
         - { in: query, name: per_page, schema: { type: integer, minimum: 1, maximum: 24 } }
       responses:
-        '200': { description: Published posts, category filters, and pagination metadata, content: { application/json: { schema: { $ref: '#/components/schemas/StorefrontBlogListEnvelope' } } } }
+        '200': { description: Published posts, category/tag filters, and pagination metadata, content: { application/json: { schema: { $ref: '#/components/schemas/StorefrontBlogListEnvelope' } } } }
   /blog/posts/{slug}:
     get:
       tags: [Catalog]
-      summary: Get a published blog post, related posts, and tagged products
+      summary: Get a published blog post, related posts, and tagged products; records an aggregate detail view
       security: []
       parameters:
         - { in: path, name: slug, required: true, schema: { type: string, maxLength: 180 } }
       responses:
         '200': { description: Published blog post, content: { application/json: { schema: { $ref: '#/components/schemas/BlogPostEnvelope' } } } }
         '404': { description: Post is missing, unpublished, or scheduled for the future }
+  /admin/career-openings:
+    get:
+      tags: [Admin]
+      summary: List career openings; requires content.manage
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - { in: query, name: q, schema: { type: string, maxLength: 120 } }
+        - { in: query, name: status, schema: { type: string, enum: [published, draft] } }
+        - { in: query, name: page, schema: { type: integer, minimum: 1 } }
+        - { in: query, name: per_page, schema: { type: integer, minimum: 1, maximum: 100 } }
+      responses:
+        '200': { description: Paginated job openings, content: { application/json: { schema: { $ref: '#/components/schemas/CareerOpeningAdminList' } } } }
+        '403': { description: Missing content.manage permission }
+    post:
+      tags: [Admin]
+      summary: Create a career opening; requires content.manage
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CareerOpeningInput' }
+      responses:
+        '201': { description: Career opening created, content: { application/json: { schema: { $ref: '#/components/schemas/CareerOpeningEnvelope' } } } }
+        '422': { $ref: '#/components/responses/ValidationError' }
+  /admin/career-openings/{opening}:
+    parameters:
+      - { in: path, name: opening, required: true, schema: { type: integer, minimum: 1 } }
+    patch:
+      tags: [Admin]
+      summary: Update a career opening; requires content.manage
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CareerOpeningInput' }
+      responses:
+        '200': { description: Career opening updated, content: { application/json: { schema: { $ref: '#/components/schemas/CareerOpeningEnvelope' } } } }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '422': { $ref: '#/components/responses/ValidationError' }
+    delete:
+      tags: [Admin]
+      summary: Delete a career opening; requires content.manage
+      security: [{ bearerAuth: [] }]
+      responses:
+        '200': { description: Career opening deleted }
+        '404': { $ref: '#/components/responses/NotFound' }
   /admin/pages:
     get:
       tags: [Admin]
@@ -6073,6 +6140,44 @@ paths:
               schema: { $ref: '#/components/schemas/NewsletterSubscriptionAccepted' }
         '422': { description: Invalid email or consent missing }
         '429': { description: Rate limit exceeded }
+  /newsletter/unsubscribe-requests:
+    post:
+      tags: [Marketing]
+      summary: Request a newsletter unsubscribe confirmation link
+      description: Accepts a normalized email and reason. Always returns the same response; an email is queued only when the address has an active subscription. The one-time token is stored as a SHA-256 hash and expires after 30 minutes. Limited to five attempts per minute per client IP.
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/NewsletterUnsubscribeRequest' }
+      responses:
+        '202':
+          description: Neutral response that does not disclose subscription status
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/NewsletterSubscriptionAccepted' }
+        '422': { $ref: '#/components/responses/ValidationError' }
+        '429': { description: Rate limit exceeded }
+  /newsletter/unsubscribe-confirmations:
+    post:
+      tags: [Marketing]
+      summary: Confirm newsletter unsubscribe
+      description: Consumes the single-use token from the subscriber's email. Expired, unknown, or used tokens return NEWSLETTER_UNSUBSCRIBE_LINK_INVALID.
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/NewsletterUnsubscribeConfirmation' }
+      responses:
+        '200':
+          description: Subscription disabled and marketing eligibility withdrawn
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/NewsletterSubscriptionAccepted' }
+        '422': { description: Invalid token or request body; invalid tokens use NEWSLETTER_UNSUBSCRIBE_LINK_INVALID }
+        '429': { description: Rate limit exceeded }
   /contact/messages:
     post:
       tags: [Marketing]
@@ -6099,6 +6204,7 @@ paths:
       summary: List published store locations
       parameters:
         - { in: query, name: province_code, schema: { type: string, maxLength: 32 } }
+        - { in: query, name: ward_code, description: Filter within province_code using the current Vietnam address catalog., schema: { type: string, maxLength: 32 } }
         - { in: query, name: page, schema: { type: integer, minimum: 1 } }
         - { in: query, name: per_page, schema: { type: integer, minimum: 1, maximum: 100 } }
       responses:
@@ -6113,6 +6219,48 @@ paths:
         - { in: query, name: q, schema: { type: string, maxLength: 120 }, description: Search topic, question, and answer text }
       responses:
         '200': { description: At most 250 active FAQ entries grouped by topic, content type is plain text, content: { application/json: { schema: { $ref: '#/components/schemas/StorefrontFaqGroupsEnvelope' } } } }
+        '422': { $ref: '#/components/responses/ValidationError' }
+        '429': { description: Public API rate limit exceeded }
+  /faqs/{faq}/helpful-votes:
+    post:
+      tags: [Catalog]
+      summary: Record whether an active FAQ answer helped the visitor
+      description: A visitor can submit one idempotent yes/no vote per active FAQ using the browser's random visitor UUID. The endpoint is rate limited and stores no contact information.
+      security: []
+      parameters:
+        - { in: path, name: faq, required: true, schema: { type: integer, minimum: 1 } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [visitor_id, helpful]
+              properties:
+                visitor_id: { type: string, format: uuid }
+                helpful: { type: boolean }
+      responses:
+        '200':
+          description: Idempotent vote result; `accepted` is false when this visitor already voted.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/StoreFaqHelpfulVoteEnvelope' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '422': { $ref: '#/components/responses/ValidationError' }
+        '429': { description: FAQ vote rate limit exceeded }
+  /careers:
+    get:
+      tags: [Catalog]
+      summary: List active career openings
+      description: Returns active openings only and filter options derived from active records. No applicant data is returned or collected.
+      security: []
+      parameters:
+        - { in: query, name: department, schema: { type: string, maxLength: 120 } }
+        - { in: query, name: location, schema: { type: string, maxLength: 150 } }
+        - { in: query, name: page, schema: { type: integer, minimum: 1 } }
+        - { in: query, name: per_page, schema: { type: integer, minimum: 1, maximum: 100, default: 24 } }
+      responses:
+        '200': { description: Active openings, department/location filters, and pagination, content: { application/json: { schema: { $ref: '#/components/schemas/CareerOpeningPublicList' } } } }
         '422': { $ref: '#/components/responses/ValidationError' }
         '429': { description: Public API rate limit exceeded }
   /pages:
@@ -7831,9 +7979,10 @@ components:
           type: array
           items:
             type: object
-            required: [product_name, quantity, unit_price, line_total]
+            required: [product_name, product_slug, quantity, unit_price, line_total]
             properties:
               product_name: { type: string }
+              product_slug: { type: [string, 'null'], description: Current catalog slug when the product still exists, otherwise null; used only to load post-purchase recommendations. }
               variant_name: { type: [string, 'null'] }
               image: { type: [string, 'null'] }
               quantity: { type: integer, minimum: 1 }
@@ -8421,10 +8570,22 @@ components:
         address: { type: string, minLength: 5, maxLength: 500 }
         province_code: { type: string, maxLength: 32 }
         province_name: { type: string, maxLength: 150 }
+        ward_code: { type: [string, 'null'], maxLength: 32, description: Optional current ward code from the selected province. }
         ward_name: { type: [string, 'null'], maxLength: 150 }
         phone: { type: string, maxLength: 32 }
         email: { type: [string, 'null'], format: email, maxLength: 254 }
         opening_hours: { type: string, minLength: 3, maxLength: 2000 }
+        opening_schedule:
+          type: [array, 'null']
+          description: Optional weekly schedule in Vietnam local time. Day uses 0 for Sunday through 6 for Saturday; a missing day is closed. Each day supports one same-day opening interval.
+          maxItems: 7
+          items:
+            type: object
+            required: [day, opens_at, closes_at]
+            properties:
+              day: { type: integer, minimum: 0, maximum: 6 }
+              opens_at: { type: string, pattern: '^([01]\\d|2[0-3]):[0-5]\\d$' }
+              closes_at: { type: string, pattern: '^([01]\\d|2[0-3]):[0-5]\\d$' }
         latitude: { type: number, minimum: -90, maximum: 90 }
         longitude: { type: number, minimum: -180, maximum: 180 }
         sort_order: { type: integer, minimum: 0, maximum: 65535, default: 0 }
@@ -8433,9 +8594,10 @@ components:
       allOf:
         - { $ref: '#/components/schemas/StoreLocationInput' }
         - type: object
-          required: [id, created_at, updated_at]
+          required: [id, is_open_now, created_at, updated_at]
           properties:
             id: { type: integer }
+            is_open_now: { type: [boolean, 'null'], description: Current open state in Asia/Ho_Chi_Minh; null when no structured weekly schedule is configured. }
             created_at: { type: [string, 'null'], format: date-time }
             updated_at: { type: [string, 'null'], format: date-time }
     StoreLocationEnvelope:
@@ -8517,6 +8679,61 @@ components:
           properties:
             query: { type: string }
             total: { type: integer }
+    StoreFaqHelpfulVoteEnvelope:
+      type: object
+      required: [data]
+      properties:
+        data:
+          type: object
+          required: [helpful, accepted]
+          properties:
+            helpful: { type: boolean, description: The vote already recorded for this visitor and FAQ }
+            accepted: { type: boolean, description: True only when this request recorded the vote }
+    CareerOpeningInput:
+      type: object
+      required: [title, department, location, employment_type, description, is_active]
+      properties:
+        title: { type: string, minLength: 2, maxLength: 180 }
+        department: { type: string, minLength: 2, maxLength: 120 }
+        location: { type: string, minLength: 2, maxLength: 150 }
+        employment_type: { type: string, enum: [full_time, part_time] }
+        summary: { type: [string, 'null'], maxLength: 800 }
+        description: { type: string, minLength: 10, maxLength: 20000 }
+        requirements: { type: [string, 'null'], maxLength: 10000 }
+        benefits: { type: [string, 'null'], maxLength: 10000 }
+        is_active: { type: boolean }
+        sort_order: { type: integer, minimum: 0, maximum: 65535, default: 0 }
+    CareerOpening:
+      allOf:
+        - { $ref: '#/components/schemas/CareerOpeningInput' }
+        - type: object
+          required: [id, sort_order, updated_at]
+          properties:
+            id: { type: integer }
+            updated_at: { type: string, format: date-time }
+    CareerOpeningEnvelope:
+      type: object
+      required: [data]
+      properties:
+        data: { $ref: '#/components/schemas/CareerOpening' }
+    CareerOpeningAdminList:
+      type: object
+      required: [data, meta]
+      properties:
+        data: { type: array, items: { $ref: '#/components/schemas/CareerOpening' } }
+        meta: { type: object, properties: { current_page: { type: integer }, last_page: { type: integer }, per_page: { type: integer }, total: { type: integer } } }
+    CareerOpeningPublicList:
+      type: object
+      required: [data, filter_options, meta]
+      properties:
+        data: { type: array, items: { $ref: '#/components/schemas/CareerOpening' } }
+        filter_options:
+          type: object
+          required: [departments, locations]
+          properties:
+            departments: { type: array, items: { type: string } }
+            locations: { type: array, items: { type: string } }
+        meta: { type: object, properties: { current_page: { type: integer }, last_page: { type: integer }, per_page: { type: integer }, total: { type: integer } } }
     ContentPageInput:
       type: object
       required: [title, slug, content, is_published]
@@ -8683,7 +8900,7 @@ components:
         data: { type: array, maxItems: 100, items: { $ref: '#/components/schemas/StorefrontPublicPageLink' } }
     BlogPostCard:
       type: object
-      required: [id, title, slug, category_name, category_slug, excerpt, cover_image, cover_alt, published_at]
+      required: [id, title, slug, category_name, category_slug, excerpt, author_name, cover_image, cover_alt, published_at, reading_minutes, view_count, tags]
       properties:
         id: { type: integer }
         title: { type: string }
@@ -8691,31 +8908,74 @@ components:
         category_name: { type: string }
         category_slug: { type: string }
         excerpt: { type: string }
+        author_name: { type: [string, 'null'], maxLength: 120 }
         cover_image: { type: [string, 'null'] }
         cover_alt: { type: [string, 'null'] }
         published_at: { type: [string, 'null'], format: date-time }
+        reading_minutes: { type: integer, minimum: 1, description: Estimated reading time calculated from sanitized article text }
+        view_count: { type: integer, minimum: 0, description: Aggregate number of public detail API requests; no visitor identifiers are stored }
+        tags: { type: array, items: { $ref: '#/components/schemas/BlogTag' } }
+    BlogTag:
+      type: object
+      required: [name, slug]
+      properties:
+        name: { type: string, maxLength: 50 }
+        slug: { type: string, maxLength: 60 }
     BlogProduct:
       type: object
-      required: [id, name, slug, images]
+      required: [id, name, slug, short_description, price, compare_at_price]
       properties:
         id: { type: integer }
         name: { type: string }
         slug: { type: string }
+        short_description: { type: [string, 'null'] }
+        price: { type: integer, minimum: 0, description: Current effective starting price in integer VND. }
+        compare_at_price: { type: [integer, 'null'], minimum: 0, description: Comparison price for the lowest priced active sale variant, when applicable. }
         images:
           type: array
-          items: { type: object, required: [url, alt], properties: { url: { type: string }, alt: { type: [string, 'null'] } } }
+          description: Current non-360 product images, included when the product image relation is loaded.
+          items:
+            type: object
+            required: [url, alt, color_value_id, sort_order, primary, is_360_frame]
+            properties:
+              url: { type: string }
+              alt: { type: [string, 'null'] }
+              color_value_id: { type: [integer, 'null'] }
+              sort_order: { type: integer }
+              primary: { type: boolean }
+              is_360_frame: { type: boolean, const: false }
+        variants:
+          type: array
+          description: Current active variants with effective prices and live available inventory; included when variant data is loaded.
+          items:
+            type: object
+            required: [id, sku, price, compare_at_price, color, color_hex, color_value_id, size, available_quantity, is_low_stock]
+            properties:
+              id: { type: integer }
+              sku: { type: string }
+              price: { type: integer, minimum: 0 }
+              compare_at_price: { type: [integer, 'null'], minimum: 0 }
+              color: { type: [string, 'null'] }
+              color_hex: { type: [string, 'null'], pattern: '^#[0-9a-fA-F]{6}$' }
+              color_value_id: { type: [integer, 'null'] }
+              size: { type: [string, 'null'] }
+              available_quantity: { type: integer, minimum: 0 }
+              is_low_stock: { type: boolean }
     BlogPost:
       allOf:
         - { $ref: '#/components/schemas/BlogPostCard' }
         - type: object
-          required: [content, meta_title, meta_description, is_published, products, related_posts]
+          required: [content, author_bio, meta_title, meta_description, is_published, products, related_posts, newer_post, older_post]
           properties:
             content: { type: string, description: Sanitized HTML }
+            author_bio: { type: [string, 'null'], maxLength: 500 }
             meta_title: { type: [string, 'null'] }
             meta_description: { type: [string, 'null'] }
             is_published: { type: boolean }
             products: { type: array, items: { $ref: '#/components/schemas/BlogProduct' } }
             related_posts: { type: array, items: { $ref: '#/components/schemas/BlogPostCard' } }
+            newer_post: { oneOf: [{ $ref: '#/components/schemas/BlogPostCard' }, { type: 'null' }], description: Nearest published post newer than the current article }
+            older_post: { oneOf: [{ $ref: '#/components/schemas/BlogPostCard' }, { type: 'null' }], description: Nearest published post older than the current article }
             created_at: { type: [string, 'null'], format: date-time }
             updated_at: { type: [string, 'null'], format: date-time }
     BlogPostEnvelope:
@@ -8731,6 +8991,8 @@ components:
         slug: { type: string, maxLength: 180, pattern: '^[A-Za-z0-9_-]+$' }
         category_name: { type: string, maxLength: 100 }
         excerpt: { type: string, maxLength: 500 }
+        author_name: { type: [string, 'null'], maxLength: 120 }
+        author_bio: { type: [string, 'null'], maxLength: 500 }
         cover_image: { type: [string, 'null'], maxLength: 500 }
         cover_alt: { type: [string, 'null'], maxLength: 180 }
         content: { type: string, maxLength: 200000 }
@@ -8739,6 +9001,7 @@ components:
         is_published: { type: boolean }
         published_at: { type: [string, 'null'], format: date-time }
         product_ids: { type: array, maxItems: 12, items: { type: integer } }
+        tags: { type: array, maxItems: 8, items: { type: string, maxLength: 50 } }
     AdminBlogPostListEnvelope:
       type: object
       required: [data, meta]
@@ -8747,7 +9010,7 @@ components:
         meta: { type: object, properties: { current_page: { type: integer }, last_page: { type: integer }, per_page: { type: integer }, total: { type: integer } } }
     AdminBlogPostSummary:
       type: object
-      required: [id, title, slug, category_name, category_slug, excerpt, cover_image, cover_alt, is_published, published_at, updated_at]
+      required: [id, title, slug, category_name, category_slug, excerpt, author_name, cover_image, cover_alt, is_published, published_at, updated_at, tags]
       properties:
         id: { type: integer }
         title: { type: string }
@@ -8755,18 +9018,22 @@ components:
         category_name: { type: string }
         category_slug: { type: string }
         excerpt: { type: string }
+        author_name: { type: [string, 'null'], maxLength: 120 }
         cover_image: { type: [string, 'null'] }
         cover_alt: { type: [string, 'null'] }
         is_published: { type: boolean }
         published_at: { type: [string, 'null'], format: date-time }
         updated_at: { type: [string, 'null'], format: date-time }
+        tags: { type: array, items: { $ref: '#/components/schemas/BlogTag' } }
     StorefrontBlogListEnvelope:
       type: object
-      required: [data, meta, categories]
+      required: [data, meta, categories, tags, popular_posts]
       properties:
         data: { type: array, items: { $ref: '#/components/schemas/BlogPostCard' } }
         meta: { type: object, properties: { current_page: { type: integer }, last_page: { type: integer }, per_page: { type: integer }, total: { type: integer } } }
         categories: { type: array, items: { type: object, required: [category_name, category_slug], properties: { category_name: { type: string }, category_slug: { type: string } } } }
+        tags: { type: array, items: { $ref: '#/components/schemas/BlogTag' } }
+        popular_posts: { type: array, maxItems: 3, items: { $ref: '#/components/schemas/BlogPostCard' }, description: "Published posts with at least one recorded public detail view, ordered by aggregate view_count" }
     StorefrontPublicPage:
       type: object
       required: [id, title, slug, content, meta_title, meta_description, is_published, created_at, updated_at]
@@ -8859,6 +9126,17 @@ components:
           required: [message]
           properties:
             message: { type: string }
+    NewsletterUnsubscribeRequest:
+      type: object
+      required: [email, reason]
+      properties:
+        email: { type: string, format: email, maxLength: 254 }
+        reason: { type: string, enum: [too_many_emails, not_relevant, signed_up_by_mistake, other] }
+    NewsletterUnsubscribeConfirmation:
+      type: object
+      required: [token]
+      properties:
+        token: { type: string, minLength: 64, maxLength: 64, pattern: '^[a-f0-9]{64}$' }
     StoreContactMessageInput:
       type: object
       required: [name, phone, email, topic, message]
@@ -8866,7 +9144,7 @@ components:
         name: { type: string, minLength: 2, maxLength: 120 }
         phone: { type: string, pattern: '^(0|\+84)\d{9}$', description: Vietnamese phone number in 0xxxxxxxxx or +84xxxxxxxxx format }
         email: { type: string, format: email, maxLength: 254 }
-        topic: { type: string, enum: [product, order, return, other] }
+        topic: { type: string, enum: [product, order, return, cooperation, other] }
         order_code: { type: string, maxLength: 32 }
         message: { type: string, minLength: 10, maxLength: 5000 }
         attachment: { type: string, format: binary, description: Optional JPG, PNG, or WebP image, maximum 2 MB and 6000 by 6000 pixels }
@@ -10150,11 +10428,12 @@ components:
         updated_at: { type: string, format: date-time }
     StorefrontOrderShipment:
       type: object
-      required: [id, carrier, tracking_code, status, shipped_at, delivered_at]
+      required: [id, carrier, tracking_code, tracking_url, status, shipped_at, delivered_at]
       properties:
         id: { type: integer }
         carrier: { type: [string, 'null'] }
         tracking_code: { type: [string, 'null'] }
+        tracking_url: { type: [string, 'null'], maxLength: 2048, format: uri, description: Optional HTTPS tracking page configured by staff }
         status: { type: string }
         shipped_at: { type: [string, 'null'], format: date-time }
         delivered_at: { type: [string, 'null'], format: date-time }

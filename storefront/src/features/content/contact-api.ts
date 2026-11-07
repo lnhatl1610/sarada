@@ -5,7 +5,7 @@ export type StoreContactMessageValues = {
   name: string
   phone: string
   email: string
-  topic: 'product' | 'order' | 'return' | 'other'
+  topic: 'product' | 'order' | 'return' | 'cooperation' | 'other'
   order_code: string
   message: string
   attachment?: File | null

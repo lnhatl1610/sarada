@@ -6,7 +6,7 @@ import { LockKeyhole } from 'lucide-react'
 import type { CustomerAddress } from '../account/account-api'
 import type { AddressOption } from './address-api'
 import type { components } from '../../types/api'
-import { checkoutSchema, type CheckoutFormValues } from './checkout-schema'
+import { checkoutSchema, type CheckoutFormInput, type CheckoutFormValues } from './checkout-schema'
 import { StorefrontBrand } from '../home/StorefrontBrand'
 import './CheckoutPage.css'
 
@@ -60,13 +60,13 @@ type CheckoutPageProps = {
 
 const emptyDraft: CheckoutFormValues = {
   payment_method: 'cod', fulfillment_type: 'delivery', pickup_location_id: '',
-  customer_name: '', customer_phone: '', customer_email: '', province_code: '',
+  customer_name: '', customer_phone: '', customer_email: '', newsletter_consent: false, province_code: '',
   district_code: '', ward_code: '', street: '', shipping_method_id: '', coupon_code: '', use_points: false, note: '',
   invoice_requested: false, invoice_tax_code: '', invoice_company_name: '', invoice_address: '',
 }
 
 export function CheckoutPage({ storeName, initialCouponCode, codEnabled, bankTransferEnabled, configurationLoading, configurationError, onRetryConfiguration, addresses, addressError, provinces, wards, locationsLoading, locationsError, shippingThreshold, shippingThresholdLoading, shippingThresholdError, onRetryLocations, onRetryShippingThreshold, previewBusy, previewError, onClearPreview, cartReady, cartError, cartExpired, cartHasUnavailableItems, onRetryCart, onProvinceChange, onSubmit, onPreview, authenticated, membershipPointsAvailable, membershipLoading, membershipError, onRetryMembership, cart, checkoutBusy, quote, money, pickupLocations, pickupLocationsLoading, pickupLocationsError }: CheckoutPageProps) {
-  const { control, register, setValue, setError, trigger, handleSubmit, formState: { errors } } = useForm<CheckoutFormValues>({
+  const { control, register, setValue, setError, trigger, handleSubmit, formState: { errors } } = useForm<CheckoutFormInput, undefined, CheckoutFormValues>({
     resolver: zodResolver(checkoutSchema),
     defaultValues: { ...emptyDraft, coupon_code: initialCouponCode, payment_method: 'cod' },
   })
@@ -239,6 +239,10 @@ export function CheckoutPage({ storeName, initialCouponCode, codEnabled, bankTra
           <label>Họ tên<input autoComplete="name" maxLength={160} aria-invalid={!!errors.customer_name} {...register('customer_name')} />{errors.customer_name && <small className="field-error" role="alert">{errors.customer_name.message}</small>}</label>
           <label>Số điện thoại<input autoComplete="tel" type="tel" maxLength={13} title="Nhập số điện thoại Việt Nam gồm 10 chữ số hoặc bắt đầu bằng +84" aria-invalid={!!errors.customer_phone} {...register('customer_phone')} />{errors.customer_phone && <small className="field-error" role="alert">{errors.customer_phone.message}</small>}</label>
           <label>Email<input autoComplete="email" type="email" aria-invalid={!!errors.customer_email} {...register('customer_email')} />{errors.customer_email && <small className="field-error" role="alert">{errors.customer_email.message}</small>}</label>
+        </div>
+        <div className="checkout-newsletter-opt-in">
+          <label><input type="checkbox" {...register('newsletter_consent')} /> Tôi đồng ý nhận email về bộ sưu tập và ưu đãi từ SARADA.</label>
+          <p>Đăng ký chỉ được gửi sau khi đặt hàng thành công. Bạn có thể hủy bất cứ lúc nào trong <Link to="/policies/privacy">Chính sách bảo mật</Link>.</p>
         </div>
         <div className="checkout-stage-actions">
           <Link className="button secondary" to="/cart">Quay lại giỏ hàng</Link>

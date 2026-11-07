@@ -109,7 +109,7 @@ class DispatchStorefrontPromotionCampaign implements ShouldBeUnique, ShouldQueue
 
     private function seedNewsletterRecipients(StorefrontPromotionCampaign $campaign): void
     {
-        DB::table('newsletter_subscriptions')->select(['id', 'email'])->orderBy('id')->chunkById(500, function ($subscribers) use ($campaign): void {
+        DB::table('newsletter_subscriptions')->whereNull('unsubscribed_at')->select(['id', 'email'])->orderBy('id')->chunkById(500, function ($subscribers) use ($campaign): void {
             $now = now();
             DB::table('storefront_promotion_campaign_recipients')->insertOrIgnore($subscribers->map(fn (object $subscriber): array => [
                 'campaign_id' => $campaign->id,
@@ -145,7 +145,7 @@ class DispatchStorefrontPromotionCampaign implements ShouldBeUnique, ShouldQueue
                 if ($smsAvailable) {
                     SendStorefrontNotificationSms::dispatch($user->id, 'promotions', $campaign->message, $campaign->href);
                 }
-            } elseif ($recipient->email && DB::table('newsletter_subscriptions')->whereRaw('LOWER(email) = LOWER(?)', [$recipient->email])->exists()) {
+            } elseif ($recipient->email && DB::table('newsletter_subscriptions')->whereRaw('LOWER(email) = LOWER(?)', [$recipient->email])->whereNull('unsubscribed_at')->exists()) {
                 Notification::route('mail', $recipient->email)->notify($notification);
             } else {
                 $recipient->update(['status' => 'skipped', 'attempts' => $recipient->attempts + 1, 'email' => null]);

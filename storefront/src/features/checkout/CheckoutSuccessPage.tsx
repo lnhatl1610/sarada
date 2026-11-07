@@ -1,5 +1,6 @@
 import { Link } from 'react-router'
 import type { components } from '../../types/api'
+import { OrderSuccessRecommendations } from './OrderSuccessRecommendations'
 import '../../CheckoutSuccess.css'
 
 type PlacedOrder = components['schemas']['StorefrontPlacedOrder']
@@ -9,9 +10,10 @@ type CheckoutSuccessPageProps = {
   order: PlacedOrder | undefined
   formatMoney: (amount: number) => string
   showRegistrationPrompt: boolean
+  newsletterMessage?: string
 }
 
-export function CheckoutSuccessPage({ code, order, formatMoney, showRegistrationPrompt }: CheckoutSuccessPageProps) {
+export function CheckoutSuccessPage({ code, order, formatMoney, showRegistrationPrompt, newsletterMessage }: CheckoutSuccessPageProps) {
   return (
     <div className="container subpage success-page">
       <div className="checkout-success-confetti" aria-hidden="true">
@@ -21,6 +23,7 @@ export function CheckoutSuccessPage({ code, order, formatMoney, showRegistration
       <p className="eyebrow">ĐẶT HÀNG THÀNH CÔNG</p>
       <h1>Cảm ơn bạn đã chọn SARADA.</h1>
       <p>Mã đơn hàng <strong>{code}</strong> đã được ghi nhận.</p>
+      {order?.placed_at && <p className="order-success-date">Ngày đặt: <time dateTime={order.placed_at}>{new Date(order.placed_at).toLocaleString('vi-VN', { dateStyle: 'medium', timeStyle: 'short' })}</time></p>}
       <section className="order-success-summary">
         <h2>{order?.payment_method === 'bank_transfer' ? 'Chuyển khoản ngân hàng' : 'Thanh toán khi nhận hàng (COD)'}</h2>
         {order ? (
@@ -42,12 +45,14 @@ export function CheckoutSuccessPage({ code, order, formatMoney, showRegistration
         )}
       </section>
       {order?.invoice_requested && <p className="order-invoice-confirmation" role="status">Yêu cầu xuất hóa đơn VAT đã được ghi nhận cùng đơn hàng.</p>}
+      {newsletterMessage && <p className="order-invoice-confirmation" role="status">{newsletterMessage}</p>}
       {showRegistrationPrompt && <p className="success-account-prompt">Tạo tài khoản để lưu thông tin giao hàng và quản lý các đơn hàng tiếp theo thuận tiện hơn.</p>}
       <div className="success-actions">
         <Link className="button dark" to={`/track-order?code=${encodeURIComponent(code ?? '')}`}>Theo dõi đơn hàng</Link>
         {showRegistrationPrompt && <Link className="button secondary" to="/register">Tạo tài khoản</Link>}
         <Link className="button secondary" to="/products">Tiếp tục mua sắm</Link>
       </div>
+      {order && <OrderSuccessRecommendations items={order.items} formatMoney={formatMoney} />}
     </div>
   )
 }

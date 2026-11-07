@@ -78,7 +78,7 @@ export function EditorialProductCard({
         {rank && rank <= 3 && (
           <span
             aria-label={`Hạng ${rank}`}
-            className="pointer-events-none absolute bottom-12 left-3 font-['Cormorant_Garamond_Variable'] text-7xl text-white [text-shadow:0_1px_8px_#0008]"
+            className="pointer-events-none absolute bottom-12 left-3 font-sans text-7xl text-white [text-shadow:0_1px_8px_#0008]"
           >
             0{rank}
           </span>

@@ -1,4 +1,5 @@
 import { useState, type FormEvent } from 'react'
+import { Check, Copy } from 'lucide-react'
 import { Link, useNavigate } from 'react-router'
 import { useCustomerVouchers, type CustomerVoucher } from './vouchers-api'
 import './VoucherWalletPage.css'
@@ -32,6 +33,8 @@ export function VoucherWalletPage({ enabled, formatMoney }: { enabled: boolean; 
   const [page, setPage] = useState(1)
   const [status, setStatus] = useState<VoucherStatus | ''>('')
   const [couponCode, setCouponCode] = useState('')
+  const [copyingCode, setCopyingCode] = useState<string | null>(null)
+  const [copyResult, setCopyResult] = useState<{ code: string; copied: boolean } | null>(null)
   const navigate = useNavigate()
   const query = useCustomerVouchers(enabled, page, status || undefined)
   const items = query.data?.data ?? []
@@ -40,6 +43,19 @@ export function VoucherWalletPage({ enabled, formatMoney }: { enabled: boolean; 
     event.preventDefault()
     const code = couponCode.trim().toUpperCase()
     if (code) navigate(`/cart?coupon=${encodeURIComponent(code)}`)
+  }
+  const copyVoucherCode = async (code: string) => {
+    setCopyingCode(code)
+    setCopyResult(null)
+    try {
+      if (!navigator.clipboard?.writeText) throw new Error('clipboard-unavailable')
+      await navigator.clipboard.writeText(code)
+      setCopyResult({ code, copied: true })
+    } catch {
+      setCopyResult({ code, copied: false })
+    } finally {
+      setCopyingCode(null)
+    }
   }
 
   return <section className="container subpage voucher-wallet" aria-labelledby="voucher-wallet-title">
@@ -56,7 +72,7 @@ export function VoucherWalletPage({ enabled, formatMoney }: { enabled: boolean; 
     </div>
     {query.isPending ? <p className="voucher-wallet__state" role="status">Đang tải voucher…</p> : query.isError ? <div className="voucher-wallet__state" role="alert"><p>Chưa tải được ví voucher.</p><button type="button" onClick={() => void query.refetch()}>Thử lại</button></div> : items.length === 0 ? <div className="voucher-wallet__state"><h2>{status ? `Chưa có mã ở trạng thái “${filters.find((filter) => filter.value === status)?.label}”` : 'Chưa có voucher'}</h2><p>Mã ưu đãi đang hoạt động sẽ xuất hiện tại đây.</p><Link to="/products">Tiếp tục mua sắm</Link></div> : <>
       <div className="voucher-wallet__list">{items.map((voucher) => <article className={`voucher-card is-${voucher.status}`} key={voucher.id}>
-        <div className="voucher-card__offer"><b>{offerText(voucher, formatMoney)}</b><span>{voucher.code}</span></div>
+        <div className="voucher-card__offer"><b>{offerText(voucher, formatMoney)}</b><span>{voucher.code}</span><button className="inline-flex min-h-11 w-fit items-center gap-2 rounded-sm px-2 font-medium text-primary underline underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-60" type="button" aria-label={`Sao chép mã ${voucher.code}`} aria-describedby={copyResult?.code === voucher.code ? `voucher-copy-${voucher.id}` : undefined} disabled={copyingCode === voucher.code} onClick={() => void copyVoucherCode(voucher.code)}>{copyResult?.code === voucher.code && copyResult.copied ? <Check size={16} aria-hidden="true" /> : <Copy size={16} aria-hidden="true" />}{copyingCode === voucher.code ? 'Đang sao chép…' : copyResult?.code === voucher.code && copyResult.copied ? 'Đã sao chép' : 'Sao chép mã'}</button>{copyResult?.code === voucher.code && <p id={`voucher-copy-${voucher.id}`} className="text-sm text-muted-foreground" role={copyResult.copied ? 'status' : 'alert'}>{copyResult.copied ? `Đã sao chép mã ${voucher.code}.` : `Không thể sao chép mã ${voucher.code}. Hãy chọn và sao chép mã hiển thị phía trên.`}</p>}</div>
         <div className="voucher-card__details">
           <span className={`voucher-card__status is-${voucher.status}`}>{statusLabel[voucher.status]}</span>
           <p>Đơn tối thiểu {formatMoney(voucher.min_order_value)}</p>

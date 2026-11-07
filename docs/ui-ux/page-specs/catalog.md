@@ -30,6 +30,7 @@ The brand directory groups the current published-product brands by Vietnamese al
 ## Product grid and states
 
 - Provide 2/3/4-column density controls on the catalog grid. Keep the mobile grid at two columns for readable card content.
+- Provide a list layout toggle alongside grid density controls. In list mode, keep product imagery, price, variant/availability details, quick add, and quick view available; use a compact two-column row on mobile.
 - Product cards offer a compact quick-add disclosure with an explicit color/size variant selector; unavailable variants are disabled, API errors remain visible, and successful additions use the shared mini-cart flow.
 - Product cards also open a keyboard-accessible quick-view dialog with color/size selection, variant-specific price and stock, product imagery, a detail-page link, and add-to-cart that closes only after API success.
 - Product cards show the exact discount percentage when the API supplies an active compare-at price, and show the approved-review average and count only when at least one approved review exists.
@@ -42,6 +43,7 @@ The brand directory groups the current published-product brands by Vietnamese al
 - Use 2 columns on mobile and 3–4 on desktop. Cards use a 3:4 product image, product name, price/compare price, variant or availability cue, and sale/new label where applicable.
 - A second image may appear on pointer hover only; all primary information remains visible without hover. Wishlist is a labeled, keyboard-accessible toggle for signed-in and guest states.
 - Loading uses layout-preserving skeletons. Empty catalog and no-match states explain next actions; API errors offer retry without discarding query state.
+- A resolved empty filtered catalog/category/collection state offers up to four active best sellers with an independent retry; search keeps its existing trending-term and best-seller recovery panel. Do not fetch suggestions while the product query is loading or unavailable.
 
 ## Acceptance criteria
 

@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next'
+import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { formatDateTime, formatNumber, formatVnd } from '../../lib/date-format'
 import { getStatusLabel, StatusBadge } from '../../components/shared/status-badge'
 import { mediaUrl } from '../../lib/media-url'
@@ -56,28 +57,35 @@ export function DashboardRevenueWidget({ period, groupBy, series, previousSeries
   onRetry: () => void
 }) {
   const { t, i18n } = useTranslation()
-  const maxRevenue = Math.max(1, ...series.map((point) => point.revenue), ...previousSeries.map((point) => point.revenue))
-  const maxOrders = Math.max(1, ...series.map((point) => point.orders))
-  const coordinate = (value: number, maximum: number) => 90 - value / maximum * 78
-  const xCoordinate = (index: number, length: number) => length < 2 ? 50 : 2 + index / (length - 1) * 96
-  const revenueLine = series.map((point, index) => `${xCoordinate(index, series.length)},${coordinate(point.revenue, maxRevenue)}`).join(' ')
-  const ordersLine = series.map((point, index) => `${xCoordinate(index, series.length)},${coordinate(point.orders, maxOrders)}`).join(' ')
-  const previousRevenueLine = previousSeries.map((point, index) => `${xCoordinate(index, previousSeries.length)},${coordinate(point.revenue, maxRevenue)}`).join(' ')
+  const chartData = series.map((point, index) => ({ ...point, previousRevenue: previousSeries[index]?.revenue ?? null }))
   const totalOrders = series.reduce((sum, point) => sum + point.orders, 0)
   const totalRevenue = series.reduce((sum, point) => sum + point.revenue, 0)
   const previousTotalRevenue = previousSeries.reduce((sum, point) => sum + point.revenue, 0)
-  const labelEvery = series.length > 60 ? 15 : series.length > 20 ? 5 : series.length > 12 ? 2 : 1
   const groupLabel = groupBy === 'week' ? t('tuần') : groupBy === 'month' ? t('tháng') : t('ngày')
+  const locale = i18n.language === 'en' ? 'en-US' : 'vi-VN'
+  const dateLabel = (value: string) => new Intl.DateTimeFormat(locale, { day: '2-digit', month: '2-digit' }).format(new Date(`${value}T00:00:00`))
+  const moneyTick = (value: number) => new Intl.NumberFormat(locale, { notation: 'compact', maximumFractionDigits: 1 }).format(value)
   return <article className="panel revenue"><div className="panel-heading"><div><h2>{t('Doanh thu')}</h2><p>{t('Đơn đã giao và thanh toán')} · {period} · {t('theo {{group}}', { group: groupLabel })}</p></div></div>
     {loading ? <div className="shared-skeleton" role="status" aria-label={t('Đang tải biểu đồ doanh thu')}><span /><span /><span /></div> : error ? <div className="shared-ui-state" role="alert"><p>{error}</p><button className="secondary" type="button" onClick={onRetry}>{t('Thử tải lại biểu đồ')}</button></div> : series.length ? <div className="revenue-chart">
       <div className="chart-legend" aria-label={t('Chú giải biểu đồ')}><span><i className="legend-revenue" />{t('Doanh thu kỳ này')}</span><span><i className="legend-orders" />{t('Số đơn')}</span>{comparePrevious && <span><i className="legend-previous-revenue" />{t('Doanh thu kỳ trước')}</span>}</div>
-      <svg className="dashboard-line-chart" viewBox="0 0 100 100" preserveAspectRatio="none" role="img" tabIndex={0} aria-label={t('Biểu đồ doanh thu đã thu từ đơn giao thành công và số đơn được tạo, {{period}}, nhóm theo {{group}}. Doanh thu kỳ này {{revenue}}; {{count}} đơn.{{previous}}', { period, group: groupLabel, revenue: fmt(totalRevenue), count: formatNumber(totalOrders), previous: comparePrevious && previousSeries.length ? ` ${t('Doanh thu kỳ trước {{revenue}}.', { revenue: fmt(previousTotalRevenue) })}` : '' })}>
-        <path className="dashboard-chart-gridline" d="M0 12 H100 M0 32 H100 M0 52 H100 M0 72 H100 M0 92 H100" />
-        <polyline className="dashboard-chart-revenue" points={revenueLine} />
-        <polyline className="dashboard-chart-orders" points={ordersLine} />
-        {comparePrevious && previousRevenueLine && <polyline className="dashboard-chart-previous-revenue" points={previousRevenueLine} />}
-      </svg>
-      <div className="dashboard-chart-dates" style={{ gridTemplateColumns: `repeat(${series.length}, minmax(0, 1fr))` }}>{series.map((point, index) => <small key={point.date}>{index % labelEvery === 0 || index === series.length - 1 ? new Intl.DateTimeFormat(i18n.language === 'en' ? 'en-US' : 'vi-VN', { day: '2-digit', month: '2-digit' }).format(new Date(`${point.date}T00:00:00`)) : ''}</small>)}</div>
+      <div className="dashboard-recharts-chart" role="img" aria-label={t('Biểu đồ doanh thu đã thu từ đơn giao thành công và số đơn được tạo, {{period}}, nhóm theo {{group}}. Doanh thu kỳ này {{revenue}}; {{count}} đơn.{{previous}}', { period, group: groupLabel, revenue: fmt(totalRevenue), count: formatNumber(totalOrders), previous: comparePrevious && previousSeries.length ? ` ${t('Doanh thu kỳ trước {{revenue}}.', { revenue: fmt(previousTotalRevenue) })}` : '' })}>
+        <ResponsiveContainer width="100%" height={210}>
+          <LineChart data={chartData} accessibilityLayer margin={{ top: 8, right: 4, bottom: 4, left: 4 }}>
+            <CartesianGrid vertical={false} stroke="var(--shell-border-subtle, #e5e1db)" strokeDasharray="3 3" />
+            <XAxis dataKey="date" tickFormatter={dateLabel} minTickGap={28} tick={{ fill: 'var(--shell-muted, #716e68)', fontSize: 10 }} tickLine={false} axisLine={{ stroke: 'var(--shell-border-subtle, #e5e1db)' }} />
+            <YAxis yAxisId="revenue" tickFormatter={moneyTick} width={54} tick={{ fill: 'var(--shell-muted, #716e68)', fontSize: 10 }} tickLine={false} axisLine={false} />
+            <YAxis yAxisId="orders" orientation="right" hide domain={[0, 'dataMax']} />
+            <Tooltip
+              labelFormatter={(label) => dateLabel(String(label))}
+              formatter={(value, name) => [String(name) === 'orders' ? formatNumber(Number(value)) : fmt(Number(value)), String(name) === 'orders' ? t('Số đơn') : String(name) === 'previousRevenue' ? t('Doanh thu kỳ trước') : t('Doanh thu kỳ này')]}
+              contentStyle={{ background: 'var(--shell-surface, #fff)', border: '1px solid var(--shell-border-subtle, #e5e1db)', borderRadius: 4, fontSize: 12 }}
+            />
+            <Line yAxisId="revenue" dataKey="revenue" name="revenue" type="monotone" stroke="#7f2638" strokeWidth={2} dot={false} activeDot={{ r: 4 }} isAnimationActive={false} />
+            <Line yAxisId="orders" dataKey="orders" name="orders" type="monotone" stroke="#385f72" strokeWidth={1.5} dot={false} activeDot={{ r: 4 }} isAnimationActive={false} />
+            {comparePrevious && previousSeries.length > 0 && <Line yAxisId="revenue" dataKey="previousRevenue" name="previousRevenue" type="monotone" stroke="#b87936" strokeWidth={1.5} strokeDasharray="5 4" dot={false} activeDot={{ r: 4 }} isAnimationActive={false} />}
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
       <p className="chart-summary">{t('Kỳ này')}: {fmt(totalRevenue)} · {t('{{count}} đơn', { count: formatNumber(totalOrders) })}{comparePrevious && previousLoading ? ` · ${t('Đang tải kỳ trước…')}` : comparePrevious && previousError ? ` · ${previousError}` : comparePrevious && previousSeries.length ? ` · ${t('Kỳ trước')}: ${fmt(previousTotalRevenue)}` : ''}</p>
       {comparePrevious && previousError && <button className="text-button" type="button" onClick={onRetry}>{t('Thử tải lại so sánh kỳ trước')}</button>}
     </div> : <div className="no-orders compact">{t('Chưa có doanh thu từ đơn đã giao, đã thanh toán trong khoảng thời gian này.')}</div>}
